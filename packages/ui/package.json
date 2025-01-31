@@ -7,7 +7,6 @@
   "exports": {
     "./*": "./src/*.tsx",
     "./utils/*": "./src/utils/*.ts",
-    "./global.css": "./src/global.css",
     "./tailwind.web.config": "./tailwind.config.web.ts"
   },
   "scripts": {
@@ -18,8 +17,6 @@
     "ui-add": "bunx shadcn@latest add && bunx @biomejs/biome lint --write --unsafe"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.49",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^3.4.15",
