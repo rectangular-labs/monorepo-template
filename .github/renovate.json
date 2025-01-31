@@ -1,10 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": [
+    "config:recommended"
+  ],
   "packageRules": [
     {
-      "matchPackagePatterns": ["^@rectangular-labs/"],
-      "enabled": false
+      "enabled": false,
+      "matchPackageNames": [
+        "/^@rectangular-labs//"
+      ]
     }
   ],
   "updateInternalDeps": true,
