@@ -1,0 +1,41 @@
+{
+  "name": "@rectangular-labs/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/client.d.ts",
+      "default": "./src/client.ts"
+    },
+    "./schema/*": {
+      "types": "./dist/schema/*.d.ts",
+      "default": "./src/schema/*.ts"
+    }
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf .turbo node_modules dist .cache",
+    "format": "bunx @biomejs/biome format .",
+    "lint": "bunx @biomejs/biome lint .",
+    "migrate-generate": "bun with-env drizzle-kit generate",
+    "migrate-push": "bun with-env drizzle-kit migrate",
+    "push": "bun with-env drizzle-kit push",
+    "studio": "bun with-env drizzle-kit studio",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "with-env": "dotenvx run -f ../../.env -- "
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.8.1",
+    "drizzle-orm": "^0.39.1"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.30.4",
+    "typescript": "^5.7.2"
+  },
+  "overrides": {
+    "drizzle-orm": "^0.38.3"
+  }
+}

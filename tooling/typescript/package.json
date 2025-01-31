@@ -1,0 +1,5 @@
+{
+  "name": "@rectangular-labs/typescript",
+  "private": true,
+  "files": ["*.json"]
+}
