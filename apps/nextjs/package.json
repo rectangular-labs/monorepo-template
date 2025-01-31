@@ -1,0 +1,36 @@
+{
+  "name": "@rectangular-labs/nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun run dev:node",
+    "dev:node": "next dev --port 8008",
+    "dev:cloudflare": "bunx dotenvx decrypt -f ../../.env  --stdout > .dev.vars && wrangler dev --port 8771",
+    "build": "bun run build:node",
+    "build:node": "next build",
+    "build:cloudflare": "opennextjs-cloudflare",
+    "start": "next start",
+    "clean": "rm -rf .turbo node_modules .next",
+    "lint": "bunx @biomejs/biome lint . --write",
+    "format": "bunx @biomejs/biome format . --write",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "@rectangular-labs/db": "workspace:*",
+    "@rectangular-labs/schema": "workspace:*",
+    "@rectangular-labs/ui": "workspace:*",
+    "@tanstack/react-query": "^5.65.1",
+    "@tanstack/react-query-devtools": "^5.65.1",
+    "effect": "^3.12.7",
+    "next": "15.1.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.12.0",
+    "@types/react": "^19.0.2",
+    "@types/react-dom": "^19.0.2",
+    "jiti": "^2.4.1",
+    "typescript": "^5.7.2"
+  }
+}

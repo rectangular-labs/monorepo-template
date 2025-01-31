@@ -1,0 +1,26 @@
+{
+  "name": "@rectangular-labs/schema",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": {
+      "types": "./dist/auth/*.d.ts",
+      "default": "./src/auth/*.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf .turbo node_modules dist .cache",
+    "format": "bunx @biomejs/biome format . --write",
+    "lint": "bunx @biomejs/biome lint . --write",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "dependencies": {
+    "effect": "^3.12.7"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
