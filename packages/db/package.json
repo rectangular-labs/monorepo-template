@@ -34,7 +34,7 @@
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
     "drizzle-kit": "^0.30.4",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   },
   "overrides": {
     "drizzle-orm": "^0.38.3"
