@@ -5,14 +5,14 @@
   "scripts": {
     "dev": "bun run dev:node",
     "dev:node": "next dev --port 8008",
-    "dev:cloudflare": "bunx dotenvx decrypt -f ../../.env  --stdout > .dev.vars && wrangler dev --port 8771",
+    "dev:cloudflare": "bun x dotenvx decrypt -f ../../.env  --stdout > .dev.vars && wrangler dev --port 8771",
     "build": "bun run build:node",
     "build:node": "next build",
     "build:cloudflare": "opennextjs-cloudflare",
     "start": "next start",
-    "clean": "rm -rf .turbo node_modules .next",
-    "lint": "bunx @biomejs/biome lint . --write",
-    "format": "bunx @biomejs/biome format . --write",
+    "clean": "git clean -xdf .turbo node_modules .next",
+    "lint": "bun x @biomejs/biome lint . --write",
+    "format": "bun x @biomejs/biome format . --write",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
@@ -31,6 +31,7 @@
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "jiti": "^2.4.1",
+    "tailwindcss": "^3.4.15",
     "typescript": "^5.7.2"
   }
 }

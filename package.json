@@ -9,8 +9,8 @@
     "db:migrate-push": "bun run --filter @rectangular-labs/db  migrate-push",
     "db:push": "bun run --filter @rectangular-labs/db push --force",
     "db:studio": "bun run --filter @rectangular-labs/db studio",
-    "env:set": "bunx dotenvx set",
-    "env:get": "bunx dotenvx get",
+    "env:set": "bun x dotenvx set",
+    "env:get": "bun x dotenvx get",
     "dev": "turbo run dev",
     "build": "turbo build",
     "changeset": "changeset",
@@ -18,7 +18,7 @@
     "format": "turbo run format --continue",
     "lint": "turbo run lint --continue",
     "typecheck": "turbo run typecheck --continue",
-    "postinstall": "bunx sherif@latest",
+    "postinstall": "bun x sherif@latest",
     "with-env": "dotenvx run --"
   },
   "devDependencies": {

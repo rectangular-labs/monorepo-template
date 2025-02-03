@@ -10,11 +10,11 @@
     "./tailwind.web.config": "./tailwind.config.web.ts"
   },
   "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "format": "bunx @biomejs/biome format . --write",
-    "lint": "bunx @biomejs/biome lint . --write",
+    "clean": "git clean -xdf .turbo node_modules",
+    "format": "bun x @biomejs/biome format . --write",
+    "lint": "bun x @biomejs/biome lint . --write",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "ui-add": "bunx shadcn@latest add && bunx @biomejs/biome lint --write --unsafe"
+    "ui-add": "bun x shadcn@latest add && bun x @biomejs/biome lint --write --unsafe"
   },
   "devDependencies": {
     "react": "^19.0.0",
@@ -43,6 +43,7 @@
     "@radix-ui/react-toggle-group": "^1.1.0",
     "@radix-ui/react-tooltip": "^1.1.4",
     "@radix-ui/react-use-controllable-state": "^1.1.0",
+    "@rectangular-labs/typescript": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "input-otp": "^1.4.2",

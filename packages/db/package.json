@@ -21,9 +21,9 @@
     "studio": "bun with-env drizzle-kit studio",
     "build": "tsc",
     "dev": "tsc --watch",
-    "clean": "rm -rf .turbo node_modules dist .cache",
-    "format": "bunx @biomejs/biome format . --write",
-    "lint": "bunx @biomejs/biome lint . --write",
+    "clean": "git clean -xdf .turbo node_modules dist .cache",
+    "format": "bun x @biomejs/biome format . --write",
+    "lint": "bun x @biomejs/biome lint . --write",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "dotenvx run -f ../../.env -- "
   },
@@ -32,6 +32,7 @@
     "drizzle-orm": "^0.39.1"
   },
   "devDependencies": {
+    "@rectangular-labs/typescript": "workspace:*",
     "drizzle-kit": "^0.30.4",
     "typescript": "^5.7.2"
   },
