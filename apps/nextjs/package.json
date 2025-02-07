@@ -21,7 +21,7 @@
     "@rectangular-labs/ui": "workspace:*",
     "@tanstack/react-query": "^5.66.0",
     "@tanstack/react-query-devtools": "^5.66.0",
-    "effect": "^3.12.9",
+    "effect": "^3.12.10",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
