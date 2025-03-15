@@ -18,7 +18,7 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "effect": "^3.13.10"
+    "effect": "^3.13.11"
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
