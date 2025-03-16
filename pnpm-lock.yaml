@@ -58,7 +58,7 @@ importers:
         specifier: ^4.19.3
         version: 4.19.3
       vite:
-        specifier: ^6.1.0
+        specifier: ^6.2.2
         version: 6.2.2(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0)(tsx@4.19.3)
       vite-plugin-mkcert:
         specifier: ^1.17.8
@@ -131,7 +131,7 @@ importers:
         specifier: ^5.8.2
         version: 5.8.2
       vite:
-        specifier: ^6.1.0
+        specifier: ^6.2.2
         version: 6.2.2(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.2)(terser@5.39.0)(tsx@4.19.3)
       vite-plugin-mkcert:
         specifier: ^1.17.8
