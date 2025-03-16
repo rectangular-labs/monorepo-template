@@ -2,8 +2,8 @@ import tailwindcss from "@tailwindcss/vite";
 import viteReact from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
 
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import { resolve } from "node:path";
+import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import mkcert from "vite-plugin-mkcert";
 
 export default defineConfig({

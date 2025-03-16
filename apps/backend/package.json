@@ -1,15 +1,16 @@
 {
   "name": "@rectangular-labs/backend",
+  "private": true,
   "type": "module",
   "exports": {
     ".": {
-      "types": "./src/routes/index.ts",
+      "types": "./dist/src/routes/index.d.ts",
       "default": "./src/routes/index.ts"
     }
   },
   "scripts": {
     "dev": "pnpm with-env vite dev --port 3922",
-    "build": "pnpm with-env-prod vite build",
+    "build": "pnpm with-env-prod vite build && tsc --emitDeclarationOnly --declaration --declarationMap --outDir dist --noEmit false",
     "serve": "pnpm with-env-prod node ./dist/index.js",
     "test": "vitest run",
     "clean": "git clean -xdf .turbo node_modules dist .cache",
