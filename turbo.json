@@ -17,7 +17,7 @@
       "cache": false
     },
     "dev": {
-      "persistent": false,
+      "persistent": true,
       "cache": false
     },
     "format": {
@@ -30,5 +30,14 @@
       "dependsOn": ["^topo", "^build"],
       "outputs": [".cache/tsbuildinfo.json"]
     }
-  }
+  },
+  "globalEnv": ["DOTENV_PRIVATE_KEY"],
+  "globalPassThroughEnv": [
+    "NODE_ENV",
+    "CI",
+    "VERCEL",
+    "VERCEL_ENV",
+    "VERCEL_URL",
+    "npm_lifecycle_event"
+  ]
 }

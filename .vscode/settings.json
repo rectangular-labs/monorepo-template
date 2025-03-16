@@ -1,4 +1,11 @@
 {
+  // allow autocomplete for ArkType expressions like "string | num"
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  // prioritize ArkType's "type" for autoimports
+  "typescript.preferences.autoImportSpecifierExcludeRegexes": ["^(node:)?os$"],
+
   "files.watcherExclude": {
     "**/routeTree.gen.ts": true
   },
@@ -6,5 +13,5 @@
     "**/routeTree.gen.ts": true
   },
 
-  "cSpell.words": ["Creds", "millis", "totp", "turso"]
+  "cSpell.words": ["Creds", "millis", "oklch", "totp", "turso"]
 }

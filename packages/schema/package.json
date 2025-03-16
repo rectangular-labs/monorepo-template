@@ -5,8 +5,8 @@
   "type": "module",
   "exports": {
     "./*": {
-      "types": "./dist/auth/*.d.ts",
-      "default": "./src/auth/*.ts"
+      "types": "./dist/*.d.ts",
+      "default": "./src/*.ts"
     }
   },
   "scripts": {
@@ -18,7 +18,7 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "effect": "^3.13.11"
+    "arktype": "^2.1.9"
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",

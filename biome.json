@@ -74,7 +74,6 @@
       "dist",
       "routeTree.gen.ts",
       "sst-env.d.ts",
-      "to-effect-schema.ts",
       "_renderer.tsx"
     ]
   }
