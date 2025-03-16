@@ -19,8 +19,7 @@
     "format": "turbo run format --continue",
     "lint": "turbo run lint --continue",
     "typecheck": "turbo run typecheck --continue",
-    "postinstall": "bun x sherif@latest",
-    "with-env": "dotenvx run --"
+    "postinstall": "bun x sherif@latest"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",

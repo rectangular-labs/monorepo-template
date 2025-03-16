@@ -4,7 +4,11 @@
     "strings": "on"
   },
   // prioritize ArkType's "type" for autoimports
-  "typescript.preferences.autoImportSpecifierExcludeRegexes": ["^(node:)?os$"],
+  "typescript.preferences.autoImportSpecifierExcludeRegexes": [
+    "^(node:)?os$",
+    "^process$",
+    "^hono/adapter$"
+  ],
 
   "files.watcherExclude": {
     "**/routeTree.gen.ts": true
@@ -12,6 +16,13 @@
   "search.exclude": {
     "**/routeTree.gen.ts": true
   },
-
-  "cSpell.words": ["Creds", "millis", "oklch", "totp", "turso"]
+  "cSpell.words": [
+    "Creds",
+    "dotenvx",
+    "millis",
+    "oklch",
+    "Sonner",
+    "totp",
+    "turso"
+  ]
 }

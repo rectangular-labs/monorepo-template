@@ -5,10 +5,10 @@ import ReactDOM from "react-dom/client";
 import * as TanstackQuery from "./components/tanstack-query/root-provider.tsx";
 
 // Import the generated route tree
-import { routeTree } from "./routeTree.gen";
-
-import "@rectangular-labs/ui/styles.css";
+import { ThemeProvider } from "@rectangular-labs/ui/components/theme-provider";
 import reportWebVitals from "./reportWebVitals.ts";
+import { routeTree } from "./routeTree.gen";
+import "./style.css";
 
 // Create a new router instance
 const router = createRouter({
@@ -36,7 +36,9 @@ if (rootElement && !rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <TanstackQuery.Provider>
-        <RouterProvider router={router} />
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <RouterProvider router={router} />
+        </ThemeProvider>
       </TanstackQuery.Provider>
     </StrictMode>,
   );

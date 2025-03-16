@@ -25,7 +25,7 @@
     "format": "bun x @biomejs/biome format . --write",
     "lint": "bun x @biomejs/biome lint . --write",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "with-env": "dotenvx run -f ../../.env -- "
+    "with-env": "dotenvx run -f ../../.env.local  -f ../../.env -- "
   },
   "dependencies": {
     "better-sqlite3": "^11.9.0",
