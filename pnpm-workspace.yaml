@@ -3,6 +3,6 @@ packages:
   - packages/*
   - tooling/*
 onlyBuiltDependencies:
-  - '@biomejs/biome'
+  - "@biomejs/biome"
   - better-sqlite3
   - esbuild

@@ -5,6 +5,9 @@ runs:
   using: composite
   steps:
     - uses: pnpm/action-setup@v4
+    - uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: latest
     - uses: actions/setup-node@v4
       with:
         node-version-file: ".nvmrc"
