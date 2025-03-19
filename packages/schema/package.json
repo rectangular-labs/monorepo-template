@@ -18,7 +18,7 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "dependencies": {
-    "arktype": "^2.1.9"
+    "arktype": "^2.1.10"
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
