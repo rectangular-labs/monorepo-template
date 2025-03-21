@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^11.9.1",
-    "drizzle-orm": "^0.40.1"
+    "drizzle-orm": "^0.41.0"
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
@@ -38,6 +38,6 @@
     "typescript": "^5.8.2"
   },
   "overrides": {
-    "drizzle-orm": "^0.40.1"
+    "drizzle-orm": "^0.41.0"
   }
 }
