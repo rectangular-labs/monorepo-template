@@ -168,8 +168,8 @@ importers:
   packages/schema:
     dependencies:
       arktype:
-        specifier: ^2.1.10
-        version: 2.1.10
+        specifier: ^2.1.11
+        version: 2.1.11
     devDependencies:
       '@rectangular-labs/typescript':
         specifier: workspace:*
@@ -354,11 +354,11 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@ark/schema@0.45.0':
-    resolution: {integrity: sha512-3XlMWkZbEjh0YsF92vnnRNCWNRNhRKDTf6XhugyCXH0YRFuM+w1vFLDbB2JLfZloEd7i5cbqsLaDLzyBZbPrSg==}
+  '@ark/schema@0.45.1':
+    resolution: {integrity: sha512-I9UnaTRDAL1nc7xi1PmHSEVu5x32S9JUlxk0W7teq9EFM7LPalq45TYvuFZMRFBBJdScHYwdF0rtnHrJfnszWw==}
 
-  '@ark/util@0.45.0':
-    resolution: {integrity: sha512-Z1gHEGbpPzLtPmYb932t2B++6YonlUi1Fa14IQ4vhsGMWhd81Mi1miUmdZXW4fNI/wg1saT7H2/5cAuONgTXhg==}
+  '@ark/util@0.45.1':
+    resolution: {integrity: sha512-FXIRRgtlh9bYMP4PEylYujOQdjQukghES8hHfjIvFdQQebal9gFsr/tJrzaBImf3FZ40BxEOuia8qiVClkIEHg==}
 
   '@asamuzakjp/css-color@3.1.1':
     resolution: {integrity: sha512-hpRD68SV2OMcZCsrbdkccTw5FXjNDLo5OuqSHyHZfwweGsDWZwDJ2+gONyNAbazZclobMirACLw0lk8WVxIqxA==}
@@ -2172,8 +2172,8 @@ packages:
   aria-query@5.3.0:
     resolution: {integrity: sha512-b0P0sZPKtyu8HkeRAfCq0IfURZK+SuwMjY1UXGBU27wpAiTwQAIlq56IbIO+ytk/JjS1fMR14ee5WBBfKi5J6A==}
 
-  arktype@2.1.10:
-    resolution: {integrity: sha512-KqbrzI9qIGrQUClifyS1HpUp/oTSRtGDvnMKzwg2TAvxRpynY1mn/ubXaxAAdGPOM8V3pBqwb01Z6TcXqhBxzQ==}
+  arktype@2.1.11:
+    resolution: {integrity: sha512-P9zSo1yexpl1/kMui1RYLHAIxuU/VCv2e0DDLuBJHfIOHQ73QSnr1LIbHLS3fCac9avv4H5SDSutZKRV+hx2IA==}
 
   array-union@2.1.0:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}
@@ -3872,11 +3872,11 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.8
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@ark/schema@0.45.0':
+  '@ark/schema@0.45.1':
     dependencies:
-      '@ark/util': 0.45.0
+      '@ark/util': 0.45.1
 
-  '@ark/util@0.45.0': {}
+  '@ark/util@0.45.1': {}
 
   '@asamuzakjp/css-color@3.1.1':
     dependencies:
@@ -5593,10 +5593,10 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  arktype@2.1.10:
+  arktype@2.1.11:
     dependencies:
-      '@ark/schema': 0.45.0
-      '@ark/util': 0.45.0
+      '@ark/schema': 0.45.1
+      '@ark/util': 0.45.1
 
   array-union@2.1.0: {}
 
