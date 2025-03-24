@@ -32,7 +32,7 @@
     "@rectangular-labs/typescript": "workspace:*",
     "@types/node": "^22.13.13",
     "tsx": "^4.19.3",
-    "vite": "^6.2.2",
+    "vite": "^6.2.3",
     "vite-plugin-mkcert": "^1.17.8",
     "vitest": "^3.0.9"
   }
