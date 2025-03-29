@@ -24,8 +24,8 @@
     "@tanstack/react-router-devtools": "^1.114.29",
     "@tanstack/router-plugin": "^1.114.29",
     "hono": "^4.7.5",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
