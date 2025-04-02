@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
-    "@tailwindcss/vite": "^4.0.17",
+    "@tailwindcss/vite": "^4.1.1",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",
     "@types/react": "^19.0.12",
