@@ -17,8 +17,8 @@
     "ui-add": "bun x shadcn@canary add && bun x @biomejs/biome lint --write --unsafe"
   },
   "devDependencies": {
-    "@types/react": "^19.0.12",
-    "@types/react-dom": "^19.0.4",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.1",
