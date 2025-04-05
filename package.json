@@ -27,7 +27,7 @@
     "@dotenvx/dotenvx": "^1.39.1",
     "@rectangular-labs/typescript": "workspace:*",
     "turbo": "2.5.0",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "packageManager": "pnpm@10.7.1"
 }
