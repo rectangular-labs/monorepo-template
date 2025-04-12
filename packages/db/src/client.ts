@@ -9,3 +9,4 @@ export const createDb = (fileName: string) =>
   drizzleBetterSqlite(fileName, {
     schema: sqliteSchema,
   });
+export type DB = ReturnType<typeof createDb>;

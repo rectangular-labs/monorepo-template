@@ -1,3 +1,7 @@
-import { parseServerEnv } from "@rectangular-labs/schema/env";
+import { parseServerEnv } from "@rectangular-labs/env";
+import { getContext } from "hono/context-storage";
 
-export const env = parseServerEnv(process.env);
+export const env = () => {
+  const context = getContext();
+  return parseServerEnv(context.env);
+};

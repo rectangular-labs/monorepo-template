@@ -7,7 +7,7 @@
     "build": "pnpm with-env-prod vite build && tsc",
     "serve": "pnpm with-env-prod vite preview",
     "test": "vitest run",
-    "clean": "git clean -xdf .turbo node_modules",
+    "clean": "git clean -xdf .turbo node_modules dist .cache",
     "format": "bun x @biomejs/biome format . --write",
     "lint": "bun x @biomejs/biome lint . --write",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@rectangular-labs/backend": "workspace:*",
-    "@rectangular-labs/schema": "workspace:*",
+    "@rectangular-labs/env": "workspace:*",
     "@rectangular-labs/ui": "workspace:*",
     "@tanstack/react-query": "^5.71.10",
     "@tanstack/react-query-devtools": "^5.71.10",

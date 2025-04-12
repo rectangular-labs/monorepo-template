@@ -1,12 +1,12 @@
 {
-  "name": "@rectangular-labs/schema",
+  "name": "@rectangular-labs/env",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "exports": {
-    "./*": {
-      "types": "./dist/*.d.ts",
-      "default": "./src/*.ts"
+    ".": {
+      "types": "./dist/env.d.ts",
+      "default": "./src/env.ts"
     }
   },
   "scripts": {

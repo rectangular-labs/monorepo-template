@@ -1,25 +1,29 @@
-import { env } from "@/lib/env";
 import { Hono } from "hono";
-import { cors } from "hono/cors";
+import { contextStorage } from "hono/context-storage";
+import { serve } from "@hono/node-server";
+import { frontendRouter } from "../lib/frontend";
+import { apiRouter } from "./api";
+import { showRoutes } from "hono/dev";
+import { dbContext } from "@/lib/hono";
 
 const app = new Hono()
-  .use(
-    "*",
-    cors({
-      origin: [env.BETTER_AUTH_URL],
-      allowHeaders: ["Content-Type", "Authorization"],
-      allowMethods: ["POST", "GET", "OPTIONS"],
-      exposeHeaders: ["Content-Length"],
-      credentials: true,
-    }),
-  )
-  .get("/", (c) => {
-    const betterAuthUrl = env.BETTER_AUTH_URL;
-    return c.json({
-      message: `Hello ${betterAuthUrl} from the backend!`,
-    });
-  });
+  .use(contextStorage())
+  .use(dbContext)
+  .route("/api", apiRouter)
+  .route("*", frontendRouter);
 
-export default app;
+showRoutes(app, {
+  verbose: true,
+});
+
+serve(
+  {
+    fetch: app.fetch,
+    port: 3922,
+  },
+  (info) => {
+    console.log(`Listening on http://localhost:${info.port}`);
+  },
+);
 
 export type AppType = typeof app;
