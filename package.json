@@ -12,7 +12,7 @@
     "ui:add": "cd ./packages/ui && bun run ui-add && cd ../..",
     "env:set": "bun x dotenvx set",
     "env:get": "bun x dotenvx get",
-    "dev": "turbo run dev",
+    "dev": "docker compose up -d && turbo run dev",
     "build": "turbo build",
     "changeset": "changeset",
     "changeset:release": "bun run build && changeset publish",

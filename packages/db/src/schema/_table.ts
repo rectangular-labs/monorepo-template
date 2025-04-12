@@ -1,3 +1,3 @@
-import { sqliteTableCreator } from "drizzle-orm/sqlite-core";
+import { pgTableCreator } from "drizzle-orm/pg-core";
 
-export const sqliteAppTable = sqliteTableCreator((name) => `ra_${name}`);
+export const pgAppTable = pgTableCreator((name) => `ra_${name}`);
