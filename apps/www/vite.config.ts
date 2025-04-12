@@ -22,4 +22,12 @@ export default defineConfig({
       "@": resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:3922",
+        changeOrigin: true,
+      },
+    },
+  },
 });

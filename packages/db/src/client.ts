@@ -1,11 +1,12 @@
-import { drizzle as drizzleBetterSqlite } from "drizzle-orm/better-sqlite3";
+import { drizzle } from "drizzle-orm/node-postgres";
 import * as user from "./schema/user";
 
-const sqliteSchema = {
+const schema = {
   ...user,
 };
 
-export const createDb = (fileName: string) =>
-  drizzleBetterSqlite(fileName, {
-    schema: sqliteSchema,
-  });
+export const createDb = (connectionString: string) => {
+  return drizzle(connectionString, { schema, casing: "snake_case" });
+};
+
+export type DB = ReturnType<typeof createDb>;

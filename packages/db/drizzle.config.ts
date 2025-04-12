@@ -1,16 +1,15 @@
 import type { Config } from "drizzle-kit";
 
-if (!process.env.SQLITE_FILENAME) {
-  throw new Error("SQLITE_FILENAME is not set");
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL is not set");
 }
 
 export default {
-  dialect: "sqlite",
+  dialect: "postgresql",
   dbCredentials: {
-    url: `../../apps/auth-server/${process.env.SQLITE_FILENAME}`,
+    url: process.env.DATABASE_URL,
   },
-  schema: "./src/schema/sqlite/*",
-
+  schema: "./src/schema/*",
   out: "./migrations",
   breakpoints: true,
   verbose: true,

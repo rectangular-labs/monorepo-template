@@ -15,7 +15,7 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/")({
   component: App,
   loader: async () => {
-    const response = await backend.index.$get();
+    const response = await backend.api.$get();
     return response.json();
   },
 });

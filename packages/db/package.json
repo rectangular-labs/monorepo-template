@@ -15,10 +15,10 @@
   },
   "license": "MIT",
   "scripts": {
-    "migrate-generate": "bun with-env drizzle-kit generate",
-    "migrate-push": "bun with-env drizzle-kit migrate",
-    "push": "bun with-env drizzle-kit push",
-    "studio": "bun with-env drizzle-kit studio",
+    "migrate-generate": "pnpm with-env drizzle-kit generate",
+    "migrate-push": "pnpm with-env drizzle-kit migrate",
+    "push": "pnpm with-env drizzle-kit push",
+    "studio": "pnpm with-env drizzle-kit studio",
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "git clean -xdf .turbo node_modules dist .cache",
@@ -28,12 +28,13 @@
     "with-env": "dotenvx run -f ../../.env.local  -f ../../.env -- "
   },
   "dependencies": {
-    "better-sqlite3": "^11.9.1",
-    "drizzle-orm": "^0.41.0"
+    "drizzle-orm": "^0.41.0",
+    "pg": "^8.14.1"
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
     "@types/node": "^22.14.1",
+    "@types/pg": "^8.11.12",
     "drizzle-kit": "^0.30.6",
     "typescript": "^5.8.3"
   },

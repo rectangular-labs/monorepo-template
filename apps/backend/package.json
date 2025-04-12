@@ -9,9 +9,9 @@
     }
   },
   "scripts": {
-    "dev": "pnpm with-env vite dev --port 3922",
-    "build": "pnpm with-env-prod vite build && tsc --emitDeclarationOnly --declaration --declarationMap --outDir dist --noEmit false",
-    "serve": "pnpm with-env-prod node ./dist/index.js",
+    "dev": "pnpm with-env tsx watch ./src/routes/index.ts",
+    "build": "pnpm with-env-prod tsc --declaration --declarationMap --outDir dist --noEmit false",
+    "serve": "pnpm with-env-prod node ./dist/routes/index.js",
     "test": "vitest run",
     "clean": "git clean -xdf .turbo node_modules dist .cache",
     "format": "bun x @biomejs/biome format . --write",
@@ -23,7 +23,7 @@
   "dependencies": {
     "@hono/node-server": "^1.14.1",
     "@rectangular-labs/db": "workspace:*",
-    "@rectangular-labs/schema": "workspace:*",
+    "@rectangular-labs/env": "workspace:*",
     "hono": "^4.7.6"
   },
   "devDependencies": {
