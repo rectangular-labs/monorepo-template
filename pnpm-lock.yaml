@@ -43,8 +43,8 @@ importers:
         version: 4.7.6
     devDependencies:
       '@hono/vite-build':
-        specifier: ^1.5.0
-        version: 1.5.0(hono@4.7.6)
+        specifier: ^1.6.0
+        version: 1.6.0(hono@4.7.6)
       '@hono/vite-dev-server':
         specifier: ^0.19.0
         version: 0.19.0(hono@4.7.6)(miniflare@4.20250409.0)(wrangler@4.10.0(@cloudflare/workers-types@4.20250412.0))
@@ -1263,8 +1263,8 @@ packages:
     peerDependencies:
       hono: ^4
 
-  '@hono/vite-build@1.5.0':
-    resolution: {integrity: sha512-aPQwcRp1j6Av+mI8cPoSSUNHwp+VGAm1uF6KqJGY4ZlCLtu13OgMt/+X5kZpLLlo2wBJqkO1POX/LfjKvc2jBg==}
+  '@hono/vite-build@1.6.0':
+    resolution: {integrity: sha512-7YJHgOVb4MnlTGI4anWTneJqRJ+h7xar6m4iz7Bnjf+QEdR6T6p5M8feqbwyQ89K1jFnGOshBVKdbUw1fPwbew==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
       hono: '*'
@@ -5302,7 +5302,7 @@ snapshots:
     dependencies:
       hono: 4.7.6
 
-  '@hono/vite-build@1.5.0(hono@4.7.6)':
+  '@hono/vite-build@1.6.0(hono@4.7.6)':
     dependencies:
       hono: 4.7.6
 
