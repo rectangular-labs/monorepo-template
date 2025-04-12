@@ -1,5 +1,5 @@
+import { type DB, createDb } from "@rectangular-labs/db";
 import { createMiddleware } from "hono/factory";
-import { createDb, type DB } from "@rectangular-labs/db";
 import { env } from "./env";
 
 export type HonoEnv = {

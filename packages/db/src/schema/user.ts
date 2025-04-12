@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import { serial, text, uniqueIndex } from "drizzle-orm/pg-core";
-import { pgAppTable } from "./_table";
 import { timestamps } from "./_helper";
+import { pgAppTable } from "./_table";
 
 export const userTable = pgAppTable(
   "user",
