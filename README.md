@@ -37,10 +37,18 @@ This project uses PostgreSQL as its database. A Docker Compose setup is provided
 
 You'll need Docker to be running.
 
-Run `pnpm run dev` to start up the frontend and server.
-Note you might have to accept some certs since we use the `mkcert` vite plugin to develop on `https` by default.
+Run `pnpm dev` to start up the frontend and server.
 
-Finally visit `https://localhost:6969` to see your dev server
+Finally visit `https://localhost:6969` to see your dev
+ server
+
+### First time set-up
+
+If this is your first time setting things up, you'll have to do a few extra things:
+
+1. Run `docker compose up -d` to launch the postgres DB.
+2. Run `pnpm db:push` to update the db with the default schema
+3. Run `pnpm dev`. Note you might have to accept some certs since we use the `mkcert` vite plugin to develop on `https` by default.
 
 ## Credits
 

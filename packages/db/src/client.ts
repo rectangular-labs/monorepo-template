@@ -8,7 +8,7 @@ const schema = {
 
 export const createDb = (connectionString: string) => {
   const client = postgres(connectionString);
-  return drizzle(client, { schema });
+  return drizzle(client, { schema, casing: "snake_case" });
 };
 
 export type DB = ReturnType<typeof createDb>;

@@ -9,7 +9,7 @@
     }
   },
   "scripts": {
-    "dev": "tsx watch ./src/routes/index.ts",
+    "dev": "pnpm with-env tsx watch ./src/routes/index.ts",
     "build": "pnpm with-env-prod tsc --declaration --declarationMap --outDir dist --noEmit false",
     "serve": "pnpm with-env-prod node ./dist/routes/index.js",
     "test": "vitest run",
