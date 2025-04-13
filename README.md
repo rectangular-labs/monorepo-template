@@ -50,6 +50,16 @@ If this is your first time setting things up, you'll have to do a few extra thin
 2. Run `pnpm db:push` to update the db with the default schema
 3. Run `pnpm dev`. Note you might have to accept some certs since we use the `mkcert` vite plugin to develop on `https` by default.
 
+### Adding new package
+
+To add a new package to the monorepo, run:
+
+```bash
+pnpm new:package
+```
+
+This command will walk you through the process of scaffolding a new package directory under `packages/`with the necessary basic configuration files.
+
 ## Credits
 
 This repository was originally inspired by via [create t3 turbo](https://github.com/t3-oss/create-t3-turbo) and wouldn't be possible without all the other open source tooling.
