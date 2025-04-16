@@ -23,7 +23,7 @@
     "@tanstack/react-router": "^1.116.0",
     "@tanstack/react-router-devtools": "^1.116.0",
     "@tanstack/router-plugin": "^1.116.1",
-    "hono": "^4.7.6",
+    "hono": "^4.7.7",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
