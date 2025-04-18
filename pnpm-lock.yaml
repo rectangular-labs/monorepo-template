@@ -15,8 +15,8 @@ importers:
         specifier: ^2.29.2
         version: 2.29.2
       '@dotenvx/dotenvx':
-        specifier: ^1.40.1
-        version: 1.40.1
+        specifier: ^1.41.0
+        version: 1.41.0
       '@rectangular-labs/typescript':
         specifier: workspace:*
         version: link:tooling/typescript
@@ -596,8 +596,8 @@ packages:
     resolution: {integrity: sha512-UJnjoFsmxfKUdNYdWgOB0mWUypuLvAfQPH1+pyvRJs6euowbFkFC6P13w1l8mJyi3vxYMxc9kld5jZEGRQs6bw==}
     engines: {node: '>=18'}
 
-  '@dotenvx/dotenvx@1.40.1':
-    resolution: {integrity: sha512-AOPRTtCD+OKciAbaw4xPvD6kTCl78nvDLRYfNl58eulXoBkfbcha7YLuXpLTayDsks6ioS2VHqUiSIo7V1mw7w==}
+  '@dotenvx/dotenvx@1.41.0':
+    resolution: {integrity: sha512-lFZOSKLM2/Jm7FXYUIvnciUhMsuEatyxCgau4lnjDD59LaSYiaNLjyjnUL/aYpH1+iaDhD37+mPOzH9kBZlUJQ==}
     hasBin: true
 
   '@drizzle-team/brocli@0.10.2':
@@ -5056,7 +5056,7 @@ snapshots:
 
   '@csstools/css-tokenizer@3.0.3': {}
 
-  '@dotenvx/dotenvx@1.40.1':
+  '@dotenvx/dotenvx@1.41.0':
     dependencies:
       commander: 11.1.0
       dotenv: 16.4.7
