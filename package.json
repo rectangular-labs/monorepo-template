@@ -15,6 +15,8 @@
     "new:package": "turbo gen package",
     "dev": "docker compose up -d && turbo run dev",
     "build": "turbo build",
+    "build:preview": "turbo build:preview",
+    "build:production": "turbo build:production",
     "changeset": "changeset",
     "changeset:release": "bun run build && changeset publish",
     "format": "turbo run format --continue",

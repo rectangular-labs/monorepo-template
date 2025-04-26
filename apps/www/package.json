@@ -3,16 +3,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm with-env vite --port 6969",
-    "build": "pnpm with-env-prod vite build && tsc",
-    "serve": "pnpm with-env-prod vite preview",
+    "dev": "pnpm with-env-local vite --port 6969",
+    "build:preview": "pnpm with-env-preview vite build && tsc",
+    "build:production": "pnpm with-env-prod vite build && tsc",
+    "serve:preview": "pnpm with-env-preview vite preview",
+    "serve:production": "pnpm with-env-prod vite preview",
     "test": "vitest run",
     "clean": "git clean -xdf .turbo node_modules dist .cache",
     "format": "bun x @biomejs/biome format . --write",
     "lint": "bun x @biomejs/biome lint . --write",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "with-env": "dotenvx run -f ../../.env.local  -f ../../.env -- ",
-    "with-env-prod": "dotenvx run -f ../../.env -- "
+    "with-env-local": "dotenvx run -f ../../.env.local  -f ../../.env -- ",
+    "with-env-preview": "dotenvx run  -f ../../.env -- ",
+    "with-env-prod": "dotenvx run -f ../../.env.production -- "
   },
   "dependencies": {
     "@rectangular-labs/backend": "workspace:*",

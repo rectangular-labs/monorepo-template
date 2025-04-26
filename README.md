@@ -11,15 +11,23 @@ This monorepo uses Turborepo and contains the following structure:
 
 ## Environment Variables
 
-Environment variables are managed using `pnpm`. To set an environment variable across all environments (development, preview, production), use:
+Environment variables are managed using `pnpm`. There's 3 layers to it:
+
+```bash
+.env.production // used for production builds
+.env // used in local development and preview builds
+.env.local // used in local development
+```
+
+ To set an environment variable, use:
 
 ```bash
 pnpm env:set <VARIABLE_NAME> <VALUE>
 ```
 
-This command updates the `.env` file in the root, which is used by all workspaces.
+This command updates the `.env` file in the root by default.
 
-To override a variable specifically for your local development environment without affecting the shared `.env` file, use the `-f` flag to target `.env.local`:
+Use the `-f` flag to target a specific file, for e.g. `.env.local`or `.env.production` :
 
 ```bash
 pnpm env:set <VARIABLE_NAME> <VALUE> -f .env.local
@@ -27,7 +35,7 @@ pnpm env:set <VARIABLE_NAME> <VALUE> -f .env.local
 
 The `.env.local` file is ignored by Git and allows you to have local-specific settings.
 
-The values in `.env` are encrypted by default so it can be easily shared across teams. Refer to the [dotenvx](https://dotenvx.com/) documentation for more.
+The values in all `.env` files are encrypted by default so it can be easily shared across teams. Refer to the [dotenvx](https://dotenvx.com/) documentation for more.
 
 ## Database
 
@@ -59,6 +67,22 @@ pnpm new:package
 ```
 
 This command will walk you through the process of scaffolding a new package directory under `packages/`with the necessary basic configuration files.
+
+## Building
+
+To build the applications for production, run:
+
+```bash
+pnpm build:production
+```
+
+To build and preview the applications, run:
+
+```bash
+pnpm build:preview
+```
+
+The main difference is that `pnpm build:production` uses the `.env.production` file while `build:preview` uses the `.env` file.
 
 ## Credits
 

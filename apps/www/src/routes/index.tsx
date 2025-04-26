@@ -1,4 +1,5 @@
 import { backend } from "@/lib/backend";
+import { env } from "@/lib/env";
 import * as Icons from "@rectangular-labs/ui/components/icon";
 import { ThemeToggle } from "@rectangular-labs/ui/components/theme-provider";
 import { Button } from "@rectangular-labs/ui/components/ui/button";
@@ -16,6 +17,7 @@ export const Route = createFileRoute("/")({
   component: App,
   loader: async () => {
     const response = await backend.api.$get();
+    console.log("env.VITE_APP_URL", env.VITE_APP_URL);
     return response.json();
   },
 });
