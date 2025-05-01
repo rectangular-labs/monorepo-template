@@ -27,7 +27,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@changesets/cli": "^2.29.2",
-    "@dotenvx/dotenvx": "^1.41.0",
+    "@dotenvx/dotenvx": "^1.42.0",
     "@rectangular-labs/typescript": "workspace:*",
     "@turbo/gen": "^2.5.2",
     "turbo": "^2.5.2",
