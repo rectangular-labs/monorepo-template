@@ -15,8 +15,8 @@ importers:
         specifier: ^2.29.2
         version: 2.29.2
       '@dotenvx/dotenvx':
-        specifier: ^1.41.0
-        version: 1.41.0
+        specifier: ^1.42.0
+        version: 1.42.0
       '@rectangular-labs/typescript':
         specifier: workspace:*
         version: link:tooling/typescript
@@ -596,8 +596,8 @@ packages:
     resolution: {integrity: sha512-UJnjoFsmxfKUdNYdWgOB0mWUypuLvAfQPH1+pyvRJs6euowbFkFC6P13w1l8mJyi3vxYMxc9kld5jZEGRQs6bw==}
     engines: {node: '>=18'}
 
-  '@dotenvx/dotenvx@1.41.0':
-    resolution: {integrity: sha512-lFZOSKLM2/Jm7FXYUIvnciUhMsuEatyxCgau4lnjDD59LaSYiaNLjyjnUL/aYpH1+iaDhD37+mPOzH9kBZlUJQ==}
+  '@dotenvx/dotenvx@1.42.0':
+    resolution: {integrity: sha512-tvaUA4gX4QsYvXug+UuiXbHk20PacpFAyrxTHJJoJ2wiCjGzkfTIMgWlxJ2WKsGyUbNCAnQKRTStqO370uwAbA==}
     hasBin: true
 
   '@drizzle-team/brocli@0.10.2':
@@ -3032,14 +3032,6 @@ packages:
   fastq@1.19.1:
     resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
 
-  fdir@6.4.3:
-    resolution: {integrity: sha512-PMXmW2y1hDDfTSRc9gaXIuCCRpuoz3Kaz8cUelp3smouvfT632ozg2vrT6lJsHKKOF59YLbOGfAWGUcKEfRMQw==}
-    peerDependencies:
-      picomatch: ^3 || ^4
-    peerDependenciesMeta:
-      picomatch:
-        optional: true
-
   fdir@6.4.4:
     resolution: {integrity: sha512-1NZP+GK4GfuAv3PqKvxQRDMjdSRZjnkq7KfhlNrCNNlZ0ygQFpebfrnfnq/W7fpUnAv9aGWmY1zKx7FYL3gwhg==}
     peerDependencies:
@@ -5086,13 +5078,13 @@ snapshots:
 
   '@csstools/css-tokenizer@3.0.3': {}
 
-  '@dotenvx/dotenvx@1.41.0':
+  '@dotenvx/dotenvx@1.42.0':
     dependencies:
       commander: 11.1.0
       dotenv: 16.4.7
       eciesjs: 0.4.14
       execa: 5.1.1
-      fdir: 6.4.3(picomatch@4.0.2)
+      fdir: 6.4.4(picomatch@4.0.2)
       ignore: 5.3.2
       object-treeify: 1.1.33
       picomatch: 4.0.2
@@ -7411,10 +7403,6 @@ snapshots:
   fastq@1.19.1:
     dependencies:
       reusify: 1.1.0
-
-  fdir@6.4.3(picomatch@4.0.2):
-    optionalDependencies:
-      picomatch: 4.0.2
 
   fdir@6.4.4(picomatch@4.0.2):
     optionalDependencies:
