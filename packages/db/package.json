@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
-    "@types/node": "^22.15.3",
+    "@types/node": "^22.15.9",
     "@types/pg": "^8.11.14",
     "drizzle-kit": "^0.31.1",
     "typescript": "^5.8.3"
