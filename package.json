@@ -29,8 +29,8 @@
     "@changesets/cli": "^2.29.3",
     "@dotenvx/dotenvx": "^1.43.0",
     "@rectangular-labs/typescript": "workspace:*",
-    "@turbo/gen": "^2.5.2",
-    "turbo": "^2.5.2",
+    "@turbo/gen": "^2.5.3",
+    "turbo": "^2.5.3",
     "typescript": "^5.8.3"
   },
   "packageManager": "pnpm@10.10.0"
