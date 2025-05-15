@@ -138,7 +138,7 @@ importers:
     dependencies:
       drizzle-orm:
         specifier: ^0.43.1
-        version: 0.43.1(@cloudflare/workers-types@4.20250412.0)(@opentelemetry/api@1.9.0)(@prisma/client@6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3))(@types/pg@8.15.1)(better-sqlite3@11.9.1)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5)(prisma@6.6.0(typescript@5.8.3))
+        version: 0.43.1(@cloudflare/workers-types@4.20250412.0)(@opentelemetry/api@1.9.0)(@prisma/client@6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3))(@types/pg@8.15.2)(better-sqlite3@11.9.1)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5)(prisma@6.6.0(typescript@5.8.3))
       pg:
         specifier: ^8.16.0
         version: 8.16.0
@@ -150,8 +150,8 @@ importers:
         specifier: ^22.15.18
         version: 22.15.18
       '@types/pg':
-        specifier: ^8.15.1
-        version: 8.15.1
+        specifier: ^8.15.2
+        version: 8.15.2
       drizzle-kit:
         specifier: ^0.31.1
         version: 0.31.1
@@ -2235,8 +2235,8 @@ packages:
   '@types/node@22.15.18':
     resolution: {integrity: sha512-v1DKRfUdyW+jJhZNEI1PYy29S2YRxMV5AOO/x/SjKmW0acCIOqmbj6Haf9eHAhsPmrhlHSxEhv/1WszcLWV4cg==}
 
-  '@types/pg@8.15.1':
-    resolution: {integrity: sha512-YKHrkGWBX5+ivzvOQ66I0fdqsQTsvxqM0AGP2i0XrVZ9DP5VA/deEbTf7VuLPGpY7fJB9uGbkZ6KjVhuHcrTkQ==}
+  '@types/pg@8.15.2':
+    resolution: {integrity: sha512-+BKxo5mM6+/A1soSHBI7ufUglqYXntChLDyTbvcAn1Lawi9J7J9Ok3jt6w7I0+T/UDJ4CyhHk66+GZbwmkYxSg==}
 
   '@types/react-dom@19.1.5':
     resolution: {integrity: sha512-CMCjrWucUBZvohgZxkjd6S9h0nZxXjzus6yDfUb+xLxYM7VvjKNH1tQrE9GWLql1XoOP4/Ds3bwFqShHUYraGg==}
@@ -3818,9 +3818,6 @@ packages:
 
   pg-protocol@1.10.0:
     resolution: {integrity: sha512-IpdytjudNuLv8nhlHs/UrVBhU0e78J0oIS/0AVdTbWxSOkFUVdsHC/NrorO6nXsQNDTT1kzDSOMJubBQviX18Q==}
-
-  pg-protocol@1.9.5:
-    resolution: {integrity: sha512-DYTWtWpfd5FOro3UnAfwvhD8jh59r2ig8bPtc9H8Ds7MscE/9NYruUQWFAOuraRl29jwcT2kyMFQ3MxeaVjUhg==}
 
   pg-types@2.2.0:
     resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
@@ -6577,10 +6574,10 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/pg@8.15.1':
+  '@types/pg@8.15.2':
     dependencies:
       '@types/node': 22.15.18
-      pg-protocol: 1.9.5
+      pg-protocol: 1.10.0
       pg-types: 4.0.2
 
   '@types/react-dom@19.1.5(@types/react@19.1.4)':
@@ -7199,12 +7196,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.43.1(@cloudflare/workers-types@4.20250412.0)(@opentelemetry/api@1.9.0)(@prisma/client@6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3))(@types/pg@8.15.1)(better-sqlite3@11.9.1)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5)(prisma@6.6.0(typescript@5.8.3)):
+  drizzle-orm@0.43.1(@cloudflare/workers-types@4.20250412.0)(@opentelemetry/api@1.9.0)(@prisma/client@6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3))(@types/pg@8.15.2)(better-sqlite3@11.9.1)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5)(prisma@6.6.0(typescript@5.8.3)):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20250412.0
       '@opentelemetry/api': 1.9.0
       '@prisma/client': 6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3)
-      '@types/pg': 8.15.1
+      '@types/pg': 8.15.2
       better-sqlite3: 11.9.1
       gel: 2.0.1
       pg: 8.16.0
@@ -8206,8 +8203,6 @@ snapshots:
       pg: 8.16.0
 
   pg-protocol@1.10.0: {}
-
-  pg-protocol@1.9.5: {}
 
   pg-types@2.2.0:
     dependencies:
