@@ -27,7 +27,7 @@
     "@hono/node-server": "^1.14.1",
     "@rectangular-labs/db": "workspace:*",
     "@rectangular-labs/env": "workspace:*",
-    "hono": "^4.7.9"
+    "hono": "^4.7.10"
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
