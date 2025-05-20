@@ -33,6 +33,6 @@
     "@rectangular-labs/typescript": "workspace:*",
     "@types/node": "^22.15.19",
     "tsx": "^4.19.4",
-    "vitest": "^3.1.3"
+    "vitest": "^3.1.4"
   }
 }
