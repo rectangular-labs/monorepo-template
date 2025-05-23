@@ -313,8 +313,8 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@19.1.5(@types/react@19.1.5))(@types/react@19.1.5)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       zod:
-        specifier: ^3.25.20
-        version: 3.25.20
+        specifier: ^3.25.23
+        version: 3.25.23
     devDependencies:
       '@types/react':
         specifier: ^19.1.5
@@ -4750,6 +4750,9 @@ packages:
   zod@3.25.20:
     resolution: {integrity: sha512-z03fqpTMDF1G02VLKUMt6vyACE7rNWkh3gpXVHgPTw28NPtDFRGvcpTtPwn2kMKtQ0idtYJUTxchytmnqYswcw==}
 
+  zod@3.25.23:
+    resolution: {integrity: sha512-Od2bdMosahjSrSgJtakrwjMDb1zM1A3VIHCPGveZt/3/wlrTWBya2lmEh2OYe4OIu8mPTmmr0gnLHIWQXdtWBg==}
+
 snapshots:
 
   '@ampproject/remapping@2.3.0':
@@ -6374,7 +6377,7 @@ snapshots:
       '@tanstack/virtual-file-routes': 1.115.0
       prettier: 3.5.3
       tsx: 4.19.4
-      zod: 3.25.20
+      zod: 3.25.23
     optionalDependencies:
       '@tanstack/react-router': 1.120.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
@@ -9146,3 +9149,5 @@ snapshots:
   yn@3.1.1: {}
 
   zod@3.25.20: {}
+
+  zod@3.25.23: {}
