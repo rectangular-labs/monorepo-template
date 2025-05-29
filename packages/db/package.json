@@ -28,7 +28,7 @@
     "with-env": "dotenvx run -f ../../.env.local  -f ../../.env -- "
   },
   "dependencies": {
-    "drizzle-orm": "^0.43.1",
+    "drizzle-orm": "^0.44.0",
     "pg": "^8.16.0"
   },
   "devDependencies": {
@@ -39,6 +39,6 @@
     "typescript": "^5.8.3"
   },
   "overrides": {
-    "drizzle-orm": "^0.43.1"
+    "drizzle-orm": "^0.44.0"
   }
 }
