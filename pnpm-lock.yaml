@@ -137,8 +137,8 @@ importers:
   packages/db:
     dependencies:
       drizzle-orm:
-        specifier: ^0.44.1
-        version: 0.44.1(@cloudflare/workers-types@4.20250412.0)(@opentelemetry/api@1.9.0)(@prisma/client@6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3))(@types/pg@8.15.4)(better-sqlite3@11.9.1)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5)(prisma@6.6.0(typescript@5.8.3))
+        specifier: ^0.44.2
+        version: 0.44.2(@cloudflare/workers-types@4.20250412.0)(@opentelemetry/api@1.9.0)(@prisma/client@6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3))(@types/pg@8.15.4)(better-sqlite3@11.9.1)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5)(prisma@6.6.0(typescript@5.8.3))
       pg:
         specifier: ^8.16.0
         version: 8.16.0
@@ -2800,8 +2800,8 @@ packages:
     resolution: {integrity: sha512-PUjYKWtzOzPtdtQlTHQG3qfv4Y0XT8+Eas6UbxCmxTj7qgMf+39dDujf1BP1I+qqZtw9uzwTh8jYtkMuCq+B0Q==}
     hasBin: true
 
-  drizzle-orm@0.44.1:
-    resolution: {integrity: sha512-prIWOlwJbiYInvcJxE+IMiJCtMiFVrSUJCwx6AXSJvGOdLu35qZ46QncTZDgloiLNCG0XxTC8agQElSmsl++TA==}
+  drizzle-orm@0.44.2:
+    resolution: {integrity: sha512-zGAqBzWWkVSFjZpwPOrmCrgO++1kZ5H/rZ4qTGeGOe18iXGVJWf3WPfHOVwFIbmi8kHjfJstC6rJomzGx8g/dQ==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -7198,7 +7198,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.1(@cloudflare/workers-types@4.20250412.0)(@opentelemetry/api@1.9.0)(@prisma/client@6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3))(@types/pg@8.15.4)(better-sqlite3@11.9.1)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5)(prisma@6.6.0(typescript@5.8.3)):
+  drizzle-orm@0.44.2(@cloudflare/workers-types@4.20250412.0)(@opentelemetry/api@1.9.0)(@prisma/client@6.6.0(prisma@6.6.0(typescript@5.8.3))(typescript@5.8.3))(@types/pg@8.15.4)(better-sqlite3@11.9.1)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5)(prisma@6.6.0(typescript@5.8.3)):
     optionalDependencies:
       '@cloudflare/workers-types': 4.20250412.0
       '@opentelemetry/api': 1.9.0
@@ -7525,7 +7525,7 @@ snapshots:
   gel@2.0.1:
     dependencies:
       '@petamoriken/float16': 3.9.2
-      debug: 4.4.0
+      debug: 4.4.1
       env-paths: 3.0.0
       semver: 7.7.1
       shell-quote: 1.8.2
