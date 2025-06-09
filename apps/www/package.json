@@ -23,9 +23,9 @@
     "@rectangular-labs/ui": "workspace:*",
     "@tanstack/react-query": "^5.80.6",
     "@tanstack/react-query-devtools": "^5.80.6",
-    "@tanstack/react-router": "^1.120.18",
-    "@tanstack/react-router-devtools": "^1.120.18",
-    "@tanstack/router-plugin": "^1.120.18",
+    "@tanstack/react-router": "^1.120.20",
+    "@tanstack/react-router-devtools": "^1.120.20",
+    "@tanstack/router-plugin": "^1.120.20",
     "hono": "^4.7.11",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
