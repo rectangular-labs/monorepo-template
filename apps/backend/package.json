@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
-    "@types/node": "^22.15.30",
+    "@types/node": "^22.15.31",
     "tsx": "^4.19.4",
     "vitest": "^3.2.3"
   }
