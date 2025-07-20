@@ -1,9 +1,10 @@
 {
   "name": "www",
   "private": true,
+  "sideEffects": false,
   "type": "module",
   "scripts": {
-    "dev": "pnpm with-env-local vite --port 6969",
+    "dev": "pnpm with-env-local vite",
     "build:preview": "pnpm with-env-preview vite build && tsc",
     "build:production": "pnpm with-env-prod vite build && tsc",
     "serve:preview": "pnpm with-env-preview vite preview",
@@ -21,12 +22,12 @@
     "@rectangular-labs/backend": "workspace:*",
     "@rectangular-labs/env": "workspace:*",
     "@rectangular-labs/ui": "workspace:*",
-    "@tanstack/react-query": "^5.80.7",
-    "@tanstack/react-query-devtools": "^5.80.7",
-    "@tanstack/react-router": "^1.121.21",
-    "@tanstack/react-router-devtools": "^1.121.21",
-    "@tanstack/router-plugin": "^1.121.21",
-    "hono": "^4.7.11",
+    "@tanstack/react-query": "^5.83.0",
+    "@tanstack/react-query-devtools": "^5.83.0",
+    "@tanstack/react-router": "^1.128.6",
+    "@tanstack/react-router-devtools": "^1.128.6",
+    "@tanstack/react-router-with-query": "^1.128.6",
+    "@tanstack/react-start": "^1.128.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
@@ -40,9 +41,10 @@
     "@vitejs/plugin-react": "^4.5.2",
     "jsdom": "^26.1.0",
     "typescript": "^5.8.3",
-    "vite": "^6.2.6",
+    "vite": "^7.0.5",
     "vite-plugin-mkcert": "^1.17.8",
-    "vitest": "^3.2.3",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.2.4",
     "web-vitals": "^5.0.3"
   }
 }
