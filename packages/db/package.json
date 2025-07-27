@@ -35,7 +35,7 @@
     "@rectangular-labs/typescript": "workspace:*",
     "@types/node": "^22.15.32",
     "@types/pg": "^8.15.4",
-    "drizzle-kit": "^0.31.1",
+    "drizzle-kit": "^0.31.4",
     "typescript": "^5.8.3"
   },
   "overrides": {
