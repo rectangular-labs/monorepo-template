@@ -11,11 +11,7 @@ export function ThemeProvider({
   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 }
 
-export function ThemeToggle({
-  className,
-}: {
-  className?: string;
-}) {
+export function ThemeToggle({ className }: { className?: string }) {
   const { setTheme, theme } = useTheme();
 
   return (

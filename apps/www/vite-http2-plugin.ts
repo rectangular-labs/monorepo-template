@@ -18,7 +18,7 @@ export function http2(): Plugin {
 
           req.on("end", () => {
             const buffer = Buffer.concat(chunks);
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+            // biome-ignore lint/suspicious/noExplicitAny: temp workaround
             const r = new Readable() as any;
 
             const headers = Object.fromEntries(

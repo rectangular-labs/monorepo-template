@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "sideEffects": false,
-  "files": ["tailwind.config.web.ts", "globals.css"],
+  "files": [
+    "tailwind.config.web.ts",
+    "globals.css"
+  ],
   "exports": {
     "./*": "./src/*.tsx",
     "./styles.css": "./src/styles.css",
