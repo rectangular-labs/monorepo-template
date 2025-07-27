@@ -41,12 +41,12 @@ function App() {
               </p>
             </CardContent>
             <CardFooter className="mt-auto">
-              <Button variant="outline" className="w-full" asChild>
+              <Button asChild className="w-full" variant="outline">
                 <a
-                  href="https://tanstack.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2"
+                  href="https://tanstack.com"
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <Icons.TanStack className="h-5 w-5" />
                   <span>Learn TanStack</span>
@@ -67,12 +67,12 @@ function App() {
               </p>
             </CardContent>
             <CardFooter className="mt-auto">
-              <Button variant="outline" className="w-full" asChild>
+              <Button asChild className="w-full" variant="outline">
                 <a
-                  href="https://github.com/pnpm/pnpm"
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2"
+                  href="https://github.com/pnpm/pnpm"
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <Icons.Pnpm className="h-5 w-5" />
                   <span>Learn More</span>
@@ -94,12 +94,12 @@ function App() {
               </p>
             </CardContent>
             <CardFooter className="mt-auto">
-              <Button variant="outline" className="w-full" asChild>
+              <Button asChild className="w-full" variant="outline">
                 <a
-                  href="https://orpc.unnoq.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2"
+                  href="https://orpc.unnoq.com/"
+                  rel="noopener noreferrer"
+                  target="_blank"
                 >
                   <span>Learn More</span>
                 </a>
@@ -109,11 +109,11 @@ function App() {
         </div>
 
         <div className="mt-16 flex flex-col items-center">
-          <Button className="gap-2" variant="default" asChild>
+          <Button asChild className="gap-2" variant="default">
             <a
               href="https://github.com/ElasticBottle/monorepo-template"
-              target="_blank"
               rel="noopener noreferrer"
+              target="_blank"
             >
               <Icons.GitHub className="h-5 w-5" />
               <span>View on GitHub</span>
