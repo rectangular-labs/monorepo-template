@@ -33,8 +33,8 @@
     "@changesets/cli": "^2.29.5",
     "@dotenvx/dotenvx": "^1.44.2",
     "@rectangular-labs/typescript": "workspace:*",
-    "@turbo/gen": "^2.5.4",
-    "turbo": "^2.5.4",
+    "@turbo/gen": "^2.5.5",
+    "turbo": "^2.5.5",
     "typescript": "^5.8.3"
   },
   "packageManager": "pnpm@10.12.1"
