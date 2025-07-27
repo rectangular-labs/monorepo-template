@@ -12,6 +12,7 @@ export default defineConfig({
       projects: ["./tsconfig.json"],
     }),
     tailwindcss(),
+    // needed for now to let tanstack start work with mkcert for https on localhost
     http2(),
     mkcert(),
     tanstackStart({
