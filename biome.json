@@ -1,16 +1,20 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "organizeImports": { "enabled": true },
+  "$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+  "assist": {
+    "actions": {
+      "source": { "organizeImports": "on", "useSortedAttributes": "on" }
+    }
+  },
   "linter": {
     "enabled": true,
+    "domains": {
+      "react": "recommended",
+      "project": "recommended",
+      "test": "recommended"
+    },
     "rules": {
       "recommended": true,
       "nursery": {
-        "noEnum": "warn",
-        "noDuplicateElseIf": "error",
-        "noDynamicNamespaceImportAccess": "error",
-        "noExportedImports": "error",
-        "noMissingVarFunction": "error",
         "useSortedClasses": {
           "level": "error",
           "fix": "safe",
@@ -21,16 +25,15 @@
         }
       },
       "correctness": {
-        "useHookAtTopLevel": "error",
-        "noNewSymbol": "error",
-        "useArrayLiterals": "error",
-        "noUnusedImports": "warn",
-        "noUnusedVariables": "warn",
-        "noUnusedPrivateClassMembers": "error"
+        "useHookAtTopLevel": "error"
       },
       "style": {
         "noRestrictedGlobals": {
-          "options": { "deniedGlobals": ["Buffer"] },
+          "options": {
+            "deniedGlobals": {
+              "Buffer": "Please use the Buffer from the node:buffer package."
+            }
+          },
           "level": "error"
         },
         "useConsistentArrayType": {
@@ -40,12 +43,16 @@
           }
         },
         "noNamespace": "error",
-        "useForOf": "error"
+        "useForOf": "error",
+        "noEnum": "warn",
+        "noExportedImports": "error"
       },
       "suspicious": {
         "noEmptyBlockStatements": "error",
-        "useAwait": "error"
-      }
+        "useAwait": "error",
+        "noDuplicateElseIf": "error"
+      },
+      "performance": {}
     }
   },
   "vcs": {
@@ -54,8 +61,15 @@
   },
   "formatter": {
     "enabled": true,
-    "indentStyle": "space",
-    "ignore": ["database.ts"]
+    "indentStyle": "space"
+  },
+  "css": {
+    "parser": {
+      "cssModules": true
+    },
+    "formatter": {
+      "enabled": true
+    }
   },
   "javascript": { "globals": [] },
   "json": {
@@ -66,15 +80,17 @@
   },
   "overrides": [],
   "files": {
-    "ignore": [
-      "node_modules",
-      ".sst",
-      ".turbo",
-      ".cache",
-      "dist",
-      "routeTree.gen.ts",
-      "sst-env.d.ts",
-      "_renderer.tsx"
+    "includes": [
+      "apps/**",
+      "packages/**",
+      "!**/node_modules",
+      "!**/.sst",
+      "!**/.turbo",
+      "!**/.cache",
+      "!**/dist",
+      "!**/routeTree.gen.ts",
+      "!**/sst-env.d.ts",
+      "!**/_renderer.tsx"
     ]
   }
 }

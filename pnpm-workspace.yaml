@@ -2,7 +2,9 @@ packages:
   - apps/*
   - packages/*
   - tooling/*
+
 onlyBuiltDependencies:
-  - "@biomejs/biome"
+  - '@biomejs/biome'
+  - '@tailwindcss/oxide'
   - better-sqlite3
   - esbuild
