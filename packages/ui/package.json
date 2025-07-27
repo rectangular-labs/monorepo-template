@@ -11,10 +11,10 @@
   },
   "scripts": {
     "clean": "git clean -xdf .turbo node_modules",
-    "format": "bun x @biomejs/biome format . --write",
-    "lint": "bun x @biomejs/biome lint . --write",
+    "format": "pnpx @biomejs/biome format . --write",
+    "lint": "pnpx @biomejs/biome lint . --write",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
-    "ui-add": "bun x shadcn@canary add && bun x @biomejs/biome lint --write --unsafe"
+    "ui-add": "pnpx shadcn@canary add && pnpx @biomejs/biome lint --write --unsafe"
   },
   "devDependencies": {
     "@types/react": "^19.1.8",

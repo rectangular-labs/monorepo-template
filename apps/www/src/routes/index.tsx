@@ -1,5 +1,3 @@
-import { backend } from "@/lib/backend";
-import { env } from "@/lib/env";
 import * as Icons from "@rectangular-labs/ui/components/icon";
 import { ThemeToggle } from "@rectangular-labs/ui/components/theme-provider";
 import { Button } from "@rectangular-labs/ui/components/ui/button";
@@ -15,11 +13,6 @@ import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: App,
-  loader: async () => {
-    const response = await backend.api.$get();
-    console.log("env.VITE_APP_URL", env.VITE_APP_URL);
-    return response.json();
-  },
 });
 
 function App() {
@@ -29,7 +22,7 @@ function App() {
       <ThemeToggle className="absolute top-4 right-4" />
 
       <div className="container mx-auto flex flex-col items-center justify-center px-4 py-16">
-        <h1 className="font-bold text-4xl tracking-tight">{data.message}</h1>
+        <h1 className="font-bold text-4xl tracking-tight">{data}</h1>
 
         <p className="mt-4 text-lg ">
           A modern, full-stack development template
@@ -38,13 +31,11 @@ function App() {
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Card className="flex flex-col">
             <CardHeader>
-              <CardTitle>React + TanStack</CardTitle>
-              <CardDescription className="">
-                Build modern, type-safe UIs
-              </CardDescription>
+              <CardTitle>React + TanStack Start</CardTitle>
+              <CardDescription>Build modern, type-safe UIs</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="">
+              <p>
                 A powerful combination for building interactive web applications
                 with type safety and excellent developer experience.
               </p>
@@ -66,39 +57,11 @@ function App() {
 
           <Card className="flex flex-col">
             <CardHeader>
-              <CardTitle>Hono Backend</CardTitle>
-              <CardDescription className="">Edge-ready backend</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="">
-                Ultra-fast, lightweight web framework with excellent TypeScript
-                support and Cloudflare compatibility.
-              </p>
-            </CardContent>
-            <CardFooter className="mt-auto">
-              <Button variant="outline" className="w-full" asChild>
-                <a
-                  href="https://hono.dev"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2"
-                >
-                  <Icons.Hono className="h-5 w-5" />
-                  <span>Explore Hono</span>
-                </a>
-              </Button>
-            </CardFooter>
-          </Card>
-
-          <Card className="flex flex-col">
-            <CardHeader>
               <CardTitle>Monorepo Architecture</CardTitle>
-              <CardDescription className="">
-                Scalable project organization
-              </CardDescription>
+              <CardDescription>Scalable project organization</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="">
+              <p>
                 Share code between projects, maintain consistency, and scale
                 your development with a modern monorepo setup.
               </p>
@@ -112,6 +75,32 @@ function App() {
                   className="flex items-center justify-center gap-2"
                 >
                   <Icons.Pnpm className="h-5 w-5" />
+                  <span>Learn More</span>
+                </a>
+              </Button>
+            </CardFooter>
+          </Card>
+          <Card className="flex flex-col">
+            <CardHeader>
+              <CardTitle>Typesafe APIs with oRPC</CardTitle>
+              <CardDescription>
+                End-to-end typesafe APIs made simple
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p>
+                oRPC is a library for building end-to-end typesafe APIs. No code
+                generation, no schemas, just TypeScript.
+              </p>
+            </CardContent>
+            <CardFooter className="mt-auto">
+              <Button variant="outline" className="w-full" asChild>
+                <a
+                  href="https://orpc.unnoq.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2"
+                >
                   <span>Learn More</span>
                 </a>
               </Button>

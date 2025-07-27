@@ -4,18 +4,14 @@
     "jsx": "react-jsx",
     "target": "ESNext",
     "module": "ESNext",
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
     "types": ["vite/client"],
-
-    /* Bundler mode */
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
 
     /* Linting */
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "~/*": ["./src/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],

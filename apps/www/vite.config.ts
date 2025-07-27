@@ -1,33 +1,30 @@
 import tailwindcss from "@tailwindcss/vite";
+import { tanstackStart } from "@tanstack/react-start/plugin/vite";
 import viteReact from "@vitejs/plugin-react";
-import { defineConfig } from "vitest/config";
-
-import { resolve } from "node:path";
-import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import mkcert from "vite-plugin-mkcert";
+import tsConfigPaths from "vite-tsconfig-paths";
+import { defineConfig } from "vitest/config";
+import { http2 } from "./vite-http2-plugin";
 
 export default defineConfig({
   plugins: [
-    TanStackRouterVite({ autoCodeSplitting: true }),
-    viteReact(),
+    tsConfigPaths({
+      projects: ["./tsconfig.json"],
+    }),
     tailwindcss(),
+    // needed for now to let tanstack start work with mkcert for https on localhost
+    http2(),
     mkcert(),
+    tanstackStart({
+      customViteReactPlugin: true,
+    }),
+    viteReact(),
   ],
   test: {
     globals: true,
     environment: "jsdom",
   },
-  resolve: {
-    alias: {
-      "@": resolve(__dirname, "./src"),
-    },
-  },
   server: {
-    proxy: {
-      "/api": {
-        target: "http://localhost:3922",
-        changeOrigin: true,
-      },
-    },
+    port: 6969,
   },
 });
