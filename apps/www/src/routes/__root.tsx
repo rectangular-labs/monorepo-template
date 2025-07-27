@@ -2,10 +2,10 @@ import { ThemeProvider } from "@rectangular-labs/ui/components/theme-provider";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
+  createRootRouteWithContext,
   HeadContent,
   Outlet,
   Scripts,
-  createRootRouteWithContext,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { seo } from "~/lib/seo";
@@ -64,7 +64,7 @@ function RootLayout() {
           <Outlet />
         </ThemeProvider>
         <Scripts />
-        <TanStackRouterDevtools position="bottom-right" />
+        <TanStackRouterDevtools position="bottom-left" />
         <ReactQueryDevtools buttonPosition="bottom-right" />
       </body>
     </html>
