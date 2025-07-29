@@ -15,8 +15,8 @@ importers:
         specifier: ^2.29.5
         version: 2.29.5
       '@dotenvx/dotenvx':
-        specifier: ^1.44.2
-        version: 1.44.2
+        specifier: ^1.48.3
+        version: 1.48.3
       '@rectangular-labs/typescript':
         specifier: workspace:*
         version: link:tooling/typescript
@@ -698,8 +698,8 @@ packages:
     resolution: {integrity: sha512-Y6+WUMsTFWE5jb20IFP4YGa5IrGY/+a/FbOSjDF/wz9gepU2hwCYSXRHP/vPwBvwcY3SVMASt4yXxbXNXigmZQ==}
     engines: {node: '>=18'}
 
-  '@dotenvx/dotenvx@1.44.2':
-    resolution: {integrity: sha512-2C44+G2dch4cB6zw7+oGQ9VcFQuuVhc5xOzfVvY7iUEj2PRhiVMIB6SpNMK1V5TvpdqrAqCYFjclK18Mh9vwNQ==}
+  '@dotenvx/dotenvx@1.48.3':
+    resolution: {integrity: sha512-7Tk0Rzgz0SEkaJRGijbKtVDHHztHz9fyXwcDT86VtD1fGVRirk4aBKUud1PEQdhwcg+jDblKGoXeA+I7J60CxQ==}
     hasBin: true
 
   '@drizzle-team/brocli@0.10.2':
@@ -3771,10 +3771,6 @@ packages:
     resolution: {integrity: sha512-1gxPBJpI/pcjQhKgIU91II6Wkay+dLcN3M6rf2uwP8hRur3HtQXjVrdAK3sjC0piaEuxzMwjXChcETiJl47lAQ==}
     engines: {node: '>=18'}
 
-  dotenv@16.4.7:
-    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
-    engines: {node: '>=12'}
-
   dotenv@16.6.1:
     resolution: {integrity: sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==}
     engines: {node: '>=12'}
@@ -4117,14 +4113,6 @@ packages:
 
   fd-slicer@1.1.0:
     resolution: {integrity: sha512-cE1qsB/VwyQozZ+q1dGxR8LBYNZeofhEdUNGSMbQD3Gw2lAzX9Zb3uIU6Ebc/Fmyjo9AWWfnn0AUCHqtevs/8g==}
-
-  fdir@6.4.4:
-    resolution: {integrity: sha512-1NZP+GK4GfuAv3PqKvxQRDMjdSRZjnkq7KfhlNrCNNlZ0ygQFpebfrnfnq/W7fpUnAv9aGWmY1zKx7FYL3gwhg==}
-    peerDependencies:
-      picomatch: ^3 || ^4
-    peerDependenciesMeta:
-      picomatch:
-        optional: true
 
   fdir@6.4.6:
     resolution: {integrity: sha512-hiFoqpyZcfNm1yc4u8oWCf9A2c4D3QjCrks3zmoVKVxpQRzmPNar1hUJcBG2RQHvEVGDN+Jm81ZheVLAQMK6+w==}
@@ -7295,13 +7283,13 @@ snapshots:
       gonzales-pe: 4.3.0
       node-source-walk: 7.0.1
 
-  '@dotenvx/dotenvx@1.44.2':
+  '@dotenvx/dotenvx@1.48.3':
     dependencies:
       commander: 11.1.0
-      dotenv: 16.4.7
+      dotenv: 16.6.1
       eciesjs: 0.4.14
       execa: 5.1.1
-      fdir: 6.4.4(picomatch@4.0.2)
+      fdir: 6.4.6(picomatch@4.0.2)
       ignore: 5.3.2
       object-treeify: 1.1.33
       picomatch: 4.0.2
@@ -8676,7 +8664,7 @@ snapshots:
       '@rollup/pluginutils': 5.2.0(rollup@4.45.1)
       commondir: 1.0.1
       estree-walker: 2.0.2
-      fdir: 6.4.4(picomatch@4.0.2)
+      fdir: 6.4.6(picomatch@4.0.2)
       is-reference: 1.2.1
       magic-string: 0.30.17
       picomatch: 4.0.2
@@ -10437,8 +10425,6 @@ snapshots:
     dependencies:
       type-fest: 4.41.0
 
-  dotenv@16.4.7: {}
-
   dotenv@16.6.1: {}
 
   drizzle-kit@0.31.4:
@@ -10790,10 +10776,6 @@ snapshots:
   fd-slicer@1.1.0:
     dependencies:
       pend: 1.2.0
-
-  fdir@6.4.4(picomatch@4.0.2):
-    optionalDependencies:
-      picomatch: 4.0.2
 
   fdir@6.4.6(picomatch@4.0.2):
     optionalDependencies:
@@ -11435,7 +11417,7 @@ snapshots:
   lambda-local@2.2.0:
     dependencies:
       commander: 10.0.1
-      dotenv: 16.4.7
+      dotenv: 16.6.1
       winston: 3.17.0
 
   lazystream@1.0.1:
@@ -12952,7 +12934,7 @@ snapshots:
 
   tinyglobby@0.2.14:
     dependencies:
-      fdir: 6.4.4(picomatch@4.0.2)
+      fdir: 6.4.6(picomatch@4.0.2)
       picomatch: 4.0.2
 
   tinygradient@1.1.5:
