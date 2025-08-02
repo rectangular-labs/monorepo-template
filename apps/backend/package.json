@@ -24,7 +24,7 @@
     "with-env-prod": "dotenvx run -f ../../.env.production -- "
   },
   "dependencies": {
-    "@hono/node-server": "^1.14.4",
+    "@hono/node-server": "^1.18.1",
     "@rectangular-labs/db": "workspace:*",
     "@rectangular-labs/env": "workspace:*",
     "hono": "^4.7.11"
