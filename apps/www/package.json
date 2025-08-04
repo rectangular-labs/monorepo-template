@@ -42,7 +42,7 @@
     "jiti": "^2.5.1",
     "jsdom": "^26.1.0",
     "typescript": "^5.8.3",
-    "vite": "^7.0.5",
+    "vite": "^7.0.6",
     "vite-plugin-mkcert": "^1.17.8",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4",
