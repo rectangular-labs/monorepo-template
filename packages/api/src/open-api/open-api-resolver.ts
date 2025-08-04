@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { minifyContractRouter } from "@orpc/contract";
 import { unlazyRouter } from "@orpc/server";
-import { router } from "./routes";
+import { router } from "../routes";
 
 const resolvedRouter = await unlazyRouter(router);
 const minifiedRouter = minifyContractRouter(resolvedRouter);

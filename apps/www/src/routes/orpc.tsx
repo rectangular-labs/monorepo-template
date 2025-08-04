@@ -1,4 +1,3 @@
-import { rqApiClient } from "@rectangular-labs/api/client";
 import { ThemeToggle } from "@rectangular-labs/ui/components/theme-provider";
 import { Button } from "@rectangular-labs/ui/components/ui/button";
 import {
@@ -11,12 +10,13 @@ import { Input } from "@rectangular-labs/ui/components/ui/input";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
+import { getRqHelper } from "~/lib/api";
 
 export const Route = createFileRoute("/orpc")({
   component: ORPCTodos,
   loader: async ({ context }) => {
     await context.queryClient.prefetchQuery(
-      rqApiClient.todos.list.queryOptions({
+      getRqHelper().todos.list.queryOptions({
         input: {
           limit: 10,
           cursor: 0,
@@ -28,7 +28,7 @@ export const Route = createFileRoute("/orpc")({
 
 function ORPCTodos() {
   const { data, refetch } = useQuery(
-    rqApiClient.todos.list.queryOptions({
+    getRqHelper().todos.list.queryOptions({
       input: {
         cursor: 0,
         limit: 10,
@@ -38,7 +38,7 @@ function ORPCTodos() {
 
   const [todo, setTodo] = useState("");
   const { mutate: addTodo } = useMutation(
-    rqApiClient.todos.create.mutationOptions({
+    getRqHelper().todos.create.mutationOptions({
       onSuccess: () => {
         refetch();
         setTodo("");

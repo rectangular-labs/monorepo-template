@@ -19,7 +19,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "concurrently \"tsc --watch\" \"tsx watch ./src/open-api-resolver.ts\"",
+    "dev": "concurrently \"tsc --watch\" \"tsx watch ./src/open-api/open-api-resolver.ts\"",
     "clean": "git clean -xdf .turbo node_modules dist .cache",
     "format": "pnpx @biomejs/biome format . --write",
     "lint": "pnpx @biomejs/biome lint . --write",
