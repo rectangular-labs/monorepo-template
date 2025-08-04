@@ -1,5 +1,5 @@
 {
-  "biome.lspBin": "node_modules/@biomejs/biome/bin/biome",
+  "biome.lsp.bin": "node_modules/@biomejs/biome/bin/biome",
   // allow autocomplete for ArkType expressions like "string | num"
   "editor.quickSuggestions": {
     "strings": "on"
@@ -26,10 +26,12 @@
     "editor.defaultFormatter": "biomejs.biome"
   },
   "files.watcherExclude": {
-    "**/routeTree.gen.ts": true
+    "**/routeTree.gen.ts": true,
+    "**/orpc-contract.json": true
   },
   "search.exclude": {
-    "**/routeTree.gen.ts": true
+    "**/routeTree.gen.ts": true,
+    "**/orpc-contract.json": true
   },
   // prioritize ArkType's "type" for autoimports
   "typescript.preferences.autoImportSpecifierExcludeRegexes": [
