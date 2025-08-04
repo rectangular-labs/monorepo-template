@@ -52,6 +52,7 @@ function BreadcrumbLink({
 function BreadcrumbPage({ className, ...props }: React.ComponentProps<"span">) {
   return (
     // biome-ignore lint/a11y/useFocusableInteractive: from shadCN
+    // biome-ignore lint/a11y/useSemanticElements: from shadCN
     <span
       aria-current="page"
       aria-disabled="true"

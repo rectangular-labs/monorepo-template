@@ -83,6 +83,7 @@
     "includes": [
       "apps/**",
       "packages/**",
+      "!./packages/api/src/open-api/orpc-contract.json",
       "!**/node_modules",
       "!**/.sst",
       "!**/.turbo",
