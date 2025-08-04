@@ -63,9 +63,9 @@ function RootLayout() {
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Outlet />
         </ThemeProvider>
-        <Scripts />
         <TanStackRouterDevtools position="bottom-left" />
         <ReactQueryDevtools buttonPosition="bottom-right" />
+        <Scripts />
       </body>
     </html>
   );

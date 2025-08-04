@@ -24,7 +24,7 @@ function App() {
       <div className="container mx-auto flex flex-col items-center justify-center px-4 py-16">
         <h1 className="font-bold text-4xl tracking-tight">{data}</h1>
 
-        <p className="mt-4 text-lg ">
+        <p className="mt-4 text-lg">
           A modern, full-stack development template
         </p>
 
@@ -122,8 +122,8 @@ function App() {
 
           <p className="mt-8 text-sm">
             Edit{" "}
-            <code className="rounded px-1 py-0.5 ">src/routes/index.tsx</code>{" "}
-            to customize this page
+            <code className="rounded px-1 py-0.5">src/routes/index.tsx</code> to
+            customize this page
           </p>
         </div>
       </div>

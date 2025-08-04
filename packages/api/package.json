@@ -1,0 +1,48 @@
+{
+  "name": "@rectangular-labs/api",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "default": "./src/client.ts"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "default": "./src/server.ts"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "default": "./src/types.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "concurrently \"tsc --watch\" \"tsx watch ./src/open-api/open-api-resolver.ts\"",
+    "clean": "git clean -xdf .turbo node_modules dist .cache",
+    "format": "pnpx @biomejs/biome format . --write",
+    "lint": "pnpx @biomejs/biome lint . --write",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "devDependencies": {
+    "@rectangular-labs/typescript": "workspace:*",
+    "@types/node": "^22.15.32",
+    "concurrently": "^9.2.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@orpc/arktype": "^1.7.9",
+    "@orpc/client": "^1.7.9",
+    "@orpc/contract": "^1.7.9",
+    "@orpc/json-schema": "^1.7.9",
+    "@orpc/openapi": "^1.7.9",
+    "@orpc/openapi-client": "^1.7.9",
+    "@orpc/react-query": "^1.7.9",
+    "@orpc/server": "^1.7.9",
+    "arktype": "^2.1.20"
+  },
+  "overrides": {
+    "@tanstack/react-query": "5.84.1"
+  }
+}
