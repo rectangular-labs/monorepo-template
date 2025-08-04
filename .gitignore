@@ -21,6 +21,8 @@ next-env.d.ts
 
 # Tanstack Start
 .tanstack/
+.nitro
+.vinxi
 
 # expo
 .expo/
