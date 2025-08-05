@@ -12,6 +12,10 @@
       "types": "./dist/server.d.ts",
       "default": "./src/server.ts"
     },
+    "./context": {
+      "types": "./dist/context.d.ts",
+      "default": "./src/context.ts"
+    },
     "./types": {
       "types": "./dist/types.d.ts",
       "default": "./src/types.ts"
@@ -40,6 +44,7 @@
     "@orpc/openapi-client": "^1.7.9",
     "@orpc/react-query": "^1.7.9",
     "@orpc/server": "^1.7.9",
+    "@rectangular-labs/db": "workspace:*",
     "arktype": "^2.1.20"
   },
   "overrides": {

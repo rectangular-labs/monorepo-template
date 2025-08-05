@@ -1,5 +1,6 @@
-import { lazy, os } from "@orpc/server";
+import { lazy } from "@orpc/server";
+import { base } from "../context";
 
-export const router = os.router({
+export const router = base.router({
   todos: lazy(() => import("./todo")),
 });
