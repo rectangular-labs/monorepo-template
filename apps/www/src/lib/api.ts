@@ -7,7 +7,7 @@ import {
   getWebRequest,
   setCookie,
 } from "@tanstack/react-start/server";
-import { clientEnv, serverEnv } from "./env";
+import { serverEnv } from "./env";
 
 export const getApiClient = createIsomorphicFn()
   .server(() => {
@@ -27,5 +27,5 @@ export const getApiClient = createIsomorphicFn()
   });
 
 export const getRqHelper = createIsomorphicFn()
-  .server(() => rqApiClient(clientEnv().VITE_APP_URL))
+  .server(() => rqApiClient(serverEnv().VITE_APP_URL))
   .client(() => rqApiClient(window.location.origin));
