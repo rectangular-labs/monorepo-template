@@ -40,11 +40,13 @@
     "^hono/adapter$"
   ],
   "cSpell.words": [
+    "arktype",
     "Creds",
     "dotenvx",
     "millis",
     "oklch",
     "orpc",
+    "simplewebauthn",
     "Sonner",
     "totp",
     "turso"
