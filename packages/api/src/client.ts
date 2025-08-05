@@ -30,4 +30,5 @@ const openApiLink = (baseUrl: string) =>
       }),
     ],
   });
-export const openApiClient: RouterClient = createORPCClient(openApiLink);
+export const openApiClient = (baseUrl: string): RouterClient =>
+  createORPCClient(openApiLink(baseUrl));

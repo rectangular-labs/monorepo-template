@@ -138,6 +138,9 @@ importers:
       '@orpc/server':
         specifier: ^1.7.9
         version: 1.7.9(crossws@0.3.5)(ws@8.18.1)
+      '@rectangular-labs/db':
+        specifier: workspace:*
+        version: link:../db
       arktype:
         specifier: ^2.1.20
         version: 2.1.20
