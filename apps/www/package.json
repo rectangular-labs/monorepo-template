@@ -28,16 +28,16 @@
     "@tanstack/react-router-devtools": "^1.130.12",
     "@tanstack/react-router-with-query": "^1.130.12",
     "@tanstack/react-start": "^1.130.12",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
     "@tailwindcss/vite": "^4.1.11",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.0",
-    "@types/react": "^19.1.8",
-    "@types/react-dom": "^19.1.6",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^4.5.2",
     "jiti": "^2.5.1",
     "jsdom": "^26.1.0",
