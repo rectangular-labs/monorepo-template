@@ -10,6 +10,7 @@ import { Input } from "@rectangular-labs/ui/components/ui/input";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
+import { LogoutButton } from "~/components/logout-button";
 import { getRqHelper } from "~/lib/api";
 
 export const Route = createFileRoute("/_authed/orpc")({
@@ -53,6 +54,7 @@ function ORPCTodos() {
   return (
     <div className="min-h-screen">
       <ThemeToggle className="absolute top-4 right-4" />
+      <LogoutButton className="absolute top-4 right-16" />
 
       <div className="container mx-auto flex flex-col items-center justify-center px-4 py-16">
         <h1 className="mb-8 font-bold text-4xl tracking-tight">

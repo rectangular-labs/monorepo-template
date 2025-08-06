@@ -7,6 +7,8 @@ import {
   CardTitle,
 } from "@rectangular-labs/ui/components/ui/card";
 import { Input } from "@rectangular-labs/ui/components/ui/input";
+import { Separator } from "@rectangular-labs/ui/components/ui/separator";
+import { Toaster, toast } from "@rectangular-labs/ui/components/ui/sonner";
 import {
   startAuthentication,
   startRegistration,
@@ -38,7 +40,6 @@ export const Route = createFileRoute("/login")({
 function Login() {
   const { next } = Route.useSearch();
   const [username, setUsername] = useState("");
-  const [result, setResult] = useState("");
 
   const {
     mutateAsync: startPasskeyRegistration,
@@ -46,7 +47,6 @@ function Login() {
   } = useMutation(
     getRqHelper().auth.passkey.startRegistration.mutationOptions(),
   );
-
   const {
     mutateAsync: finishPasskeyRegistration,
     isPending: isFinishRegistrationPending,
@@ -56,54 +56,57 @@ function Login() {
 
   const { mutateAsync: startPasskeyLogin, isPending: isStartLoginPending } =
     useMutation(getRqHelper().auth.passkey.startLogin.mutationOptions());
-
   const { mutateAsync: finishPasskeyLogin, isPending: isFinishLoginPending } =
     useMutation(getRqHelper().auth.passkey.finishLogin.mutationOptions());
 
   const navigate = useNavigate();
   const handlePasskeyLogin = async () => {
-    setResult("");
-    // 1. Get a challenge from the worker
-    const options = await startPasskeyLogin({});
+    try {
+      // 1. Get a challenge from the worker
+      const options = await startPasskeyLogin({});
 
-    // 2. Ask the browser to sign the challenge
-    const login = await startAuthentication({ optionsJSON: options });
+      // 2. Ask the browser to sign the challenge
+      const login = await startAuthentication({ optionsJSON: options });
 
-    // 3. Give the signed challenge to the worker to finish the login process
-    const { success } = await finishPasskeyLogin(login);
-    if (success) {
+      // 3. Give the signed challenge to the worker to finish the login process
+      await finishPasskeyLogin(login);
+
+      toast.success("Login successful!");
       await navigate({
         to: next ?? "/",
       });
+    } catch {
+      toast.error("Login failed. Please try again.");
     }
   };
 
   const handlePasskeyRegister = async () => {
     if (username.trim().length < 4) {
-      setResult("Please enter a username with at least 4 characters");
+      toast.error("Please enter a username with at least 4 characters");
       return;
     }
-    setResult("");
-    // 1. Get a challenge from the worker
-    const options = await startPasskeyRegistration({
-      username: username.trim(),
-    });
-    console.log("options", options.challenge);
-    // 2. Ask the browser to sign the challenge
-    const registration = await startRegistration({ optionsJSON: options });
 
-    // 3. Give the signed challenge to the worker to finish the registration process
-    const { success } = await finishPasskeyRegistration({
-      username,
-      registration,
-    });
+    try {
+      // 1. Get a challenge from the worker
+      const options = await startPasskeyRegistration({
+        username: username.trim(),
+      });
+      console.log("options", options.challenge);
+      // 2. Ask the browser to sign the challenge
+      const registration = await startRegistration({ optionsJSON: options });
 
-    if (!success) {
-      setResult("Registration failed");
-    } else {
+      // 3. Give the signed challenge to the worker to finish the registration process
+      await finishPasskeyRegistration({
+        username,
+        registration,
+      });
+
+      toast.success("Registration successful!");
       await navigate({
         to: next ?? "/",
       });
+    } catch {
+      toast.error("Registration failed. Please try again.");
     }
   };
 
@@ -122,54 +125,71 @@ function Login() {
           Passkey Authentication
         </h1>
 
-        <div className="w-full max-w-md space-y-6">
+        <div className="w-full max-w-lg space-y-6">
+          {/* Login Section */}
           <Card>
             <CardHeader>
-              <CardTitle>Login or Register</CardTitle>
+              <CardTitle className="text-center">Welcome Back</CardTitle>
+              <p className="text-center text-muted-foreground text-sm">
+                Sign in to your account using your passkey
+              </p>
+            </CardHeader>
+            <CardContent>
+              <Button
+                className="w-full"
+                disabled={isPending}
+                onClick={handlePasskeyLogin}
+                size="lg"
+                type="button"
+              >
+                {isPending ? "Signing in..." : "Sign in with passkey"}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* Divider */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <Separator className="w-full" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or create new account
+              </span>
+            </div>
+          </div>
+
+          {/* Registration Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-center">Create Account</CardTitle>
+              <p className="text-center text-muted-foreground text-sm">
+                Register a new account with your passkey
+              </p>
             </CardHeader>
             <CardContent className="space-y-4">
               <Input
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Username (required for registration)"
+                placeholder="Choose a username (minimum 4 characters)"
                 type="text"
                 value={username}
               />
-
-              <div className="space-y-3">
-                <Button
-                  className="w-full"
-                  disabled={isPending}
-                  onClick={handlePasskeyLogin}
-                  type="button"
-                >
-                  {isPending ? "..." : "Login with passkey"}
-                </Button>
-
-                <Button
-                  className="w-full"
-                  disabled={isPending || !username.trim()}
-                  onClick={handlePasskeyRegister}
-                  type="button"
-                  variant="outline"
-                >
-                  {isPending ? "..." : "Register with passkey"}
-                </Button>
-              </div>
-
-              {result && (
-                <div
-                  className={`rounded-md p-3 text-sm ${
-                    result.includes("successful")
-                      ? "border border-green-200 bg-green-50 text-green-700"
-                      : "border border-red-200 bg-red-50 text-red-700"
-                  }`}
-                >
-                  {result}
-                </div>
-              )}
+              <Button
+                className="w-full"
+                disabled={isPending || !username.trim()}
+                onClick={handlePasskeyRegister}
+                size="lg"
+                type="button"
+                variant="outline"
+              >
+                {isPending
+                  ? "Creating account..."
+                  : "Create account with passkey"}
+              </Button>
             </CardContent>
           </Card>
         </div>
+        <Toaster />
       </div>
     </div>
   );

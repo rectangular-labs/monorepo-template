@@ -16,7 +16,7 @@ export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
   beforeLoad: async () => {
-    const { user } = await getApiClient().auth.getCurrentUser();
+    const { user } = await getApiClient().auth.getCurrentUser({});
     return { user };
   },
 
