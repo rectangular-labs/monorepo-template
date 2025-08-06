@@ -7,7 +7,7 @@ export const userTable = pgAppTable(
   "user",
   {
     id: serial("user_id").primaryKey(),
-    username: text("username"),
+    username: text("username").notNull(),
     firstName: text("first_name"),
     lastName: text("last_name"),
     ...timestamps,
