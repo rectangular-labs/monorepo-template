@@ -8,6 +8,10 @@
       "types": "./dist/client.d.ts",
       "default": "./src/client.ts"
     },
+    "./env": {
+      "types": "./dist/env.d.ts",
+      "default": "./src/env.ts"
+    },
     "./schema/*": {
       "types": "./dist/schema/*.d.ts",
       "default": "./src/schema/*.ts"
@@ -28,6 +32,8 @@
     "with-env": "dotenvx run -f ../../.env.local  -f ../../.env -- "
   },
   "dependencies": {
+    "@t3-oss/env-core": "^0.13.8",
+    "arktype": "^2.1.20",
     "drizzle-orm": "^0.44.4",
     "pg": "^8.16.3"
   },
