@@ -1,0 +1,38 @@
+---
+alwaysApply: true
+description: Monorepo structure and workspace organization
+---
+
+# Monorepo Structure Guide
+
+This is a monorepo with the following structure:
+
+## Apps (`apps/`)
+
+- `apps/www/` - Main web application using React, Vite, and TanStack Start
+- When creating new apps, ensure `tsconfig.json` extends from `@rectangular-labs/typescript` package
+- New apps should reference workspace packages using `@rectangular-labs/*` naming convention
+
+## Packages (`packages/`)
+
+- `packages/ui/` - Shared UI components using Shadcn/UI with Radix primitives
+- `packages/api/` - API layer using ORPC for type-safe endpoints
+- `packages/db/` - Database layer using Drizzle ORM with PostgreSQL
+
+## Key Files and Conventions
+
+- [package.json](mdc:package.json) - Root workspace configuration with scripts
+- [turbo.json](mdc:turbo.json) - Turborepo build configuration
+- [pnpm-workspace.yaml](mdc:pnpm-workspace.yaml) - PNPM workspace definition
+
+## Package Creation
+
+- Use `pnpm new:package` to scaffold new packages
+- All internal packages use `@rectangular-labs/` namespace
+- TypeScript configuration should extend from `@rectangular-labs/typescript`
+
+## Development Workflow
+
+- `pnpm dev` - Start development servers with Docker Compose
+- `pnpm build` - Build all packages and apps
+- `pnpm lint` and `pnpm format` - Code quality tools using Biome

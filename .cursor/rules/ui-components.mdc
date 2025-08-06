@@ -1,0 +1,62 @@
+---
+globs: packages/ui/**/*
+description: UI component development using Shadcn/UI and design system patterns
+---
+
+# UI Component Development
+
+## Package Structure
+
+- **Location**: `packages/ui/`
+- **Namespace**: `@rectangular-labs/ui`
+- **Shadcn Version**: Use canary version for latest features
+
+## Adding Shadcn Components
+
+```bash
+cd packages/ui && pnpx shadcn@canary add button
+```
+
+Or use the workspace command:
+
+```bash
+pnpm ui:add
+```
+
+## Component Organization
+
+- **`src/components/ui/`** - Shadcn components (auto-generated)
+- **`src/components/`** - Custom reusable components
+- **`src/animation/`** - Animation components (e.g., blur-fade)
+- **`src/hooks/`** - Custom React hooks
+- **`src/utils/`** - Utility functions
+
+## Importing Components in Apps
+
+```jsx
+import { Button } from '@rectangular-labs/ui/components/ui'
+import { ThemeProvider } from '@rectangular-labs/ui/components/theme-provider'
+
+export const Page = () => {
+    return <Button>Hello world</Button>
+}
+```
+
+## Icons
+
+- Add icons to [icon.tsx](mdc:packages/ui/src/components/icon.tsx)
+- Import as namespace: `import * as Icons from '@rectangular-labs/ui/components/icon'`
+- Use as: `<Icons.Moon />`
+
+## Styling
+
+- Uses Tailwind CSS v4
+- CSS variables for theming in [styles.css](mdc:packages/ui/src/styles.css)
+- Utility functions in [cn.ts](mdc:packages/ui/src/utils/cn.ts)
+
+## Dependencies
+
+- Built on Radix UI primitives
+- Uses `class-variance-authority` for component variants
+- Motion library for animations
+- Supports dark/light themes with `next-themes`
