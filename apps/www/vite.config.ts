@@ -6,7 +6,6 @@ import mkcert from "vite-plugin-mkcert";
 import viteTsConfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 import type { serverEnv } from "~/lib/env";
-import { http2 } from "./vite-http2-plugin";
 
 const jiti = createJiti(import.meta.url);
 const env = await jiti.import("./src/lib/env");
@@ -19,8 +18,6 @@ const config = defineConfig({
       projects: ["./tsconfig.json"],
     }),
     tailwindcss(),
-    // needed for now to let tanstack start work with mkcert for https on localhost
-    http2(),
     mkcert(),
     tanstackStart({
       customViteReactPlugin: true,
@@ -32,6 +29,7 @@ const config = defineConfig({
     environment: "jsdom",
   },
   server: {
+    proxy: {},
     port: 6969,
   },
 });
