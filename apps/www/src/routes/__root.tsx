@@ -8,12 +8,18 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { getApiClient } from "~/lib/api";
 import { seo } from "~/lib/seo";
 import appCss from "../style.css?url";
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient;
 }>()({
+  beforeLoad: async () => {
+    const { user } = await getApiClient().auth.getCurrentUser({});
+    return { user };
+  },
+
   head: () => ({
     meta: [
       { charSet: "utf-8" },

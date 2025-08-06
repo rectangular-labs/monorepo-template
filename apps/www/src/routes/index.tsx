@@ -108,8 +108,14 @@ function App() {
           </Card>
         </div>
 
-        <div className="mt-16 flex flex-col items-center">
-          <Button asChild className="gap-2" variant="default">
+        <div className="mt-16 flex flex-col items-center space-y-6">
+          <Button asChild variant="default">
+            <a href="/orpc">
+              <span>Try ORPC Demo</span>
+            </a>
+          </Button>
+
+          <Button asChild className="gap-2" variant="secondary">
             <a
               href="https://github.com/ElasticBottle/monorepo-template"
               rel="noopener noreferrer"

@@ -1,18 +1,13 @@
 import { createApiContext } from "@rectangular-labs/api/context";
 import { openAPIHandler } from "@rectangular-labs/api/server";
-import { parseServerEnv } from "@rectangular-labs/env";
-import {
-  createServerFileRoute,
-  getCookie,
-  setCookie,
-} from "@tanstack/react-start/server";
+import { createServerFileRoute } from "@tanstack/react-start/server";
+import { serverEnv } from "~/lib/env";
 
 async function handle({ request }: { request: Request }) {
-  const env = parseServerEnv(process.env);
+  const env = serverEnv();
   const context = createApiContext({
     dbUrl: env.DATABASE_URL,
-    headers: request.headers,
-    cookies: { get: getCookie, set: setCookie },
+    url: new URL(request.url),
   });
 
   const { response } = await openAPIHandler(`${env.VITE_APP_URL}/api`).handle(

@@ -5,25 +5,27 @@
   "type": "module",
   "exports": {
     "./client": {
-      "types": "./dist/client.d.ts",
       "default": "./src/client.ts"
     },
     "./server": {
-      "types": "./dist/server.d.ts",
       "default": "./src/server.ts"
     },
     "./context": {
-      "types": "./dist/context.d.ts",
       "default": "./src/context.ts"
     },
+    "./env": {
+      "default": "./src/env.ts"
+    },
     "./types": {
-      "types": "./dist/types.d.ts",
       "default": "./src/types.ts"
+    },
+    "./schemas/*": {
+      "default": "./src/schemas/*.ts"
     }
   },
   "scripts": {
     "build": "tsc",
-    "dev": "concurrently \"tsc --watch\" \"tsx watch ./src/open-api/open-api-resolver.ts\"",
+    "dev": "tsx watch ./src/_open-api/open-api-resolver.ts",
     "clean": "git clean -xdf .turbo node_modules dist .cache",
     "format": "pnpx @biomejs/biome format . --write",
     "lint": "pnpx @biomejs/biome lint . --write",
@@ -32,7 +34,6 @@
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
     "@types/node": "^22.15.32",
-    "concurrently": "^9.2.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
@@ -42,9 +43,11 @@
     "@orpc/json-schema": "^1.7.9",
     "@orpc/openapi": "^1.7.9",
     "@orpc/openapi-client": "^1.7.9",
-    "@orpc/react-query": "^1.7.9",
     "@orpc/server": "^1.7.9",
+    "@orpc/tanstack-query": "^1.7.9",
     "@rectangular-labs/db": "workspace:*",
+    "@simplewebauthn/server": "^13.1.2",
+    "@t3-oss/env-core": "^0.13.8",
     "arktype": "^2.1.20"
   },
   "overrides": {

@@ -25,7 +25,7 @@ const list = base
   .output(todoSchema.array())
   .handler(({ input, context }) => {
     // Example: Access context properties (DB, headers, cookies)
-    console.log("User-Agent:", context.headers.get("user-agent"));
+    console.log("User-Agent:", context.reqHeaders?.get("user-agent"));
     console.log("Database available:", !!context.db);
 
     return todos.slice(
@@ -85,11 +85,6 @@ const create = base
 
     // Example: Use context for database operations, logging user info, etc.
     console.log("Creating todo:", newTodo);
-    console.log(
-      "Request cookies:",
-      Object.keys(context.cookies).length,
-      "cookies",
-    );
     console.log("Database available:", !!context.db);
 
     return newTodo;

@@ -11,22 +11,33 @@
 import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as OrpcRouteImport } from './routes/orpc'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthedRouteRouteImport } from './routes/_authed/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthedOrpcRouteImport } from './routes/_authed/orpc'
 import { ServerRoute as ApiSplatServerRouteImport } from './routes/api/$'
 import { ServerRoute as ApiRpcSplatServerRouteImport } from './routes/api/rpc.$'
 
 const rootServerRouteImport = createServerRootRoute()
 
-const OrpcRoute = OrpcRouteImport.update({
-  id: '/orpc',
-  path: '/orpc',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthedRouteRoute = AuthedRouteRouteImport.update({
+  id: '/_authed',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthedOrpcRoute = AuthedOrpcRouteImport.update({
+  id: '/orpc',
+  path: '/orpc',
+  getParentRoute: () => AuthedRouteRoute,
 } as any)
 const ApiSplatServerRoute = ApiSplatServerRouteImport.update({
   id: '/api/$',
@@ -41,28 +52,33 @@ const ApiRpcSplatServerRoute = ApiRpcSplatServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/orpc': typeof OrpcRoute
+  '/login': typeof LoginRoute
+  '/orpc': typeof AuthedOrpcRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/orpc': typeof OrpcRoute
+  '/login': typeof LoginRoute
+  '/orpc': typeof AuthedOrpcRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/orpc': typeof OrpcRoute
+  '/_authed': typeof AuthedRouteRouteWithChildren
+  '/login': typeof LoginRoute
+  '/_authed/orpc': typeof AuthedOrpcRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/orpc'
+  fullPaths: '/' | '/login' | '/orpc'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/orpc'
-  id: '__root__' | '/' | '/orpc'
+  to: '/' | '/login' | '/orpc'
+  id: '__root__' | '/' | '/_authed' | '/login' | '/_authed/orpc'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  OrpcRoute: typeof OrpcRoute
+  AuthedRouteRoute: typeof AuthedRouteRouteWithChildren
+  LoginRoute: typeof LoginRoute
 }
 export interface FileServerRoutesByFullPath {
   '/api/$': typeof ApiSplatServerRoute
@@ -92,11 +108,18 @@ export interface RootServerRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/orpc': {
-      id: '/orpc'
-      path: '/orpc'
-      fullPath: '/orpc'
-      preLoaderRoute: typeof OrpcRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authed': {
+      id: '/_authed'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -105,6 +128,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authed/orpc': {
+      id: '/_authed/orpc'
+      path: '/orpc'
+      fullPath: '/orpc'
+      preLoaderRoute: typeof AuthedOrpcRouteImport
+      parentRoute: typeof AuthedRouteRoute
     }
   }
 }
@@ -127,9 +157,22 @@ declare module '@tanstack/react-start/server' {
   }
 }
 
+interface AuthedRouteRouteChildren {
+  AuthedOrpcRoute: typeof AuthedOrpcRoute
+}
+
+const AuthedRouteRouteChildren: AuthedRouteRouteChildren = {
+  AuthedOrpcRoute: AuthedOrpcRoute,
+}
+
+const AuthedRouteRouteWithChildren = AuthedRouteRoute._addFileChildren(
+  AuthedRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  OrpcRoute: OrpcRoute,
+  AuthedRouteRoute: AuthedRouteRouteWithChildren,
+  LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
