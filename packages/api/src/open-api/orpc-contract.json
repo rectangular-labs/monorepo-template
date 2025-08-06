@@ -1,1 +1,0 @@
-{"todos":{"list":{"~orpc":{"errorMap":{},"meta":{},"route":{"method":"GET","path":"/todos/"}}},"find":{"~orpc":{"errorMap":{},"meta":{},"route":{"method":"GET","path":"/todos/{id}"}}},"create":{"~orpc":{"errorMap":{},"meta":{},"route":{"method":"POST","path":"/todos/"}}}}}

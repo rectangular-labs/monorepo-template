@@ -6,6 +6,6 @@ import { router } from "../routes";
 const resolvedRouter = await unlazyRouter(router);
 const minifiedRouter = minifyContractRouter(resolvedRouter);
 fs.writeFileSync(
-  "./src/open-api/orpc-contract.json",
+  "./src/_open-api/orpc-contract.json",
   JSON.stringify(minifiedRouter),
 );
