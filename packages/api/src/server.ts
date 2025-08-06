@@ -4,20 +4,28 @@ import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { createRouterClient } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
-import type { InitialContext } from "./context";
+import {
+  RequestHeadersPlugin,
+  ResponseHeadersPlugin,
+} from "@orpc/server/plugins";
 import { router } from "./routes";
 import { todoSchema } from "./routes/todo";
+import type { InitialContext } from "./types";
 
 export const serverClient = (context: InitialContext) =>
   createRouterClient(router, {
-    context: () => context,
+    context,
   });
 
-export const RpcHandler = new RPCHandler(router, {});
+export const RpcHandler = new RPCHandler(router, {
+  plugins: [new RequestHeadersPlugin(), new ResponseHeadersPlugin()],
+});
 
 export const openAPIHandler = (apiUrl: string) =>
   new OpenAPIHandler(router, {
     plugins: [
+      new RequestHeadersPlugin(),
+      new ResponseHeadersPlugin(),
       new SmartCoercionPlugin({
         schemaConverters: [new ArkTypeToJsonSchemaConverter()],
       }),
