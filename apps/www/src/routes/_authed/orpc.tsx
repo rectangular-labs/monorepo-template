@@ -12,7 +12,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
 import { getRqHelper } from "~/lib/api";
 
-export const Route = createFileRoute("/orpc")({
+export const Route = createFileRoute("/_authed/orpc")({
   component: ORPCTodos,
   loader: async ({ context }) => {
     await context.queryClient.prefetchQuery(

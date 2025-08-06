@@ -1,31 +1,24 @@
 import { rpcClient, rqApiClient } from "@rectangular-labs/api/client";
-import { createApiContext } from "@rectangular-labs/api/context";
 import { serverClient } from "@rectangular-labs/api/server";
 import { createIsomorphicFn } from "@tanstack/react-start";
-import {
-  getCookie,
-  getWebRequest,
-  setCookie,
-} from "@tanstack/react-start/server";
-import { serverEnv } from "./env";
+import { getWebRequest } from "@tanstack/react-start/server";
+import { clientEnv, serverEnv } from "./env";
 
 export const getApiClient = createIsomorphicFn()
   .server(() => {
     const request = getWebRequest();
-    const context = createApiContext({
-      cookies: {
-        get: getCookie,
-        set: setCookie,
-      },
+    const client = serverClient({
       dbUrl: serverEnv().DATABASE_URL,
-      headers: request.headers,
+      url: new URL(request.url),
+      // The request isn't populated in the server context, so we need to pass it in manually
+      reqHeaders: request.headers,
+      resHeaders: new Headers(),
     });
-    return serverClient(context);
+    return client;
   })
   .client(() => {
-    return rpcClient(window.location.origin);
+    const client = rpcClient(window.location.origin);
+    return client;
   });
 
-export const getRqHelper = createIsomorphicFn()
-  .server(() => rqApiClient(serverEnv().VITE_APP_URL))
-  .client(() => rqApiClient(window.location.origin));
+export const getRqHelper = () => rqApiClient(clientEnv().VITE_APP_URL);
