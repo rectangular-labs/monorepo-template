@@ -14,7 +14,7 @@ export const credentialTable = pgAppTable(
   "credential",
   {
     id: serial("id").primaryKey(),
-    credentialId: text().primaryKey(),
+    credentialId: text().notNull(),
     userId: integer()
       .notNull()
       .references(() => userTable.id, {
