@@ -21,6 +21,7 @@ next-env.d.ts
 
 # Tanstack Start
 .tanstack/
+.output/
 .nitro
 .vinxi
 

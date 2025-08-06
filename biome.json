@@ -15,6 +15,7 @@
     "rules": {
       "recommended": true,
       "nursery": {
+        "noMisusedPromises": "error",
         "noFloatingPromises": "error",
         "useSortedClasses": {
           "level": "error",
@@ -90,6 +91,10 @@
       "!**/.turbo",
       "!**/.cache",
       "!**/dist",
+      "!**/.output",
+      "!**/.tanstack",
+      "!**/.turbo",
+      "!**/.nitro",
       "!**/routeTree.gen.ts",
       "!**/sst-env.d.ts",
       "!**/_renderer.tsx"
