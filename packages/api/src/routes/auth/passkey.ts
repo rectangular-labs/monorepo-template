@@ -109,7 +109,7 @@ const finishRegistration = base
     path: "/register/finish",
   })
   .input(finishRegistrationInputSchema)
-  .output(type({ success: "boolean" }))
+  .output(type({ success: "true" }))
   .handler(async ({ input, context }) => {
     const { rpID } = getWebAuthnConfig();
 
@@ -148,7 +148,9 @@ const finishRegistration = base
       .returning();
 
     if (!user) {
-      return { success: false };
+      throw new ORPCError("INTERNAL_SERVER_ERROR", {
+        message: "Failed to create user",
+      });
     }
 
     // Create credential

@@ -27,7 +27,7 @@ const getCurrentUser = base
     method: "GET",
     path: "/me",
   })
-  .input(type("undefined"))
+  .input(type({}))
   .output(
     type({
       user: schema.selectUserSchema
@@ -53,7 +53,7 @@ const logout = base
     method: "POST",
     path: "/logout",
   })
-  .input(type("undefined"))
+  .input(type({}))
   .output(type({ success: "boolean" }))
   .handler(async () => {
     const authedSession = await getAuthedSession();
