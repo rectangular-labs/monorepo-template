@@ -1,6 +1,7 @@
 import {
   ArrowDownIcon,
   ArrowUpIcon,
+  DotIcon,
   EyeIcon,
   EyeOffIcon,
   FileIcon,
@@ -89,6 +90,7 @@ export const Spinner = Loader2;
 export const ArrowUp = ArrowUpIcon;
 export const ArrowDown = ArrowDownIcon;
 export const File = FileIcon;
+export const Dot = DotIcon;
 
 export const TanStack = (props: SVGProps<SVGSVGElement>) => (
   <svg
