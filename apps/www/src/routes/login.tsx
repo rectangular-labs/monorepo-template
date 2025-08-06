@@ -17,7 +17,7 @@ import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { type } from "arktype";
 import { useState } from "react";
-import { getRqHelper } from "~/lib/api";
+import { getApiClient, getRqHelper } from "~/lib/api";
 
 export const Route = createFileRoute("/login")({
   validateSearch: type({
@@ -28,8 +28,9 @@ export const Route = createFileRoute("/login")({
       next: search.next,
     };
   },
-  loader: ({ context, deps }) => {
-    if (context.user && deps.next) {
+  loader: async ({ deps }) => {
+    const { user } = await getApiClient().auth.getCurrentUser({});
+    if (user && deps.next) {
       return redirect({ to: deps.next });
     }
     return;
