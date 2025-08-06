@@ -35,9 +35,6 @@ importers:
       '@rectangular-labs/api':
         specifier: workspace:*
         version: link:../../packages/api
-      '@rectangular-labs/env':
-        specifier: workspace:*
-        version: link:../../packages/env
       '@rectangular-labs/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -200,19 +197,6 @@ importers:
       drizzle-kit:
         specifier: ^0.31.4
         version: 0.31.4
-      typescript:
-        specifier: ^5.8.3
-        version: 5.8.3
-
-  packages/env:
-    dependencies:
-      arktype:
-        specifier: ^2.1.20
-        version: 2.1.20
-    devDependencies:
-      '@rectangular-labs/typescript':
-        specifier: workspace:*
-        version: link:../../tooling/typescript
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
