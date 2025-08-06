@@ -33,11 +33,11 @@
     "**/routeTree.gen.ts": true,
     "**/orpc-contract.json": true
   },
-  // prioritize ArkType's "type" for autoimports
   "typescript.preferences.autoImportSpecifierExcludeRegexes": [
+    // prioritize ArkType's "type" for autoimports
     "^(node:)?os$",
-    "^process$",
-    "^hono/adapter$"
+    // prioritize our own env for autoimports
+    "^(node:)?process$",
   ],
   "cSpell.words": [
     "arktype",
@@ -49,6 +49,7 @@
     "simplewebauthn",
     "Sonner",
     "totp",
-    "turso"
+    "turso",
+    "Unlazied"
   ]
 }
