@@ -1,4 +1,13 @@
-import { EyeIcon, EyeOffIcon, Loader2, MoonIcon, SunIcon } from "lucide-react";
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  EyeIcon,
+  EyeOffIcon,
+  FileIcon,
+  Loader2,
+  MoonIcon,
+  SunIcon,
+} from "lucide-react";
 import type { SVGProps } from "react";
 
 type IconProps = React.HTMLAttributes<SVGElement>;
@@ -77,6 +86,9 @@ export const Sun = SunIcon;
 export const EyeOn = EyeIcon;
 export const EyeOff = EyeOffIcon;
 export const Spinner = Loader2;
+export const ArrowUp = ArrowUpIcon;
+export const ArrowDown = ArrowDownIcon;
+export const File = FileIcon
 
 export const TanStack = (props: SVGProps<SVGSVGElement>) => (
   <svg
