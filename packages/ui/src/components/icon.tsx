@@ -88,7 +88,7 @@ export const EyeOff = EyeOffIcon;
 export const Spinner = Loader2;
 export const ArrowUp = ArrowUpIcon;
 export const ArrowDown = ArrowDownIcon;
-export const File = FileIcon
+export const File = FileIcon;
 
 export const TanStack = (props: SVGProps<SVGSVGElement>) => (
   <svg
