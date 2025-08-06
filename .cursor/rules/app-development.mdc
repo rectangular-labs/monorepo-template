@@ -1,0 +1,50 @@
+---
+globs: apps/**/*
+description: Guidelines for developing applications in the apps directory
+---
+
+# App Development Guidelines
+
+## Creating New Apps
+
+1. **Always ask which app** when adding features if multiple apps exist
+2. **TypeScript Configuration**: New apps must extend from `@rectangular-labs/typescript`:
+
+   ```json
+   {
+     "extends": "@rectangular-labs/typescript/tsconfig.base.json"
+   }
+   ```
+
+3. **Package Dependencies**: Reference workspace packages using:
+
+   ```json
+   {
+     "dependencies": {
+       "@rectangular-labs/ui": "workspace:*",
+       "@rectangular-labs/api": "workspace:*",
+       "@rectangular-labs/db": "workspace:*"
+     }
+   }
+   ```
+
+## Current Apps
+
+- **`apps/www/`** - Main web application
+  - Uses React 19, Vite, TanStack Router
+  - Authentication with WebAuthn/Passkeys
+  - Imports UI components from `@rectangular-labs/ui`
+  - API calls through `@rectangular-labs/api/client`
+
+## App Structure Patterns
+
+- `src/routes/` - Route definitions for TanStack Router
+- `src/components/` - App-specific components
+- `src/lib/` - App-specific utilities and configurations
+- `public/` - Static assets
+
+## Environment Management
+
+- Use `pnpm with-env-local`, `pnpm with-env-preview`, or `pnpm with-env-prod`
+- Environment files: `.env.local`, `.env`, `.env.production`
+- Environment validation using `@t3-oss/env-core`

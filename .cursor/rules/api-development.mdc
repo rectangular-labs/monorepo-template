@@ -1,0 +1,70 @@
+---
+globs: packages/api/**/*
+description: API development using ORPC for type-safe endpoints
+---
+
+# API Development Guidelines
+
+## Package Structure
+
+- **Location**: `packages/api/`
+- **Namespace**: `@rectangular-labs/api`
+- **Framework**: ORPC for type-safe API development
+- **Routes**: `src/routes/`
+- **Business Logic**: `src/lib/`
+
+## Route Development
+
+- **Location**: [src/routes/](mdc:packages/api/src/routes/)
+- **Index**: [routes/index.ts](mdc:packages/api/src/routes/index.ts) - Route aggregation
+
+### Adding New Routes
+
+1. Create route file in `src/routes/`
+2. Define ORPC procedures with proper validation
+3. Export and register in [routes/index.ts](mdc:packages/api/src/routes/index.ts). Prefer lazy routes where possible.
+
+## Business Logic & Middleware
+
+- **Location**: [src/lib/](mdc:packages/api/src/lib/)
+- **Session Management**: [session.ts](mdc:packages/api/src/lib/session.ts) - Cookie-based sessions
+- **Context Storage**: [context-storage.ts](mdc:packages/api/src/lib/context-storage.ts) - Async context
+- **Logging**: [logger.ts](mdc:packages/api/src/lib/logger.ts) - Structured logging
+
+### Domain-Specific Operations
+
+- Database operations that need reuse go in `src/lib/`
+- Session management utilities
+- Authentication middleware
+
+## Database Integration
+
+- Import from `@rectangular-labs/db`
+- Use database client and schemas
+- Follow transaction patterns for data consistency
+
+## schemas
+
+- For schemas that might need to be shared with the front-end, extract them to [src/schema](mdc:packages/api/src/schema)
+
+## Environment & Configuration
+
+- Environment validation in [env.ts](mdc:packages/api/src/env.ts)
+- Context setup in [context.ts](mdc:packages/api/src/context.ts)
+- Server configuration in [server.ts](mdc:packages/api/src/server.ts)
+- Client configuration in [client.ts](mdc:packages/api/src/client.ts)
+
+## Client Usage
+
+```typescript
+import { client } from '@rectangular-labs/api/client'
+
+// Type-safe API calls
+const todos = await client.todo.list()
+```
+
+## Development
+
+- `pnpm dev` - Watch mode with OpenAPI generation
+- Auto-generates contract for frontend consumption
+- Hot reload for rapid development

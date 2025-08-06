@@ -109,16 +109,16 @@ function ChatInputTextArea({
     <Textarea
       ref={textareaRef}
       {...props}
-      value={value}
-      onChange={onChange}
-      onKeyDown={handleKeyDown}
       className={cn(
         "max-h-[400px] min-h-0 resize-none overflow-x-hidden",
         variant === "unstyled" &&
           "border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0",
         className,
       )}
+      onChange={onChange}
+      onKeyDown={handleKeyDown}
       rows={rows}
+      value={value}
     />
   );
 }
@@ -146,26 +146,26 @@ function ChatInputSubmit({
   if (loading && onStop) {
     return (
       <Button
-        onClick={onStop}
         className={className}
-        variant={"outline"}
+        onClick={onStop}
         size={"icon"}
+        variant={"outline"}
         {...props}
       >
         <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
+          aria-label="Stop"
           fill="currentColor"
+          height="24"
           stroke="currentColor"
-          strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          aria-label="Stop"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          width="24"
+          xmlns="http://www.w3.org/2000/svg"
         >
           <title>Stop</title>
-          <rect x="6" y="6" width="12" height="12" />
+          <rect height="12" width="12" x="6" y="6" />
         </svg>
       </Button>
     );
@@ -179,8 +179,6 @@ function ChatInputSubmit({
   return (
     <Button
       className={className}
-      variant={"outline"}
-      size={"icon"}
       disabled={isDisabled}
       onClick={(event) => {
         event.preventDefault();
@@ -188,6 +186,8 @@ function ChatInputSubmit({
           onSubmit?.();
         }
       }}
+      size={"icon"}
+      variant={"outline"}
       {...props}
     >
       <ArrowUp />

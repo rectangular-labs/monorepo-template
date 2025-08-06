@@ -1,0 +1,67 @@
+---
+globs: packages/db/**/*
+description: Database schema management using Drizzle ORM
+---
+
+# Database Schema Management
+
+## Package Structure
+
+- **Location**: `packages/db/`
+- **Namespace**: `@rectangular-labs/db`
+- **ORM**: Drizzle ORM with PostgreSQL
+- **Schema Location**: `src/schema/`
+
+## Schema Development Workflow
+
+### 1. Making Schema Changes
+
+- Edit schema files in `src/schema/`
+- Current schemas: [user.ts](mdc:packages/db/src/schema/user.ts), [credential.ts](mdc:packages/db/src/schema/credential.ts)
+- Use helper files: [_table.ts](mdc:packages/db/src/schema/_table.ts), [_helper.ts](mdc:packages/db/src/schema/_helper.ts)
+
+### 2. Development Database Updates
+
+```bash
+pnpm db:push
+```
+
+- Pushes schema changes directly to development database
+- Use `--force` flag for destructive changes (already included in script)
+
+### 3. Production Migration Process
+
+**Only after changes are finalized:**
+
+```bash
+# 1. Generate migration files
+pnpm db:migrate-generate
+
+# 2. Apply migrations to remote database
+pnpm db:migrate-push
+```
+
+## Database Scripts
+
+- `pnpm db:push` - Push schema changes to dev database
+- `pnpm db:migrate-generate` - Generate SQL migration files
+- `pnpm db:migrate-push` - Apply migrations to remote database
+- `pnpm db:studio` - Open Drizzle Studio for database inspection
+
+## Schema Patterns
+
+- Use `createTable` helper from [_table.ts](mdc:packages/db/src/schema/_table.ts)
+- Common fields (id, createdAt, updatedAt) in [_helper.ts](mdc:packages/db/src/schema/_helper.ts)
+- Export schemas for use in API and apps
+
+## Environment Configuration
+
+- Database connection configured in [env.ts](mdc:packages/db/src/env.ts)
+- Uses environment variables for connection strings
+- Drizzle config in [drizzle.config.ts](mdc:packages/db/drizzle.config.ts)
+
+## Type Safety
+
+- Uses `drizzle-arktype` for runtime validation
+- Schema types exported for use across the monorepo
+- Client exported from [client.ts](mdc:packages/db/src/client.ts)

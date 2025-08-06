@@ -1,0 +1,64 @@
+---
+description: Guidelines for creating new packages in the monorepo
+---
+
+# Package Creation Guidelines
+
+## Creating New Packages
+
+Use the Turbo generator to scaffold new packages:
+
+```bash
+pnpm new:package
+```
+
+## Package Types
+
+- **Public**: Packages intended for external publication
+- **Private**: Internal packages for monorepo use only
+
+## Generated Structure
+
+The generator creates:
+
+- `package.json` - Package configuration
+- `tsconfig.json` - TypeScript configuration extending base
+- `src/index.ts` - Entry point
+- `tsup.config.ts` - Build configuration (public packages only)
+
+## Package Configuration
+
+All packages should:
+
+1. Use `@rectangular-labs/` namespace
+2. Extend TypeScript configuration from `@rectangular-labs/typescript`
+3. Follow consistent export patterns
+4. Include proper build and development scripts
+
+## Common Package Scripts
+
+```json
+{
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "git clean -xdf .turbo node_modules dist .cache",
+    "format": "pnpx @biomejs/biome format . --write",
+    "lint": "pnpx @biomejs/biome lint . --write",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  }
+}
+```
+
+## Workspace Integration
+
+- Packages are automatically detected by PNPM workspace
+- Use `workspace:*` for internal dependencies
+- Include in Turbo build pipeline as needed
+- Follow monorepo conventions for consistency
+
+## Dependency Management
+
+- The generator automatically fetches latest versions
+- Workspace packages use `workspace:*` versioning
+- External dependencies use caret ranges (`^1.0.0`)
