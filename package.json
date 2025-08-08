@@ -30,7 +30,7 @@
     "postinstall": "pnpx sherif@latest"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.1.3",
+    "@biomejs/biome": "2.1.4",
     "@changesets/cli": "^2.29.5",
     "@dotenvx/dotenvx": "^1.48.4",
     "@rectangular-labs/typescript": "workspace:*",
