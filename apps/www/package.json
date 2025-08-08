@@ -28,7 +28,7 @@
     "@tanstack/react-router": "^1.130.12",
     "@tanstack/react-router-devtools": "^1.130.13",
     "@tanstack/react-router-with-query": "^1.130.12",
-    "@tanstack/react-start": "^1.130.15",
+    "@tanstack/react-start": "^1.130.16",
     "arktype": "^2.1.20",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
