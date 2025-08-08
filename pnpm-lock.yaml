@@ -136,8 +136,8 @@ importers:
         specifier: ^1.7.9
         version: 1.7.9(crossws@0.3.5)(ws@8.18.1)
       '@orpc/openapi-client':
-        specifier: ^1.7.9
-        version: 1.7.9
+        specifier: ^1.7.10
+        version: 1.7.10
       '@orpc/server':
         specifier: ^1.7.9
         version: 1.7.9(crossws@0.3.5)(ws@8.18.1)

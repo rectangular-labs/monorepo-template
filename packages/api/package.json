@@ -42,7 +42,7 @@
     "@orpc/contract": "^1.7.10",
     "@orpc/json-schema": "^1.7.9",
     "@orpc/openapi": "^1.7.9",
-    "@orpc/openapi-client": "^1.7.9",
+    "@orpc/openapi-client": "^1.7.10",
     "@orpc/server": "^1.7.9",
     "@orpc/tanstack-query": "^1.7.9",
     "@rectangular-labs/db": "workspace:*",
