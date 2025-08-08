@@ -37,7 +37,7 @@
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@orpc/arktype": "^1.7.10",
+    "@orpc/arktype": "^1.7.11",
     "@orpc/client": "^1.7.10",
     "@orpc/contract": "^1.7.10",
     "@orpc/json-schema": "^1.7.9",
