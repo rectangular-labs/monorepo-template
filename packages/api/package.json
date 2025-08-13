@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@orpc/arktype": "^1.8.0",
-    "@orpc/client": "^1.7.11",
+    "@orpc/client": "^1.8.0",
     "@orpc/contract": "^1.7.11",
     "@orpc/json-schema": "^1.7.9",
     "@orpc/openapi": "^1.7.9",
