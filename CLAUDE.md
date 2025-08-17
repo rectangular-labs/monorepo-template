@@ -88,15 +88,12 @@ This is a TypeScript monorepo using Turborepo with the following structure:
 
 ## Package Generation
 
-Create new packages with: `pnpm new:package`
+Create new packages with: `pnpm new:package --args "PACKAGE_NAME" "public"|"private"`
 This scaffolds a new package under `packages/` with proper configuration.
 
 ## Code Conventions
 
-- Use Biome for formatting (space indentation)
-- Strict TypeScript configuration with `noUncheckedIndexedAccess`
 - React hooks must be at component top level
-- Use array shorthand syntax (`string[]` not `Array<string>`)
 - Avoid enums, prefer union types
-- Import from `node:buffer` instead of global Buffer
-- Sort Tailwind classes using Biome's `useSortedClasses` rule
+- After generating code, you MUST make sure that the linter and formatter is happy by running the linter and formatter.
+- NEVER use `as any` or casting generally unless specifically asked to. If you need type either use `satisfies` or type the object directly as needed - e.g. `const test:number = 3`.
