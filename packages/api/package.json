@@ -43,7 +43,7 @@
     "@orpc/json-schema": "^1.7.9",
     "@orpc/openapi": "^1.7.9",
     "@orpc/openapi-client": "^1.8.0",
-    "@orpc/server": "^1.7.9",
+    "@orpc/server": "^1.8.1",
     "@orpc/tanstack-query": "^1.7.9",
     "@rectangular-labs/db": "workspace:*",
     "@simplewebauthn/server": "^13.1.2",
