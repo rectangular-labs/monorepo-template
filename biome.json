@@ -66,6 +66,9 @@
     "indentStyle": "space"
   },
   "css": {
+    "linter": {
+      "enabled": false
+    },
     "parser": {
       "cssModules": true
     },
@@ -85,6 +88,7 @@
     "includes": [
       "apps/**",
       "packages/**",
+      "!**/.conductor",
       "!**/orpc-contract.json",
       "!**/node_modules",
       "!**/.sst",
