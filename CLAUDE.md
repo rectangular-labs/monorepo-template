@@ -94,6 +94,7 @@ This scaffolds a new package under `packages/` with proper configuration.
 ## Code Conventions
 
 - React hooks must be at component top level
+- Use react query and the `getRqHelper` to fetch and mutate data on the server.
 - Avoid enums, prefer union types
 - After generating code, you MUST make sure that the linter and formatter is happy by running the linter and formatter.
 - NEVER use `as any` or casting generally unless specifically asked to. If you need type either use `satisfies` or type the object directly as needed - e.g. `const test:number = 3`.
