@@ -18,4 +18,4 @@ export const getCurrentSession = createIsomorphicFn()
     return session.data;
   });
 
-export const authClient = () => createAuthClient();
+export const authClient = createAuthClient();

@@ -1,10 +1,12 @@
-import { EmailOtpForm } from "@rectangular-labs/ui/components/auth/email-otp-form";
-import { SocialLoginButtons } from "@rectangular-labs/ui/components/auth/social-login-buttons";
 import { ThemeToggle } from "@rectangular-labs/ui/components/theme-provider";
+import { Button } from "@rectangular-labs/ui/components/ui/button";
+import { Input } from "@rectangular-labs/ui/components/ui/input";
+import { Label } from "@rectangular-labs/ui/components/ui/label";
 import { Separator } from "@rectangular-labs/ui/components/ui/separator";
 import { Toaster, toast } from "@rectangular-labs/ui/components/ui/sonner";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { type } from "arktype";
+import { useState } from "react";
 import { authClient, getCurrentSession } from "~/lib/auth";
 
 export const Route = createFileRoute("/login")({
@@ -29,9 +31,14 @@ export const Route = createFileRoute("/login")({
 function Login() {
   const { next } = Route.useSearch();
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
 
   const sendOtp = async (email: string) => {
-    const { error } = await authClient().emailOtp.sendVerificationOtp({
+    const { error } = await authClient.emailOtp.sendVerificationOtp({
       email,
       type: "sign-in",
     });
@@ -43,7 +50,7 @@ function Login() {
   };
 
   const verifyOtp = async ({ email, otp }: { email: string; otp: string }) => {
-    const { error } = await authClient().signIn.emailOtp({ email, otp });
+    const { error } = await authClient.signIn.emailOtp({ email, otp });
     if (error) {
       toast.error(error.message ?? "Invalid code. Try again.");
     } else {
@@ -56,7 +63,7 @@ function Login() {
     provider: "github" | "discord" | string,
   ) => {
     try {
-      await authClient().signIn.social({
+      await authClient.signIn.social({
         provider,
         callbackURL: next ?? "/",
         errorCallbackURL: "/login",
@@ -74,7 +81,62 @@ function Login() {
         <h1 className="mb-8 font-bold text-4xl tracking-tight">Sign in</h1>
 
         <div className="w-full max-w-lg space-y-6">
-          <SocialLoginButtons onProviderClick={signInWithProvider} />
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                autoComplete="email"
+                id="email"
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                type="email"
+                value={email}
+              />
+            </div>
+            <Button
+              className="w-full"
+              disabled={!email || isSending}
+              onClick={async () => {
+                setIsSending(true);
+                try {
+                  await sendOtp(email);
+                  setOtpSent(true);
+                } finally {
+                  setIsSending(false);
+                }
+              }}
+            >
+              {isSending ? "Sending..." : otpSent ? "Resend code" : "Send code"}
+            </Button>
+            {otpSent ? (
+              <div className="space-y-2">
+                <Label htmlFor="otp">Verification code</Label>
+                <Input
+                  autoComplete="one-time-code"
+                  id="otp"
+                  inputMode="numeric"
+                  onChange={(e) => setOtp(e.target.value)}
+                  pattern="[0-9]*"
+                  placeholder="6-digit code"
+                  value={otp}
+                />
+                <Button
+                  className="w-full"
+                  disabled={!otp || isVerifying}
+                  onClick={async () => {
+                    setIsVerifying(true);
+                    try {
+                      await verifyOtp({ email, otp });
+                    } finally {
+                      setIsVerifying(false);
+                    }
+                  }}
+                >
+                  {isVerifying ? "Verifying..." : "Verify & sign in"}
+                </Button>
+              </div>
+            ) : null}
+          </div>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -87,7 +149,22 @@ function Login() {
             </div>
           </div>
 
-          <EmailOtpForm onSendOtp={sendOtp} onVerifyOtp={verifyOtp} />
+          <div className="space-y-2">
+            <Button
+              className="w-full"
+              onClick={() => signInWithProvider("github")}
+              variant="outline"
+            >
+              Continue with GitHub
+            </Button>
+            <Button
+              className="w-full"
+              onClick={() => signInWithProvider("discord")}
+              variant="outline"
+            >
+              Continue with Discord
+            </Button>
+          </div>
         </div>
         <Toaster />
       </div>
