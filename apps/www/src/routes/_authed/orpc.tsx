@@ -11,13 +11,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useState } from "react";
 import { LogoutButton } from "~/components/logout-button";
-import { getRqHelper } from "~/lib/api";
+import { rqHelper } from "~/lib/api";
 
 export const Route = createFileRoute("/_authed/orpc")({
   component: ORPCTodos,
   loader: async ({ context }) => {
     await context.queryClient.prefetchQuery(
-      getRqHelper().todos.list.queryOptions({
+      rqHelper.todos.list.queryOptions({
         input: {
           limit: 10,
           cursor: 0,
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/_authed/orpc")({
 
 function ORPCTodos() {
   const { data, refetch } = useQuery(
-    getRqHelper().todos.list.queryOptions({
+    rqHelper.todos.list.queryOptions({
       input: {
         cursor: 0,
         limit: 10,
@@ -39,7 +39,7 @@ function ORPCTodos() {
 
   const [todo, setTodo] = useState("");
   const { mutate: addTodo } = useMutation(
-    getRqHelper().todos.create.mutationOptions({
+    rqHelper.todos.create.mutationOptions({
       onSuccess: () => {
         refetch();
         setTodo("");

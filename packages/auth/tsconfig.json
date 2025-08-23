@@ -1,0 +1,9 @@
+{
+  "extends": "@rectangular-labs/typescript/tsconfig.internal-package.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

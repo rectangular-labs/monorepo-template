@@ -8,6 +8,7 @@ import type {
   RequestHeadersPluginContext,
   ResponseHeadersPluginContext,
 } from "@orpc/server/plugins";
+import type { Auth } from "@rectangular-labs/auth";
 import type { DB } from "@rectangular-labs/db";
 import type { router } from "./routes";
 
@@ -24,5 +25,6 @@ export interface InitialContext
   extends RequestHeadersPluginContext,
     ResponseHeadersPluginContext {
   db: DB;
+  auth: Auth;
   url: URL;
 }

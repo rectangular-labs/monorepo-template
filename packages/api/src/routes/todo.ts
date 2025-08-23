@@ -1,5 +1,5 @@
 import { type } from "arktype";
-import { base } from "../context";
+import { protectedBase } from "../context";
 
 export const todoSchema = type({
   id: "number",
@@ -11,7 +11,7 @@ const todos = [
   { id: 2, name: "Buy a new phone" },
   { id: 3, name: "Finish the project" },
 ];
-const list = base
+const list = protectedBase
   .route({
     method: "GET",
     path: "/",
@@ -33,7 +33,7 @@ const list = base
       (input.cursor ?? 0) + (input.limit ?? 10),
     );
   });
-const find = base
+const find = protectedBase
   .route({
     method: "GET",
     path: "/{id}",
@@ -61,7 +61,7 @@ const find = base
 
     return todo;
   });
-const create = base
+const create = protectedBase
   .route({
     method: "POST",
     path: "/",
@@ -90,7 +90,7 @@ const create = base
     return newTodo;
   });
 
-export default base.prefix("/todos").router({
+export default protectedBase.prefix("/todos").router({
   list,
   find,
   create,

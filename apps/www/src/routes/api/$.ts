@@ -1,9 +1,15 @@
 import { createApiContext } from "@rectangular-labs/api/context";
 import { openAPIHandler } from "@rectangular-labs/api/server";
+import { initAuthHandler } from "@rectangular-labs/auth";
 import { createServerFileRoute } from "@tanstack/react-start/server";
 import { serverEnv } from "~/lib/env";
 
 async function handle({ request }: { request: Request }) {
+  if (new URL(request.url).pathname.startsWith("/api/auth/")) {
+    const auth = initAuthHandler();
+    return await auth.handler(request);
+  }
+
   const env = serverEnv();
   const context = createApiContext({
     dbUrl: env.DATABASE_URL,

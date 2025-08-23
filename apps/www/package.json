@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@rectangular-labs/api": "workspace:*",
+    "@rectangular-labs/auth": "workspace:*",
     "@rectangular-labs/ui": "workspace:*",
     "@simplewebauthn/browser": "^13.1.2",
     "@t3-oss/env-core": "^0.13.8",

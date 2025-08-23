@@ -21,4 +21,4 @@ export const getApiClient = createIsomorphicFn()
     return client;
   });
 
-export const getRqHelper = () => rqApiClient(clientEnv().VITE_APP_URL);
+export const rqHelper = rqApiClient(clientEnv().VITE_APP_URL);
