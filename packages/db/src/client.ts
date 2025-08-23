@@ -1,15 +1,18 @@
 import { drizzle } from "drizzle-orm/node-postgres";
-import * as credential from "./schema/credential";
-import * as user from "./schema/user";
+import * as authSchema from "./schema/auth-schema";
 
 export * from "drizzle-orm";
-export const schema = {
-  ...user,
-  ...credential,
+
+const schema = {
+  ...authSchema,
 };
 
 export const createDb = (connectionString: string) => {
-  return drizzle(connectionString, { schema, casing: "snake_case" });
+  return drizzle(connectionString, {
+    schema,
+    casing: "snake_case",
+    logger: true,
+  });
 };
 
 export type DB = ReturnType<typeof createDb>;
