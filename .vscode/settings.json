@@ -27,11 +27,18 @@
   },
   "files.watcherExclude": {
     "**/routeTree.gen.ts": true,
+    "**/orpc-contract.json": true,
+    "**/auth-schema.ts": true
+  },
+  "files.readonlyInclude": {
+    "**/routeTree.gen.ts": true,
+    "**/auth-schema.ts": true,
     "**/orpc-contract.json": true
   },
   "search.exclude": {
     "**/routeTree.gen.ts": true,
-    "**/orpc-contract.json": true
+    "**/orpc-contract.json": true,
+    "**/auth-schema.ts": true
   },
   "typescript.preferences.autoImportSpecifierExcludeRegexes": [
     // prioritize ArkType's "type" for autoimports
