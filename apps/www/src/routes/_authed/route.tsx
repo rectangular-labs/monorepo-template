@@ -1,10 +1,10 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { getApiClient } from "~/lib/api";
+import { getCurrentSession } from "~/lib/auth";
 
 export const Route = createFileRoute("/_authed")({
   beforeLoad: async ({ location }) => {
-    const { user } = await getApiClient().auth.getCurrentUser({});
-    if (!user) {
+    const session = await getCurrentSession();
+    if (!session) {
       throw redirect({
         to: "/login",
         search: {
