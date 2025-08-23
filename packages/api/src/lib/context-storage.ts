@@ -32,7 +32,7 @@ export function getContext() {
   const context = asyncLocalStorage.getStore();
   if (!context) {
     throw new Error(
-      "Context not available. Make sure to use the      `asyncStorageMiddleware`",
+      "Context not available. Make sure to use the `asyncStorageMiddleware`",
     );
   }
   return context;
