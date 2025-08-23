@@ -3,10 +3,10 @@ import { createDb } from "@rectangular-labs/db";
 import type { BetterAuthOptions } from "better-auth";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { oAuthProxy } from "better-auth/plugins";
+import { emailOTP, oAuthProxy } from "better-auth/plugins";
 import { authEnv } from "./env";
 
-export function initAuth() {
+export function initAuthHandler() {
   const env = authEnv();
 
   const baseUrl = env.VITE_APP_URL;
@@ -24,6 +24,12 @@ export function initAuth() {
     },
     baseURL: baseUrl,
     secret: env.AUTH_ENCRYPTION_KEY,
+    logger: {
+      disabled: true,
+      log(level, message, ...args) {
+        console.log(level, message, ...args);
+      },
+    },
     plugins: [
       oAuthProxy({
         /**
@@ -31,6 +37,12 @@ export function initAuth() {
          */
         currentURL: baseUrl,
         productionURL: productionUrl,
+      }),
+      emailOTP({
+        async sendVerificationOTP({ email, otp, type }) {
+          await Promise.resolve();
+          console.log(`[auth] Email OTP (${type}) for ${email}: ${otp}`);
+        },
       }),
       expo(),
     ],
@@ -56,5 +68,5 @@ export function initAuth() {
   return betterAuth(config);
 }
 
-export type Auth = ReturnType<typeof initAuth>;
+export type Auth = ReturnType<typeof initAuthHandler>;
 export type Session = Auth["$Infer"]["Session"];

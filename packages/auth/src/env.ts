@@ -6,7 +6,6 @@ export const authEnv = () =>
   createEnv({
     extends: [dbEnv()],
     server: {
-      VITE_APP_URL: type("string.url"),
       AUTH_PRODUCTION_URL: type("string.url"),
       AUTH_ENCRYPTION_KEY: type("string >= 32"),
       AUTH_DISCORD_ID: type("string|undefined"),
@@ -14,6 +13,13 @@ export const authEnv = () =>
       AUTH_GITHUB_ID: type("string|undefined"),
       AUTH_GITHUB_SECRET: type("string|undefined"),
     },
-    runtimeEnv: process.env,
+    clientPrefix: "VITE_",
+    client: {
+      VITE_APP_URL: type("string.url"),
+    },
+    runtimeEnv:
+      typeof window !== "undefined"
+        ? (import.meta as unknown as { env: Record<string, string> }).env
+        : process.env,
     emptyStringAsUndefined: true,
   });
