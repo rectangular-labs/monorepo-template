@@ -1,0 +1,97 @@
+---
+title: "Building with TypeScript"
+description: "Tips and best practices for building robust applications with TypeScript."
+date: "2024-08-26"
+author: "Development Team"  
+tags: ["typescript", "best-practices", "development"]
+---
+
+# Building with TypeScript
+
+TypeScript has become an essential tool for building robust, maintainable JavaScript applications. Here's our approach to leveraging TypeScript effectively.
+
+## Type Safety First
+
+The primary benefit of TypeScript is catching errors at compile time rather than runtime. We embrace strict type checking:
+
+```typescript
+// Configure strict settings in tsconfig.json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true
+  }
+}
+```
+
+## Schema Validation with ArkType
+
+For runtime validation, we use ArkType instead of Zod. ArkType provides excellent TypeScript integration:
+
+```typescript
+import { type } from "arktype";
+
+const UserSchema = type({
+  id: "number",
+  name: "string",
+  email: "string",
+  "age?": "number"
+});
+
+// Type is automatically inferred
+type User = typeof UserSchema.infer;
+```
+
+## Key Principles
+
+### 1. Favor Composition Over Inheritance
+
+```typescript
+type BaseEntity = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type User = BaseEntity & {
+  name: string;
+  email: string;
+};
+```
+
+### 2. Use Union Types Instead of Enums
+
+```typescript
+// Prefer this
+type Status = "pending" | "approved" | "rejected";
+
+// Over this
+enum Status {
+  Pending = "pending",
+  Approved = "approved", 
+  Rejected = "rejected"
+}
+```
+
+### 3. Leverage Template Literal Types
+
+```typescript
+type EventName = `on${Capitalize<string>}`;
+type Color = `#${string}`;
+```
+
+## Tooling Setup
+
+Our TypeScript setup includes:
+
+- **Strict compilation** for maximum type safety
+- **Path mapping** for clean imports
+- **Incremental builds** for performance
+- **Declaration maps** for better debugging
+
+TypeScript isn't just about types—it's about building confidence in your code through better tooling and developer experience.
+
+---
+
+*Keep typing safe!*

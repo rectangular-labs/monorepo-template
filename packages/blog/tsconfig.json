@@ -1,0 +1,12 @@
+{
+  "extends": "@rectangular-labs/typescript/tsconfig.internal-package.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "dom", "dom.iterable"],
+    "jsx": "preserve",
+    "paths": {
+      "@content-collections/generated": ["./.content-collections/generated"]
+    }
+  },
+  "include": ["src", "content-collections.ts", ".content-collections/generated"],
+  "exclude": ["node_modules", "dist"]
+}

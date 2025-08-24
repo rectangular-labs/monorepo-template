@@ -1,0 +1,35 @@
+{
+  "name": "@rectangular-labs/blog",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "build": "content-collections build && tsc",
+    "dev": "concurrently \"content-collections watch\" \"tsc --watch\"",
+    "clean": "git clean -xdf .turbo node_modules dist .cache .content-collections",
+    "format": "pnpx @biomejs/biome format . --write",
+    "lint": "pnpx @biomejs/biome lint . --write",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "devDependencies": {
+    "@content-collections/cli": "^0.1.7",
+    "@content-collections/core": "^0.11.0",
+    "@content-collections/mdx": "^0.2.2",
+    "@rectangular-labs/typescript": "workspace:*",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "concurrently": "^9.2.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "arktype": "^2.1.20"
+  }
+}
