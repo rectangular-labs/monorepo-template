@@ -17,6 +17,7 @@ import {
 } from "../../ui/form";
 import { toast } from "../../ui/sonner";
 import { useAuth } from "../auth-provider";
+import { PasswordSchema } from "../schema/password";
 
 export function ResetPasswordForm() {
   const tokenChecked = useRef(false);
@@ -31,11 +32,16 @@ export function ResetPasswordForm() {
 
   const confirmPasswordEnabled = credentials?.enableConfirmPassword;
   const schema = type({
-    newPassword: "string >= 8",
-    confirmPassword: confirmPasswordEnabled ? "string" : "undefined",
+    newPassword: PasswordSchema,
+    confirmPassword: confirmPasswordEnabled
+      ? PasswordSchema
+      : type("undefined"),
   }).narrow((n, ctx) => {
     if (n.confirmPassword?.length && n.confirmPassword !== n.newPassword) {
-      return ctx.mustBe("Passwords do not match");
+      return ctx.reject({
+        message: "Passwords do not match",
+        path: ["confirmPassword"],
+      });
     }
     return true;
   });

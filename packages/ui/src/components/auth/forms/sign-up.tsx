@@ -4,7 +4,6 @@ import { arktypeResolver } from "@hookform/resolvers/arktype";
 import { type } from "arktype";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
-
 import { cn } from "../../../utils/cn";
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
@@ -21,6 +20,7 @@ import { toast } from "../../ui/sonner";
 import { Textarea } from "../../ui/textarea";
 import { useAuth } from "../auth-provider";
 import { PasswordInput } from "../password-input";
+import { PasswordSchema } from "../schema/password";
 
 export function SignUpForm() {
   const {
@@ -40,14 +40,11 @@ export function SignUpForm() {
 
   const baseSchema = type({
     email: "string.email >= 1",
-    password: "string > 0",
-    username: usernameEnabled ? "string > 0" : "undefined",
-    confirmPassword: confirmPasswordEnabled ? "string > 0" : "undefined",
-  }).narrow((n, ctx) => {
-    if (n.confirmPassword?.length && n.confirmPassword !== n.password) {
-      return ctx.mustBe("Passwords do not match");
-    }
-    return true;
+    password: PasswordSchema,
+    username: usernameEnabled ? "string >= 3" : "undefined",
+    confirmPassword: confirmPasswordEnabled
+      ? PasswordSchema
+      : type("undefined"),
   });
 
   const additionalSchema: Record<string, string> = {};
@@ -82,6 +79,14 @@ export function SignUpForm() {
       type({
         "...": baseSchema,
         ...additionalSchema,
+      }).narrow((n, ctx) => {
+        if (n.confirmPassword?.length && n.confirmPassword !== n.password) {
+          return ctx.reject({
+            message: "Passwords do not match",
+            path: ["confirmPassword"],
+          });
+        }
+        return true;
       }),
     ),
     defaultValues,
@@ -121,6 +126,11 @@ export function SignUpForm() {
       if (confirmPasswordEnabled) form.resetField("confirmPassword");
       return;
     }
+    if (!response.data.token) {
+      // TODO: Handle email verification case
+      return;
+    }
+
     onSuccess?.();
     setView(viewPaths.SIGN_IN);
     toast.success("Account created successfully");

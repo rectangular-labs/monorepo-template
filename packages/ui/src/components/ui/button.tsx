@@ -51,7 +51,7 @@ function Button({
   const Comp = asChild ? Slot : "button";
 
   const finalChildren = isLoading ? (
-    <div className="flex w-full items-center gap-2">
+    <div className="flex w-full items-center justify-center gap-2">
       <Loader2 className="animate-spin" />
       {children}
     </div>
@@ -64,6 +64,7 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       data-slot="button"
       {...props}
+      disabled={isLoading || props.disabled}
     >
       {finalChildren}
     </Comp>
