@@ -57,6 +57,7 @@
     "Sonner",
     "totp",
     "turso",
-    "Unlazied"
+    "Unlazied",
+    "webauthn"
   ]
 }
