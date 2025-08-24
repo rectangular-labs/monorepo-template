@@ -1,0 +1,93 @@
+{
+  "name": "@rectangular-labs/emails",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "description": "Unified email client with multiple provider drivers",
+  "keywords": [
+    "rectangular-labs",
+    "email",
+    "smtp",
+    "sendgrid",
+    "resend",
+    "postmark"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ElasticBottle/rectangular-labs.git",
+    "directory": "packages/emails"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/ElasticBottle/rectangular-labs/tree/main/packages/emails#readme",
+  "files": [
+    "dist",
+    "!dist/**/*.map",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./drivers/*": {
+      "types": "./dist/drivers/*.d.ts",
+      "import": "./dist/drivers/*.js"
+    },
+    "./templates/*": {
+      "import": "./src/templates/*.tsx"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "clean": "git clean -xdf .turbo node_modules dist .cache",
+    "format": "pnpx @biomejs/biome format . --write",
+    "lint": "pnpx @biomejs/biome lint . --write",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "devDependencies": {
+    "@rectangular-labs/typescript": "workspace:*",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-sesv2": "^3.0.0",
+    "@jsx-email/all": "^1.0.0",
+    "@plunk/node": "^3.0.0",
+    "@sendgrid/mail": "^8.0.0",
+    "mailersend": "^2.0.0",
+    "nodemailer": "^6.0.0",
+    "postmark": "^4.0.0",
+    "react": "^18.0.0",
+    "resend": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@aws-sdk/client-sesv2": {
+      "optional": true
+    },
+    "@jsx-email/all": {
+      "optional": true
+    },
+    "@plunk/node": {
+      "optional": true
+    },
+    "@sendgrid/mail": {
+      "optional": true
+    },
+    "mailersend": {
+      "optional": true
+    },
+    "nodemailer": {
+      "optional": true
+    },
+    "postmark": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "resend": {
+      "optional": true
+    }
+  }
+}
