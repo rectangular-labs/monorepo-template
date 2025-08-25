@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@rectangular-labs/ui/components/theme-provider";
+import { Toaster } from "@rectangular-labs/ui/components/ui/sonner";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import {
@@ -62,6 +63,7 @@ function RootLayout() {
       <body>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Outlet />
+          <Toaster />
         </ThemeProvider>
         <TanStackRouterDevtools position="bottom-left" />
         <ReactQueryDevtools buttonPosition="bottom-right" />
