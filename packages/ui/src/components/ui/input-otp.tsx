@@ -84,7 +84,7 @@ function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
 function OTPInputGroup({ otpSeparators = 0 }: { otpSeparators?: 0 | 1 | 2 }) {
   if (otpSeparators === 0) {
     return (
-      <InputOTPGroup>
+      <InputOTPGroup className="w-full">
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />
         <InputOTPSlot index={2} />
@@ -98,7 +98,7 @@ function OTPInputGroup({ otpSeparators = 0 }: { otpSeparators?: 0 | 1 | 2 }) {
   if (otpSeparators === 1) {
     return (
       <>
-        <InputOTPGroup>
+        <InputOTPGroup className="flex w-full justify-center">
           <InputOTPSlot index={0} />
           <InputOTPSlot index={1} />
           <InputOTPSlot index={2} />
@@ -106,7 +106,7 @@ function OTPInputGroup({ otpSeparators = 0 }: { otpSeparators?: 0 | 1 | 2 }) {
 
         <InputOTPSeparator />
 
-        <InputOTPGroup>
+        <InputOTPGroup className="flex w-full justify-center">
           <InputOTPSlot index={3} />
           <InputOTPSlot index={4} />
           <InputOTPSlot index={5} />
@@ -117,21 +117,21 @@ function OTPInputGroup({ otpSeparators = 0 }: { otpSeparators?: 0 | 1 | 2 }) {
 
   return (
     <>
-      <InputOTPGroup>
+      <InputOTPGroup className="w-full">
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />
       </InputOTPGroup>
 
       <InputOTPSeparator />
 
-      <InputOTPGroup>
+      <InputOTPGroup className="w-full">
         <InputOTPSlot index={2} />
         <InputOTPSlot index={3} />
       </InputOTPGroup>
 
       <InputOTPSeparator />
 
-      <InputOTPGroup>
+      <InputOTPGroup className="w-full">
         <InputOTPSlot index={4} />
         <InputOTPSlot index={5} />
       </InputOTPGroup>
