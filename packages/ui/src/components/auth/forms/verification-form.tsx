@@ -69,6 +69,8 @@ export function VerificationForm({
   const isPhone = mode.includes("phone");
   const isEmail = !isPhone;
 
+  const verificationType = needsCode ? "code" : "link";
+
   const openEmail = () => {
     window.open("mailto:", "_self");
   };
@@ -284,7 +286,7 @@ export function VerificationForm({
         </Button>
       )}
       <div className="flex items-center gap-2 text-sm">
-        Didn't receive a code?{" "}
+        Didn't receive a {verificationType}?{" "}
         <Button
           className="px-0"
           disabled={isSubmitting || isDisabled}
@@ -292,7 +294,7 @@ export function VerificationForm({
           type="button"
           variant="link"
         >
-          Resend code
+          Resend {verificationType}
         </Button>
       </div>
     </div>
