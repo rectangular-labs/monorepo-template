@@ -6,7 +6,7 @@ import {
   GoogleIcon,
 } from "@rectangular-labs/ui/components/icon";
 import { ThemeToggle } from "@rectangular-labs/ui/components/theme-provider";
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { type } from "arktype";
 import { authClient, getCurrentSession } from "~/lib/auth";
 
@@ -30,16 +30,27 @@ export const Route = createFileRoute("/login")({
 });
 
 function Login() {
+  const search = Route.useSearch();
+  const navigate = useNavigate();
+
   return (
     <div className="flex min-h-screen items-center justify-center">
       <ThemeToggle className="absolute top-4 right-4" />
       <AuthProvider
         authClient={authClient}
         credentials={{
-          verificationMode: "code",
+          verificationMode: "token",
+          enableForgotPassword: true,
+          enableConfirmPassword: true,
           enableRememberMe: true,
         }}
         plugins={["oneTap"]}
+        redirects={{
+          successCallbackURL: search.next,
+          onSuccess: () => {
+            void navigate({ to: search.next ?? "/orpc" });
+          },
+        }}
         socialProviders={[
           {
             provider: "google",

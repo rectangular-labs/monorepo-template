@@ -29,10 +29,10 @@ export type AuthViewPath = (typeof AuthViewPaths)[keyof typeof AuthViewPaths];
 
 export interface Redirects {
   onSuccess?: (() => void | Promise<void>) | undefined;
-  successCallbackURL?: string;
-  errorCallbackURL?: string;
-  newUserCallbackURL?: string;
-  resetPasswordCallbackURL?: string;
+  successCallbackURL?: string | undefined;
+  errorCallbackURL?: string | undefined;
+  newUserCallbackURL?: string | undefined;
+  resetPasswordCallbackURL?: string | undefined;
 }
 
 export type AdditionalField = {
@@ -195,7 +195,7 @@ export function AuthProvider({
   const onSuccessRef = useRef(redirects?.onSuccess);
   const successHandler = useCallback(async () => {
     if (onSuccessRef.current) {
-      await Promise.resolve(onSuccessRef.current());
+      return await Promise.resolve(onSuccessRef.current());
     }
     window.location.href = redirects?.successCallbackURL ?? "/";
   }, [redirects?.successCallbackURL]);

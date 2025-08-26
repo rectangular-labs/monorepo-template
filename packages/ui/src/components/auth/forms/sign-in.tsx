@@ -158,6 +158,7 @@ export function SignInForm({
                   <Button
                     className="px-0"
                     onClick={() => setView(viewPaths.FORGOT_PASSWORD)}
+                    type="button"
                     variant="link"
                   >
                     Forgot password?
