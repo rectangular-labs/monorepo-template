@@ -9,7 +9,8 @@
   "scripts": {
     "clean": "git clean -xdf node_modules .turbo .sst",
     "clean:workspaces": "turbo clean",
-    "db:migrate-generate": "pnpm run --filter @rectangular-labs/db  migrate-generate",
+    "auth:generate": "pnpm run --filter @rectangular-labs/auth generate",
+    "db:migrate-generate": "pnpm run --filter @rectangular-labs/db migrate-generate",
     "db:migrate-push": "pnpm run --filter @rectangular-labs/db  migrate-push",
     "db:push": "pnpm run --filter @rectangular-labs/db push --force",
     "db:studio": "pnpm run --filter @rectangular-labs/db studio",
