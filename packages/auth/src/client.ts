@@ -9,6 +9,7 @@ import {
   oneTapClient,
   organizationClient,
   passkeyClient,
+  phoneNumberClient,
   siweClient,
   ssoClient,
   twoFactorClient,
@@ -23,6 +24,7 @@ const _authClient = createAuthClientBase({
   plugins: [
     twoFactorClient(),
     usernameClient(),
+    phoneNumberClient(),
     magicLinkClient(),
     emailOTPClient(),
     passkeyClient(),
@@ -44,15 +46,12 @@ const _authClient = createAuthClientBase({
 });
 export type CompleteAuthClient = typeof _authClient;
 
-export type AuthClient = ReturnType<
-  typeof createAuthClientBase<{
-    plugins: [ReturnType<typeof emailOTPClient>];
-  }>
->;
-export const createAuthClient = (): AuthClient => {
+// Since better auth uses proxy for the client to route frontend calls to the backend, we don't actually need to pass any plugins here.
+// the types on the frontend based of the CompleteAuthClient will suffice. The only thing we need to configure is the baseURL and server side plugins.
+export const createAuthClient = () => {
   const env = authEnv();
   return createAuthClientBase({
     baseURL: env.VITE_APP_URL,
-    plugins: [emailOTPClient()],
+    plugins: [],
   });
 };
