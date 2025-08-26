@@ -16,26 +16,25 @@ import {
   FormLabel,
   FormMessage,
 } from "../../ui/form";
-import { InputOTP, OTPInputGroup } from "../../ui/input-otp";
+import { InputOTP } from "../../ui/input-otp";
 import { toast } from "../../ui/sonner";
-import { useAuth } from "../auth-provider";
+import { type AuthViewPath, useAuth } from "../auth-provider";
+import { OTPInputGroup } from "../otp-input-group";
 
-export function TwoFactorForm() {
-  const {
-    authClient,
-    onSuccess,
-    setView,
-    viewPaths,
-    isSubmitting,
-    setIsSubmitting,
-  } = useAuth();
+export function TwoFactorForm({
+  setView,
+}: {
+  setView: (view: AuthViewPath) => void;
+}) {
+  const { authClient, successHandler, viewPaths } = useAuth();
+  const [isSubmitting, _setIsSubmitting] = useState(false);
   const { data: session, isPending: isLoadingSession } =
     authClient.useSession();
 
   const initialSendRef = useRef(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [coolDownSeconds, setCoolDownSeconds] = useState(0);
-  const [method, setMethod] = useState<"totp" | "otp" | null>(null);
+  const [method, _setMethod] = useState<"totp" | "otp" | null>(null);
 
   const schema = type({
     code: "string.numeric",
@@ -128,9 +127,8 @@ export function TwoFactorForm() {
       return;
     }
 
-    // TODO: handle success / redirect to callbackURL
-    onSuccess?.();
     toast.success("Two-factor authentication enabled successfully");
+    successHandler();
   }
 
   return (

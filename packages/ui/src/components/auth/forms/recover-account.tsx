@@ -1,8 +1,8 @@
 "use client";
 import { arktypeResolver } from "@hookform/resolvers/arktype";
 import { type } from "arktype";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-
 import { Button } from "../../ui/button";
 import {
   Form,
@@ -16,7 +16,8 @@ import { Input } from "../../ui/input";
 import { useAuth } from "../auth-provider";
 
 export function RecoverAccountForm() {
-  const { authClient, isSubmitting, setIsSubmitting, onSuccess } = useAuth();
+  const { authClient, onSuccess } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const schema = type({ code: "string > 0" });
 

@@ -116,7 +116,7 @@ export function AuthForm({
         <ChangePasswordForm mode={"reset-token"} token={resetToken ?? ""} />
       );
     case viewPaths.TWO_FACTOR:
-      return <TwoFactorForm />;
+      return <TwoFactorForm setView={setView} />;
     case viewPaths.RECOVER_ACCOUNT:
       return <RecoverAccountForm />;
 
