@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowLeftIcon } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -13,14 +13,17 @@ import {
 } from "../ui/card";
 import { AuthForm } from "./auth-form";
 import { type AuthViewPath, useAuth } from "./auth-provider";
-import { EmailOTPButton } from "./email-otp-button";
-import { MagicLinkButton } from "./magic-link-button";
 import { OneTap } from "./one-tap";
 import { PasskeyButton } from "./passkey-button";
+import { SignInEmailOTPButton } from "./sign-in-email-otp-button";
+import { SignInMagicLinkButton } from "./sign-in-magic-link-button";
 
-const TITLES = {
-  SIGN_IN: "Sign in",
-  SIGN_UP: "Sign up",
+const TITLES: Record<AuthViewPath, string> = {
+  SIGN_IN_PASSWORD: "Sign in",
+  SIGN_UP_PASSWORD: "Sign up",
+  TWO_FACTOR: "Two-factor authentication",
+  VERIFICATION_CODE: "",
+  VERIFICATION_TOKEN: "",
   MAGIC_LINK: "Magic link",
   EMAIL_OTP: "Email OTP",
   FORGOT_PASSWORD: "Forgot password",
@@ -28,25 +31,29 @@ const TITLES = {
   RECOVER_ACCOUNT: "Recover account",
 };
 
-const DESCRIPTIONS = {
-  DISABLED_CREDENTIALS_DESCRIPTION:
-    "Choose a provider to login to your account",
-  USERNAME_DESCRIPTION: "Enter your username",
-  SIGN_UP_DESCRIPTION: "Create an account to get started",
+const DESCRIPTIONS: Record<`${AuthViewPath}_DESCRIPTION`, string> = {
+  SIGN_IN_PASSWORD_DESCRIPTION: "Log back in to get started",
+  SIGN_UP_PASSWORD_DESCRIPTION: "Create an account to get started",
+  TWO_FACTOR_DESCRIPTION: "Enter the code sent to your phone",
+  VERIFICATION_CODE_DESCRIPTION: "",
+  VERIFICATION_TOKEN_DESCRIPTION: "",
   MAGIC_LINK_DESCRIPTION: "Enter your email to receive a magic link",
   EMAIL_OTP_DESCRIPTION: "Enter your email to receive an OTP",
   FORGOT_PASSWORD_DESCRIPTION:
     "Enter your email to receive a password reset link",
   RESET_PASSWORD_DESCRIPTION: "Enter your new password",
+  RECOVER_ACCOUNT_DESCRIPTION: "Use your backup code to recover your account",
 };
 
 export interface AuthViewProps {
+  initialView?: AuthViewPath;
   socialLayout?: "auto" | "horizontal" | "grid" | "vertical";
 }
-export function AuthCard({ socialLayout: socialLayoutProp }: AuthViewProps) {
+export function AuthCard({
+  initialView,
+  socialLayout: socialLayoutProp,
+}: AuthViewProps) {
   const {
-    view,
-    setView,
     viewPaths,
     hasMagicLink,
     hasEmailOTP,
@@ -54,6 +61,22 @@ export function AuthCard({ socialLayout: socialLayoutProp }: AuthViewProps) {
     hasOneTap,
     credentials,
   } = useAuth();
+  const [view, setView] = useState<AuthViewPath>(() => {
+    if (initialView) {
+      return initialView;
+    }
+    if (credentials) {
+      return viewPaths.SIGN_IN_PASSWORD;
+    }
+    if (hasMagicLink) {
+      return viewPaths.MAGIC_LINK;
+    }
+    if (hasEmailOTP) {
+      return viewPaths.EMAIL_OTP;
+    }
+    return viewPaths.SIGN_IN_PASSWORD;
+  });
+  const [isSomethingSubmitting, setIsSomethingSubmitting] = useState(false);
   let socialLayout = socialLayoutProp;
   if (socialLayout === "auto") {
     socialLayout = !credentials ? "vertical" : "horizontal";
@@ -62,27 +85,18 @@ export function AuthCard({ socialLayout: socialLayoutProp }: AuthViewProps) {
     //   : "vertical";
   }
 
-  const credentialViews: AuthViewPath[] = [
-    viewPaths.SIGN_IN,
-    viewPaths.SIGN_UP,
-    viewPaths.FORGOT_PASSWORD,
+  const loginViews: AuthViewPath[] = [
+    viewPaths.SIGN_IN_PASSWORD,
+    viewPaths.SIGN_UP_PASSWORD,
     viewPaths.MAGIC_LINK,
     viewPaths.EMAIL_OTP,
-  ];
-  const showPasskeyViews: AuthViewPath[] = [
-    viewPaths.SIGN_IN,
-    viewPaths.MAGIC_LINK,
-    viewPaths.EMAIL_OTP,
-    viewPaths.RECOVER_ACCOUNT,
-    viewPaths.TWO_FACTOR,
-    viewPaths.FORGOT_PASSWORD,
   ];
   const showSignUpFooter: AuthViewPath[] = [
-    viewPaths.SIGN_IN,
+    viewPaths.SIGN_IN_PASSWORD,
     viewPaths.MAGIC_LINK,
     viewPaths.EMAIL_OTP,
   ];
-  const showSignInFooter: AuthViewPath[] = [viewPaths.SIGN_UP];
+  const showSignInFooter: AuthViewPath[] = [viewPaths.SIGN_UP_PASSWORD];
 
   const { title, description } = useMemo(
     () => ({
@@ -95,42 +109,50 @@ export function AuthCard({ socialLayout: socialLayoutProp }: AuthViewProps) {
 
   return (
     <Card className={"w-full max-w-sm"}>
-      <CardHeader>
-        <CardTitle className={"text-lg md:text-xl"}>{title}</CardTitle>
-        {description && (
-          <CardDescription className={"text-xs md:text-sm"}>
-            {description}
-          </CardDescription>
-        )}
-      </CardHeader>
+      {(title || description) && (
+        <CardHeader>
+          {title && (
+            <CardTitle className={"text-lg md:text-xl"}>{title}</CardTitle>
+          )}
+          {description && (
+            <CardDescription className={"text-xs md:text-sm"}>
+              {description}
+            </CardDescription>
+          )}
+        </CardHeader>
+      )}
 
       <CardContent className={"grid gap-6"}>
-        {hasOneTap &&
-          ["SIGN_IN", "SIGN_UP", "MAGIC_LINK", "EMAIL_OTP"].includes(
-            view as string,
-          ) && <OneTap />}
-
+        {hasOneTap && loginViews.includes(view) && <OneTap />}
         <div className="grid gap-4">
-          {credentials && <AuthForm />}
-
+          <AuthForm
+            isSomethingSubmitting={isSomethingSubmitting}
+            setIsSomethingSubmitting={setIsSomethingSubmitting}
+            setView={setView}
+            view={view}
+          />
           {hasMagicLink &&
-            ((credentials && credentialViews.includes(view)) ||
-              (hasEmailOTP && view === viewPaths.EMAIL_OTP)) && (
-              <MagicLinkButton />
+            (credentials || hasEmailOTP) &&
+            loginViews.includes(view) && (
+              <SignInMagicLinkButton
+                isSubmitting={isSomethingSubmitting}
+                setView={setView}
+                view={view}
+              />
             )}
-
           {hasEmailOTP &&
-            ((credentials && credentialViews.includes(view)) ||
-              (hasMagicLink &&
-                (
-                  [viewPaths.MAGIC_LINK, viewPaths.SIGN_IN] as AuthViewPath[]
-                ).includes(view))) && <EmailOTPButton />}
+            (credentials || hasMagicLink) &&
+            loginViews.includes(view) && (
+              <SignInEmailOTPButton
+                isSubmitting={isSomethingSubmitting}
+                setView={setView}
+                view={view}
+              />
+            )}
         </div>
 
-        {view !== "RESET_PASSWORD" && (
-          <div className="grid gap-4">
-            {hasPasskey && showPasskeyViews.includes(view) && <PasskeyButton />}
-          </div>
+        {loginViews.includes(view) && (
+          <div className="grid gap-4">{hasPasskey && <PasskeyButton />}</div>
         )}
       </CardContent>
 
@@ -139,7 +161,8 @@ export function AuthCard({ socialLayout: socialLayoutProp }: AuthViewProps) {
           <>
             <span>Don't have an account?</span>
             <Button
-              onClick={() => setView(viewPaths.SIGN_UP)}
+              className="px-0"
+              onClick={() => setView(viewPaths.SIGN_UP_PASSWORD)}
               size="sm"
               variant="link"
             >
@@ -151,7 +174,8 @@ export function AuthCard({ socialLayout: socialLayoutProp }: AuthViewProps) {
           <>
             <span>Already have an account?</span>
             <Button
-              onClick={() => setView(viewPaths.SIGN_IN)}
+              className="px-0"
+              onClick={() => setView(viewPaths.SIGN_IN_PASSWORD)}
               size="sm"
               variant="link"
             >
@@ -162,11 +186,12 @@ export function AuthCard({ socialLayout: socialLayoutProp }: AuthViewProps) {
         {!showSignUpFooter.includes(view) &&
           !showSignInFooter.includes(view) && (
             <Button
-              onClick={() => setView(viewPaths.SIGN_IN)}
+              className="px-0"
+              onClick={() => setView(viewPaths.SIGN_IN_PASSWORD)}
               size="sm"
               variant="link"
             >
-              <ArrowLeftIcon className="size-3" />
+              <ArrowLeftIcon className="size-3" /> Go Back
             </Button>
           )}
       </CardFooter>

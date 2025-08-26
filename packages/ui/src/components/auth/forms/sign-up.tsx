@@ -2,7 +2,8 @@
 
 import { arktypeResolver } from "@hookform/resolvers/arktype";
 import { type } from "arktype";
-import { useMemo } from "react";
+import { Loader2 } from "lucide-react";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { cn } from "../../../utils/cn";
 import { Button } from "../../ui/button";
@@ -18,21 +19,24 @@ import {
 import { Input } from "../../ui/input";
 import { toast } from "../../ui/sonner";
 import { Textarea } from "../../ui/textarea";
-import { useAuth } from "../auth-provider";
+import { type AuthViewPath, useAuth } from "../auth-provider";
 import { PasswordInput } from "../password-input";
 import { PasswordSchema } from "../schema/password";
+import type { VerificationInfo } from "./verification-form";
 
-export function SignUpForm() {
-  const {
-    authClient,
-    viewPaths,
-    view,
-    setView,
-    isSubmitting,
-    setIsSubmitting,
-    credentials,
-    onSuccess,
-  } = useAuth();
+export function SignUpForm({
+  setView,
+  isSomethingSubmitting,
+  setIsSomethingSubmitting,
+  setVerificationInfo,
+}: {
+  setView: (view: AuthViewPath) => void;
+  isSomethingSubmitting: boolean;
+  setIsSomethingSubmitting: (isSomethingSubmitting: boolean) => void;
+  setVerificationInfo: (verificationInfo: VerificationInfo) => void;
+}) {
+  const { authClient, viewPaths, credentials, successHandler } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const usernameEnabled = credentials?.useUsername;
   const confirmPasswordEnabled = credentials?.enableConfirmPassword;
@@ -108,6 +112,7 @@ export function SignUpForm() {
       }
     }
 
+    setIsSomethingSubmitting(true);
     setIsSubmitting(true);
     const response = await authClient.signUp.email({
       ...values,
@@ -116,27 +121,58 @@ export function SignUpForm() {
       name: (values.name as string) ?? "",
     });
     setIsSubmitting(false);
+    setIsSomethingSubmitting(false);
 
     if (response.error) {
+      if (response.error.code === "PASSWORD_COMPROMISED") {
+        form.setError("password", {
+          message:
+            response.error.message ??
+            "Password has been compromised. Please choose a different one.",
+        });
+        form.resetField("password");
+        if (confirmPasswordEnabled) form.resetField("confirmPassword");
+        return;
+      }
+
       form.setError("root", {
         message:
           response.error.message ?? "Failed to sign up. Please try again.",
       });
-      form.resetField("password");
-      if (confirmPasswordEnabled) form.resetField("confirmPassword");
-      return;
-    }
-    if (!response.data.token) {
-      // TODO: Handle email verification case
       return;
     }
 
-    onSuccess?.();
-    setView(viewPaths.SIGN_IN);
+    if (!response.data.token) {
+      // Handle email verification case
+      if (credentials?.verificationMode === "code") {
+        setView(viewPaths.VERIFICATION_CODE);
+        setVerificationInfo({
+          mode: "verification-email-code",
+          medium: "email",
+          identifier: values.email,
+        });
+      }
+      if (credentials?.verificationMode === "token") {
+        setView(viewPaths.VERIFICATION_TOKEN);
+        setVerificationInfo({
+          mode: "verification-email-token",
+          medium: "email",
+          identifier: values.email,
+        });
+      }
+      return;
+    }
+
     toast.success("Account created successfully");
+    await successHandler();
   }
 
-  if (view !== viewPaths.SIGN_UP) return null;
+  if (!credentials) {
+    console.warn(
+      "Rendering the sign up form but credentials was set to `undefined` in the `AuthProvider`.",
+    );
+    return null;
+  }
 
   return (
     <Form {...form}>
@@ -153,7 +189,7 @@ export function SignUpForm() {
                 <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isSomethingSubmitting}
                     placeholder="Your name"
                     {...field}
                   />
@@ -174,7 +210,7 @@ export function SignUpForm() {
                 <FormControl>
                   <Input
                     autoComplete="username"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isSomethingSubmitting}
                     placeholder="Choose a username"
                     {...field}
                   />
@@ -194,7 +230,7 @@ export function SignUpForm() {
               <FormControl>
                 <Input
                   autoComplete="email"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isSomethingSubmitting}
                   placeholder="you@example.com"
                   type="email"
                   {...field}
@@ -214,7 +250,7 @@ export function SignUpForm() {
               <FormControl>
                 <PasswordInput
                   autoComplete="new-password"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isSomethingSubmitting}
                   enableToggle
                   placeholder="Password"
                   type="password"
@@ -236,7 +272,7 @@ export function SignUpForm() {
                 <FormControl>
                   <PasswordInput
                     autoComplete="new-password"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isSomethingSubmitting}
                     enableToggle
                     placeholder="Confirm Password"
                     {...field}
@@ -272,7 +308,7 @@ export function SignUpForm() {
                         <FormControl>
                           <Checkbox
                             checked={Boolean(formField.value)}
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || isSomethingSubmitting}
                             onCheckedChange={formField.onChange}
                           />
                         </FormControl>
@@ -296,13 +332,13 @@ export function SignUpForm() {
                     <FormControl>
                       {cfg.multiline ? (
                         <Textarea
-                          disabled={isSubmitting}
+                          disabled={isSubmitting || isSomethingSubmitting}
                           placeholder={cfg.placeholder}
                           {...formField}
                         />
                       ) : (
                         <Input
-                          disabled={isSubmitting}
+                          disabled={isSubmitting || isSomethingSubmitting}
                           placeholder={cfg.placeholder}
                           type={cfg.type === "number" ? "number" : "text"}
                           {...form.register(castKey)}
@@ -317,12 +353,15 @@ export function SignUpForm() {
           })}
 
         {form.formState.errors.root && (
-          <div className="text-destructive text-sm" role="alert">
-            {form.formState.errors.root.message}
-          </div>
+          <FormMessage>{form.formState.errors.root.message}</FormMessage>
         )}
 
-        <Button className={cn("w-full")} isLoading={isSubmitting} type="submit">
+        <Button
+          className={cn("w-full")}
+          disabled={isSubmitting || isSomethingSubmitting}
+          type="submit"
+        >
+          {isSubmitting && <Loader2 className="animate-spin" />}
           Sign Up
         </Button>
       </form>

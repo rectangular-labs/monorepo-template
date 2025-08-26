@@ -1,12 +1,22 @@
 import { LockIcon, MailIcon } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { Button } from "../ui/button";
-import { useAuth } from "./auth-provider";
+import { type AuthViewPath, useAuth } from "./auth-provider";
 
-export function EmailOTPButton() {
-  const { view, setView, viewPaths, isSubmitting } = useAuth();
+export function SignInEmailOTPButton({
+  view,
+  setView,
+  isSubmitting,
+}: {
+  view: AuthViewPath;
+  setView: (view: AuthViewPath) => void;
+  isSubmitting: boolean;
+}) {
+  const { viewPaths } = useAuth();
   const toggledView =
-    view === viewPaths.EMAIL_OTP ? viewPaths.SIGN_IN : viewPaths.EMAIL_OTP;
+    view === viewPaths.EMAIL_OTP
+      ? viewPaths.SIGN_IN_PASSWORD
+      : viewPaths.EMAIL_OTP;
 
   return (
     <Button

@@ -2,8 +2,9 @@
 
 import { arktypeResolver } from "@hookform/resolvers/arktype";
 import { type } from "arktype";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
 import {
@@ -15,19 +16,23 @@ import {
   FormMessage,
 } from "../../ui/form";
 import { Input } from "../../ui/input";
-import { useAuth } from "../auth-provider";
+import { type AuthViewPath, useAuth } from "../auth-provider";
 import { PasswordInput } from "../password-input";
+import type { VerificationInfo } from "./verification-form";
 
-export function SignInForm() {
-  const {
-    authClient,
-    view,
-    setView,
-    viewPaths,
-    isSubmitting,
-    setIsSubmitting,
-    credentials,
-  } = useAuth();
+export function SignInForm({
+  setView,
+  isSomethingSubmitting,
+  setIsSomethingSubmitting,
+  setVerificationInfo,
+}: {
+  setView: (view: AuthViewPath) => void;
+  isSomethingSubmitting: boolean;
+  setIsSomethingSubmitting: (isSomethingSubmitting: boolean) => void;
+  setVerificationInfo: (verificationInfo: VerificationInfo) => void;
+}) {
+  const { authClient, viewPaths, credentials, successHandler } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const usernameEnabled = credentials?.useUsername;
   const rememberMeEnabled = credentials?.enableRememberMe;
@@ -47,6 +52,7 @@ export function SignInForm() {
   });
 
   async function signIn({ email, password, rememberMe }: typeof schema.infer) {
+    setIsSomethingSubmitting(true);
     setIsSubmitting(true);
     const response = await (async () => {
       if (usernameEnabled) {
@@ -64,21 +70,30 @@ export function SignInForm() {
       }
     })();
     setIsSubmitting(false);
+    setIsSomethingSubmitting(false);
 
     if (response.error) {
       if (response.error.status === 403) {
-        // todo: redirect to verify email address
+        // Redirect to verify email address
+        if (credentials?.verificationMode === "code") {
+          setView(viewPaths.VERIFICATION_CODE);
+          setVerificationInfo({
+            mode: "verification-email-code",
+            medium: "email",
+            identifier: email,
+          });
+        }
+        if (credentials?.verificationMode === "token") {
+          setView(viewPaths.VERIFICATION_TOKEN);
+          setVerificationInfo({
+            mode: "verification-email-token",
+            medium: "email",
+            identifier: email,
+          });
+        }
         return;
       }
-      form.resetField("password");
-      if (response.error.code === "PASSWORD_COMPROMISED") {
-        form.setError("password", {
-          message:
-            response.error.message ??
-            "Password has been compromised. Please choose a different one.",
-        });
-        return;
-      }
+
       form.setError("root", {
         message:
           response.error.message ??
@@ -89,13 +104,17 @@ export function SignInForm() {
 
     if ("twoFactorRedirect" in response.data) {
       setView(viewPaths.TWO_FACTOR);
-    } else {
-      // TODO: handle success / redirect to callbackURL
-      // success path handled by consumer onSuccess if needed
+      return;
     }
+    await successHandler();
   }
 
-  if (view !== viewPaths.SIGN_IN) return null;
+  if (!credentials) {
+    console.warn(
+      "Rendering the sign in form but credentials was set to `undefined` in the `AuthProvider`.",
+    );
+    return null;
+  }
 
   return (
     <Form {...form}>
@@ -115,7 +134,7 @@ export function SignInForm() {
                   autoComplete={
                     usernameEnabled ? "username webauthn" : "email webauthn"
                   }
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isSomethingSubmitting}
                   placeholder={
                     usernameEnabled ? "Enter your username" : "Enter your email"
                   }
@@ -139,6 +158,7 @@ export function SignInForm() {
 
                 {credentials?.enableForgotPassword && (
                   <Button
+                    className="px-0"
                     onClick={() => setView(viewPaths.FORGOT_PASSWORD)}
                     variant="link"
                   >
@@ -150,7 +170,7 @@ export function SignInForm() {
               <FormControl>
                 <PasswordInput
                   autoComplete="current-password webauthn"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isSomethingSubmitting}
                   placeholder="Your password"
                   {...field}
                 />
@@ -170,7 +190,7 @@ export function SignInForm() {
                 <FormControl>
                   <Checkbox
                     checked={field.value}
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isSomethingSubmitting}
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
@@ -180,8 +200,15 @@ export function SignInForm() {
             )}
           />
         )}
-        {/* TODO: Display root error message */}
-        <Button className={"w-full"} isLoading={isSubmitting} type="submit">
+        {form.formState.errors.root && (
+          <FormMessage>{form.formState.errors.root.message}</FormMessage>
+        )}
+        <Button
+          className={"w-full"}
+          disabled={isSubmitting || isSomethingSubmitting}
+          type="submit"
+        >
+          {isSubmitting && <Loader2 className="animate-spin" />}
           Sign in
         </Button>
       </form>

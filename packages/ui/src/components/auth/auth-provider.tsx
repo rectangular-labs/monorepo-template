@@ -5,32 +5,32 @@ import type {
   CompleteAuthClient,
 } from "@rectangular-labs/auth/client";
 import type { PropsWithChildren } from "react";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useRef,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useRef } from "react";
 
 const AuthViewPaths = {
-  SIGN_UP: "SIGN_UP",
+  // identity capture. These all ask for either a phone number or email address.
+  SIGN_UP_PASSWORD: "SIGN_UP_PASSWORD",
+  SIGN_IN_PASSWORD: "SIGN_IN_PASSWORD",
   EMAIL_OTP: "EMAIL_OTP",
   MAGIC_LINK: "MAGIC_LINK",
+  FORGOT_PASSWORD: "FORGOT_PASSWORD",
+  // verification types. These all ask for a code or require you to check your identifier for some link.
+  VERIFICATION_CODE: "VERIFICATION_CODE",
+  VERIFICATION_TOKEN: "VERIFICATION_TOKEN",
+  // password reset
+  RESET_PASSWORD: "RESET_PASSWORD",
+  // two factor
   TWO_FACTOR: "TWO_FACTOR",
   RECOVER_ACCOUNT: "RECOVER_ACCOUNT",
-  SIGN_IN: "SIGN_IN",
-  FORGOT_PASSWORD: "FORGOT_PASSWORD",
-  RESET_PASSWORD: "RESET_PASSWORD",
 } as const;
 export type AuthViewPath = (typeof AuthViewPaths)[keyof typeof AuthViewPaths];
 
-export interface OnAuthComplete {
-  onSuccess?: () => void;
-  onError?: (error: unknown) => void;
-  successRedirect?: string;
-  errorRedirect?: string;
-  newUserRedirect?: string;
+export interface Redirects {
+  onSuccess?: (() => void | Promise<void>) | undefined;
+  successCallbackURL?: string | undefined;
+  errorCallbackURL?: string | undefined;
+  newUserCallbackURL?: string | undefined;
+  resetPasswordCallbackURL?: string | undefined;
 }
 
 export type AdditionalField = {
@@ -85,9 +85,10 @@ export type CredentialsOptions = {
   enableForgotPassword?: boolean;
   /**
    * Enable or disable Remember Me checkbox
-   * @default false
+   * @default true
    */
   enableRememberMe?: boolean;
+  verificationMode?: "code" | "token";
   /**
    * whether to use username instead of email for sign in
    * @default false
@@ -96,74 +97,78 @@ export type CredentialsOptions = {
 };
 
 type AuthContextValue = {
-  view: AuthViewPath;
-  setView: (view: AuthViewPath) => void;
-  isSubmitting: boolean;
-  setIsSubmitting: (isSubmitting: boolean) => void;
+  // view: AuthViewPath;
+  // setView: (view: AuthViewPath) => void;
+  // isSubmitting: boolean;
+  // setIsSubmitting: (isSubmitting: boolean) => void;
   viewPaths: typeof AuthViewPaths;
   authClient: CompleteAuthClient;
+  credentials?: CredentialsOptions;
   hasMagicLink: boolean;
   hasEmailOTP: boolean;
   hasPasskey: boolean;
   hasOneTap: boolean;
   hasUsername: boolean;
-  credentials?: CredentialsOptions;
-} & OnAuthComplete;
+  successHandler: () => Promise<void>;
+} & Redirects;
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({
-  initialView = "SIGN_IN",
+  // initialView = "SIGN_IN",
   authClient,
-  onAuthComplete,
+  redirects,
   children,
   credentials,
+  plugins = [],
 }: PropsWithChildren<{
-  initialView?: AuthViewPath;
+  redirects?: Redirects;
   authClient: BaseAuthClient;
-  onAuthComplete?: OnAuthComplete;
+  initialView?: AuthViewPath;
   credentials?: CredentialsOptions;
+  plugins?: ("magicLink" | "emailOTP" | "passkey" | "oneTap" | "username")[];
 }>) {
-  const [view, setView] = useState<AuthViewPath>(initialView);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const successRef = useRef(onAuthComplete?.onSuccess);
-  const errorRef = useRef(onAuthComplete?.onError);
+  // const [view, setView] = useState<AuthViewPath>(initialView);
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSuccess = useCallback(() => {
-    successRef.current?.();
-  }, []);
-
-  const handleError = useCallback((error: unknown) => {
-    errorRef.current?.(error);
-  }, []);
-
-  const hasUsername = "username" in authClient.signIn;
+  const hasUsername = plugins?.includes("username");
   const defaultCredentials = {
     enableConfirmPassword: false,
     enableForgotPassword: true,
     enableRememberMe: true,
     useUsername: hasUsername,
+    verificationMode: "token" as const,
   };
+
+  const onSuccessRef = useRef(redirects?.onSuccess);
+  const successHandler = useCallback(async () => {
+    if (onSuccessRef.current) {
+      await Promise.resolve(onSuccessRef.current());
+    }
+    window.location.href = redirects?.successCallbackURL ?? "/";
+  }, [redirects?.successCallbackURL]);
 
   return (
     <AuthContext.Provider
       value={{
         authClient: authClient as unknown as CompleteAuthClient,
-        isSubmitting,
-        setIsSubmitting,
-        view,
-        setView,
+        // isSubmitting,
+        // setIsSubmitting,
+        // view,
+        // setView,
         viewPaths: AuthViewPaths,
-        onError: handleError,
-        onSuccess: handleSuccess,
-        successRedirect: onAuthComplete?.successRedirect ?? "",
-        errorRedirect: onAuthComplete?.errorRedirect ?? "",
-        newUserRedirect: onAuthComplete?.newUserRedirect ?? "",
-        hasMagicLink: "magicLink" in authClient.signIn,
-        hasEmailOTP: "emailOTP" in authClient.signIn,
-        hasPasskey: "passkey" in authClient.signIn,
-        hasOneTap: "oneTap" in authClient,
+        credentials: { ...defaultCredentials, ...(credentials ?? {}) },
+        successHandler,
+        onSuccess: redirects?.onSuccess,
+        successCallbackURL: redirects?.successCallbackURL ?? "/",
+        errorCallbackURL: redirects?.errorCallbackURL ?? "/login?type=error",
+        newUserCallbackURL: redirects?.newUserCallbackURL ?? "/",
+        resetPasswordCallbackURL:
+          redirects?.resetPasswordCallbackURL ?? "/login?type=reset-password",
+        hasMagicLink: plugins?.includes("magicLink"),
+        hasEmailOTP: plugins?.includes("emailOTP"),
+        hasPasskey: plugins?.includes("passkey"),
+        hasOneTap: plugins?.includes("oneTap"),
         hasUsername,
-        credentials: credentials ?? defaultCredentials,
       }}
     >
       {children}
