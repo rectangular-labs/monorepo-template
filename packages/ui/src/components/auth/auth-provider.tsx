@@ -6,6 +6,7 @@ import type {
 } from "@rectangular-labs/auth/client";
 import type { PropsWithChildren } from "react";
 import { createContext, useCallback, useContext, useRef } from "react";
+import type { SocialProvider } from "./social-providers";
 
 const AuthViewPaths = {
   // identity capture. These all ask for either a phone number or email address.
@@ -104,6 +105,7 @@ type AuthContextValue = {
   viewPaths: typeof AuthViewPaths;
   authClient: CompleteAuthClient;
   credentials?: CredentialsOptions;
+  socialProviders: SocialProvider[];
   hasMagicLink: boolean;
   hasEmailOTP: boolean;
   hasPasskey: boolean;
@@ -125,12 +127,14 @@ export function AuthProvider({
   redirects,
   children,
   credentials,
+  socialProviders,
   plugins = [],
 }: PropsWithChildren<{
   redirects?: Redirects;
   authClient: BaseAuthClient;
   initialView?: AuthViewPath;
   credentials?: CredentialsOptions;
+  socialProviders?: SocialProvider[];
   plugins?: (
     | "magicLink"
     | "emailOTP"
@@ -170,6 +174,7 @@ export function AuthProvider({
         // setView,
         viewPaths: AuthViewPaths,
         credentials: { ...defaultCredentials, ...(credentials ?? {}) },
+        socialProviders: socialProviders ?? [],
         successHandler,
         onSuccess: redirects?.onSuccess,
         successCallbackURL: redirects?.successCallbackURL ?? "/",

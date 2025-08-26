@@ -101,10 +101,6 @@ export function AuthForm({
           setView={setView}
         />
       ) : null;
-    case viewPaths.TWO_FACTOR:
-      return <TwoFactorForm />;
-    case viewPaths.RECOVER_ACCOUNT:
-      return <RecoverAccountForm />;
     case viewPaths.RESET_PASSWORD:
       return (verificationInfo?.mode === "password-reset-email-code" ||
         verificationInfo?.mode === "password-reset-phone-code") &&
@@ -117,6 +113,10 @@ export function AuthForm({
       ) : (
         <ChangePasswordForm mode={"reset-token"} token={""} />
       );
+    case viewPaths.TWO_FACTOR:
+      return <TwoFactorForm />;
+    case viewPaths.RECOVER_ACCOUNT:
+      return <RecoverAccountForm />;
 
     default:
       return null;

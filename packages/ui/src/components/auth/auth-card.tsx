@@ -2,6 +2,7 @@
 
 import { ArrowLeftIcon } from "lucide-react";
 import { useMemo, useState } from "react";
+import { cn } from "../../utils/cn";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -11,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
+import { Separator } from "../ui/separator";
 import { AuthForm } from "./auth-form";
 import { type AuthViewPath, useAuth } from "./auth-provider";
 import type {
@@ -19,6 +21,7 @@ import type {
 } from "./forms/verification-form";
 import { OneTap } from "./one-tap";
 import { PasskeyButton } from "./passkey-button";
+import { ProviderButton } from "./provider-button";
 import { SignInEmailOTPButton } from "./sign-in-email-otp-button";
 import { SignInMagicLinkButton } from "./sign-in-magic-link-button";
 import { SignInPhoneOTPButton } from "./sign-in-phone-otp-button";
@@ -67,7 +70,7 @@ export interface AuthViewProps {
 }
 export function AuthCard({
   initialView,
-  socialLayout: socialLayoutProp,
+  socialLayout: socialLayoutProp = "auto",
 }: AuthViewProps) {
   const {
     viewPaths,
@@ -77,7 +80,9 @@ export function AuthCard({
     hasOneTap,
     hasPhoneOTP,
     credentials,
+    socialProviders,
   } = useAuth();
+  const hasForm = hasMagicLink || hasEmailOTP || hasPhoneOTP || !!credentials;
   const [view, setView] = useState<AuthViewPath>(() => {
     if (initialView) {
       return initialView;
@@ -100,13 +105,18 @@ export function AuthCard({
   const [verificationInfo, setVerificationInfo] =
     useState<VerificationInfo | null>(null);
 
-  let socialLayout = socialLayoutProp;
-  if (socialLayout === "auto") {
-    socialLayout = !credentials ? "vertical" : "horizontal";
-    // : social?.providers && social.providers.length > 2
-    //   ? "horizontal"
-    //   : "vertical";
-  }
+  const socialLayout = (() => {
+    if (socialLayoutProp === "auto") {
+      if (!credentials) {
+        return "vertical";
+      }
+      if (socialProviders.length > 2) {
+        return "horizontal";
+      }
+      return "vertical";
+    }
+    return socialLayoutProp;
+  })();
 
   const loginViews: AuthViewPath[] = [
     viewPaths.SIGN_IN_PASSWORD,
@@ -115,13 +125,14 @@ export function AuthCard({
     viewPaths.EMAIL_OTP,
     viewPaths.PHONE_OTP,
   ];
-  const showSignUpFooter: AuthViewPath[] = [
+  const signInViews: AuthViewPath[] = [
     viewPaths.SIGN_IN_PASSWORD,
     viewPaths.MAGIC_LINK,
     viewPaths.EMAIL_OTP,
     viewPaths.PHONE_OTP,
   ];
-  const showSignInFooter: AuthViewPath[] = [viewPaths.SIGN_UP_PASSWORD];
+  const signUpViews: AuthViewPath[] = [viewPaths.SIGN_UP_PASSWORD];
+  const showPasskey = hasPasskey && signInViews.includes(view);
 
   const { title, description } = useMemo(() => {
     if (view === viewPaths.IDENTITY_VERIFICATION) {
@@ -155,45 +166,81 @@ export function AuthCard({
 
       <CardContent className={"grid gap-6"}>
         {hasOneTap && loginViews.includes(view) && <OneTap />}
-        <div className="grid gap-4">
-          <AuthForm
-            setShouldDisable={setShouldDisable}
-            setVerificationInfo={setVerificationInfo}
-            setView={setView}
-            shouldDisable={shouldDisable}
-            verificationInfo={verificationInfo}
-            view={view}
-          />
-          {hasMagicLink && credentials && loginViews.includes(view) && (
-            <SignInMagicLinkButton
-              isSubmitting={shouldDisable}
+        {hasForm && (
+          <div className="grid gap-4">
+            <AuthForm
+              setShouldDisable={setShouldDisable}
+              setVerificationInfo={setVerificationInfo}
               setView={setView}
+              shouldDisable={shouldDisable}
+              verificationInfo={verificationInfo}
               view={view}
             />
-          )}
-          {hasEmailOTP && credentials && loginViews.includes(view) && (
-            <SignInEmailOTPButton
-              isSubmitting={shouldDisable}
-              setView={setView}
-              view={view}
-            />
-          )}
-          {hasPhoneOTP && credentials && loginViews.includes(view) && (
-            <SignInPhoneOTPButton
-              isSubmitting={shouldDisable}
-              setView={setView}
-              view={view}
-            />
-          )}
-        </div>
-
-        {loginViews.includes(view) && (
-          <div className="grid gap-4">{hasPasskey && <PasskeyButton />}</div>
+            {hasMagicLink && credentials && loginViews.includes(view) && (
+              <SignInMagicLinkButton
+                isSubmitting={shouldDisable}
+                setView={setView}
+                view={view}
+              />
+            )}
+            {hasEmailOTP && credentials && loginViews.includes(view) && (
+              <SignInEmailOTPButton
+                isSubmitting={shouldDisable}
+                setView={setView}
+                view={view}
+              />
+            )}
+            {hasPhoneOTP && credentials && loginViews.includes(view) && (
+              <SignInPhoneOTPButton
+                isSubmitting={shouldDisable}
+                setView={setView}
+                view={view}
+              />
+            )}
+          </div>
         )}
+
+        {loginViews.includes(view) &&
+          (showPasskey || socialProviders.length > 0) && (
+            <>
+              {hasForm && (
+                <div className={"flex items-center gap-2"}>
+                  <Separator className={"!w-auto grow"} />
+                  <span className="flex-shrink-0 text-muted-foreground text-sm">
+                    Or continue with
+                  </span>
+                  <Separator className={"!w-auto grow"} />
+                </div>
+              )}
+              <div className="grid gap-4">
+                {socialProviders.length > 0 && (
+                  <div
+                    className={cn(
+                      "flex w-full items-center justify-between gap-4",
+                      socialLayout === "horizontal" && "flex-wrap",
+                      socialLayout === "vertical" && "flex-col",
+                      socialLayout === "grid" && "grid grid-cols-2",
+                    )}
+                  >
+                    {socialProviders.map((socialProvider) => (
+                      <ProviderButton
+                        key={socialProvider.name}
+                        provider={socialProvider}
+                        setShouldDisable={setShouldDisable}
+                        shouldDisable={shouldDisable}
+                        socialLayout={socialLayout || "vertical"}
+                      />
+                    ))}
+                  </div>
+                )}
+                {showPasskey && <PasskeyButton />}
+              </div>
+            </>
+          )}
       </CardContent>
 
       <CardFooter className="justify-center gap-1.5 text-muted-foreground text-sm">
-        {showSignUpFooter.includes(view) && (
+        {signInViews.includes(view) && (
           <>
             <span>Don't have an account?</span>
             <Button
@@ -206,7 +253,7 @@ export function AuthCard({
             </Button>
           </>
         )}
-        {showSignInFooter.includes(view) && (
+        {signUpViews.includes(view) && (
           <>
             <span>Already have an account?</span>
             <Button
@@ -219,17 +266,16 @@ export function AuthCard({
             </Button>
           </>
         )}
-        {!showSignUpFooter.includes(view) &&
-          !showSignInFooter.includes(view) && (
-            <Button
-              className="px-0"
-              onClick={() => setView(viewPaths.SIGN_IN_PASSWORD)}
-              size="sm"
-              variant="link"
-            >
-              <ArrowLeftIcon className="size-3" /> Go Back
-            </Button>
-          )}
+        {!signInViews.includes(view) && !signUpViews.includes(view) && (
+          <Button
+            className="px-0"
+            onClick={() => setView(viewPaths.SIGN_IN_PASSWORD)}
+            size="sm"
+            variant="link"
+          >
+            <ArrowLeftIcon className="size-3" /> Go Back
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );
