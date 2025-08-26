@@ -13,10 +13,10 @@ const AuthViewPaths = {
   SIGN_IN_PASSWORD: "SIGN_IN_PASSWORD",
   EMAIL_OTP: "EMAIL_OTP",
   MAGIC_LINK: "MAGIC_LINK",
+  PHONE_OTP: "PHONE_OTP",
   FORGOT_PASSWORD: "FORGOT_PASSWORD",
   // verification types. These all ask for a code or require you to check your identifier for some link.
-  VERIFICATION_CODE: "VERIFICATION_CODE",
-  VERIFICATION_TOKEN: "VERIFICATION_TOKEN",
+  IDENTITY_VERIFICATION: "IDENTITY_VERIFICATION",
   // password reset
   RESET_PASSWORD: "RESET_PASSWORD",
   // two factor
@@ -27,10 +27,10 @@ export type AuthViewPath = (typeof AuthViewPaths)[keyof typeof AuthViewPaths];
 
 export interface Redirects {
   onSuccess?: (() => void | Promise<void>) | undefined;
-  successCallbackURL?: string | undefined;
-  errorCallbackURL?: string | undefined;
-  newUserCallbackURL?: string | undefined;
-  resetPasswordCallbackURL?: string | undefined;
+  successCallbackURL?: string;
+  errorCallbackURL?: string;
+  newUserCallbackURL?: string;
+  resetPasswordCallbackURL?: string;
 }
 
 export type AdditionalField = {
@@ -109,8 +109,14 @@ type AuthContextValue = {
   hasPasskey: boolean;
   hasOneTap: boolean;
   hasUsername: boolean;
+  hasPhoneOTP: boolean;
   successHandler: () => Promise<void>;
-} & Redirects;
+  successCallbackURL: string;
+  errorCallbackURL: string;
+  newUserCallbackURL: string;
+  resetPasswordCallbackURL: string;
+  onSuccess: Redirects["onSuccess"];
+};
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({
@@ -125,7 +131,14 @@ export function AuthProvider({
   authClient: BaseAuthClient;
   initialView?: AuthViewPath;
   credentials?: CredentialsOptions;
-  plugins?: ("magicLink" | "emailOTP" | "passkey" | "oneTap" | "username")[];
+  plugins?: (
+    | "magicLink"
+    | "emailOTP"
+    | "passkey"
+    | "oneTap"
+    | "username"
+    | "phoneOTP"
+  )[];
 }>) {
   // const [view, setView] = useState<AuthViewPath>(initialView);
   // const [isSubmitting, setIsSubmitting] = useState(false);
@@ -168,6 +181,7 @@ export function AuthProvider({
         hasEmailOTP: plugins?.includes("emailOTP"),
         hasPasskey: plugins?.includes("passkey"),
         hasOneTap: plugins?.includes("oneTap"),
+        hasPhoneOTP: plugins?.includes("phoneOTP"),
         hasUsername,
       }}
     >

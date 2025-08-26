@@ -26,13 +26,13 @@ import type { VerificationInfo } from "./verification-form";
 
 export function SignUpForm({
   setView,
-  isSomethingSubmitting,
-  setIsSomethingSubmitting,
+  shouldDisable,
+  setShouldDisable,
   setVerificationInfo,
 }: {
   setView: (view: AuthViewPath) => void;
-  isSomethingSubmitting: boolean;
-  setIsSomethingSubmitting: (isSomethingSubmitting: boolean) => void;
+  shouldDisable: boolean;
+  setShouldDisable: (disabled: boolean) => void;
   setVerificationInfo: (verificationInfo: VerificationInfo) => void;
 }) {
   const { authClient, viewPaths, credentials, successHandler } = useAuth();
@@ -112,7 +112,7 @@ export function SignUpForm({
       }
     }
 
-    setIsSomethingSubmitting(true);
+    setShouldDisable(true);
     setIsSubmitting(true);
     const response = await authClient.signUp.email({
       ...values,
@@ -121,7 +121,7 @@ export function SignUpForm({
       name: (values.name as string) ?? "",
     });
     setIsSubmitting(false);
-    setIsSomethingSubmitting(false);
+    setShouldDisable(false);
 
     if (response.error) {
       if (response.error.code === "PASSWORD_COMPROMISED") {
@@ -145,18 +145,16 @@ export function SignUpForm({
     if (!response.data.token) {
       // Handle email verification case
       if (credentials?.verificationMode === "code") {
-        setView(viewPaths.VERIFICATION_CODE);
+        setView(viewPaths.IDENTITY_VERIFICATION);
         setVerificationInfo({
           mode: "verification-email-code",
-          medium: "email",
           identifier: values.email,
         });
       }
       if (credentials?.verificationMode === "token") {
-        setView(viewPaths.VERIFICATION_TOKEN);
+        setView(viewPaths.IDENTITY_VERIFICATION);
         setVerificationInfo({
           mode: "verification-email-token",
-          medium: "email",
           identifier: values.email,
         });
       }
@@ -189,7 +187,7 @@ export function SignUpForm({
                 <FormLabel>Name</FormLabel>
                 <FormControl>
                   <Input
-                    disabled={isSubmitting || isSomethingSubmitting}
+                    disabled={isSubmitting || shouldDisable}
                     placeholder="Your name"
                     {...field}
                   />
@@ -210,7 +208,7 @@ export function SignUpForm({
                 <FormControl>
                   <Input
                     autoComplete="username"
-                    disabled={isSubmitting || isSomethingSubmitting}
+                    disabled={isSubmitting || shouldDisable}
                     placeholder="Choose a username"
                     {...field}
                   />
@@ -230,7 +228,7 @@ export function SignUpForm({
               <FormControl>
                 <Input
                   autoComplete="email"
-                  disabled={isSubmitting || isSomethingSubmitting}
+                  disabled={isSubmitting || shouldDisable}
                   placeholder="you@example.com"
                   type="email"
                   {...field}
@@ -250,7 +248,7 @@ export function SignUpForm({
               <FormControl>
                 <PasswordInput
                   autoComplete="new-password"
-                  disabled={isSubmitting || isSomethingSubmitting}
+                  disabled={isSubmitting || shouldDisable}
                   enableToggle
                   placeholder="Password"
                   type="password"
@@ -272,7 +270,7 @@ export function SignUpForm({
                 <FormControl>
                   <PasswordInput
                     autoComplete="new-password"
-                    disabled={isSubmitting || isSomethingSubmitting}
+                    disabled={isSubmitting || shouldDisable}
                     enableToggle
                     placeholder="Confirm Password"
                     {...field}
@@ -308,7 +306,7 @@ export function SignUpForm({
                         <FormControl>
                           <Checkbox
                             checked={Boolean(formField.value)}
-                            disabled={isSubmitting || isSomethingSubmitting}
+                            disabled={isSubmitting || shouldDisable}
                             onCheckedChange={formField.onChange}
                           />
                         </FormControl>
@@ -332,13 +330,13 @@ export function SignUpForm({
                     <FormControl>
                       {cfg.multiline ? (
                         <Textarea
-                          disabled={isSubmitting || isSomethingSubmitting}
+                          disabled={isSubmitting || shouldDisable}
                           placeholder={cfg.placeholder}
                           {...formField}
                         />
                       ) : (
                         <Input
-                          disabled={isSubmitting || isSomethingSubmitting}
+                          disabled={isSubmitting || shouldDisable}
                           placeholder={cfg.placeholder}
                           type={cfg.type === "number" ? "number" : "text"}
                           {...form.register(castKey)}
@@ -358,7 +356,7 @@ export function SignUpForm({
 
         <Button
           className={cn("w-full")}
-          disabled={isSubmitting || isSomethingSubmitting}
+          disabled={isSubmitting || shouldDisable}
           type="submit"
         >
           {isSubmitting && <Loader2 className="animate-spin" />}

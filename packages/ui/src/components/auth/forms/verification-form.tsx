@@ -16,54 +16,43 @@ import {
 } from "../../ui/form";
 import { InputOTP } from "../../ui/input-otp";
 import { toast } from "../../ui/sonner";
-import { useAuth } from "../auth-provider";
+import { type AuthViewPath, useAuth } from "../auth-provider";
 import { OTPInputGroup } from "../otp-input-group";
 import { CodeSchema } from "../schema/code";
 
 export type VerificationMode =
-  | "code"
-  | "password-reset-code"
+  | "phone-code"
+  | "password-reset-phone-code"
+  | "email-code"
+  | "password-reset-email-code"
   | "verification-email-code"
   | "magic-link-token"
   | "password-reset-token"
   | "verification-email-token";
 
-const typeText: Record<VerificationMode, string> = {
-  "verification-email-token": "verification link",
-  "verification-email-code": "verification code",
-  "password-reset-token": "password reset link",
-  "password-reset-code": "password reset code",
-  "magic-link-token": "sign-in link",
-  code: "verification code",
-};
-
 export interface VerificationInfo {
   mode: VerificationMode;
-  medium: "email" | "phone";
   identifier: string;
+  code?: string | undefined;
 }
 
 type VerificationFormProps = {
   isDisabled?: boolean;
-  onComplete?:
-    | ((result: {
-        identifier: string;
-        mode: VerificationMode;
-        medium: "email" | "phone";
-        code: string | undefined;
-      }) => void)
-    | undefined;
+  setVerificationInfo: (info: VerificationInfo | null) => void;
+  setView: (view: AuthViewPath) => void;
 } & VerificationInfo;
 
 export function VerificationForm({
   mode,
-  medium,
   identifier,
   isDisabled,
-  onComplete,
+  setView,
+  setVerificationInfo,
 }: VerificationFormProps) {
   const {
     authClient,
+    viewPaths,
+    successHandler,
     successCallbackURL,
     errorCallbackURL,
     newUserCallbackURL,
@@ -77,39 +66,50 @@ export function VerificationForm({
     resolver: arktypeResolver(codeSchema),
   });
 
+  const isPhone = mode.includes("phone");
+  const isEmail = !isPhone;
+
   const openEmail = () => {
     window.open("mailto:", "_self");
   };
-  const openMessages = () => {
-    window.open("sms:", "_self");
-  };
 
   async function handleComplete(values: typeof codeSchema.infer) {
+    if (
+      mode === "magic-link-token" ||
+      mode === "password-reset-token" ||
+      mode === "verification-email-token"
+    ) {
+      // There isn't anything to be done with token based verification types.
+      // User will click the link in their email or SMS and be redirected to the app.
+      return;
+    }
+
+    if (!values.code) {
+      // This should never happen, since the form validation should prevent this. Mostly for typescript linting.
+      throw new Error("Code is required");
+    }
+
     setIsSubmitting(true);
     const response = await (() => {
-      if (
-        mode === "magic-link-token" ||
-        mode === "password-reset-token" ||
-        mode === "verification-email-token"
-      ) {
-        // There isn't anything to be done with token based verification types.
-        // User will click the link in their email or SMS and be redirected to the app.
-        return;
-      }
-
-      if (!values.code) {
-        // This should never happen, since the form validation should prevent this. Mostly for typescript linting.
-        throw new Error("Code is required");
-      }
-
       switch (mode) {
-        case "code": {
+        case "email-code": {
           return authClient.signIn.emailOtp({
             otp: values.code,
             email: identifier,
           });
         }
-        case "password-reset-code": {
+        case "phone-code": {
+          return authClient.phoneNumber.verify({
+            code: values.code,
+            phoneNumber: identifier,
+            disableSession: false,
+          });
+        }
+        case "password-reset-phone-code": {
+          // no otp verification for password reset phone code for some reason.
+          return;
+        }
+        case "password-reset-email-code": {
           return authClient.emailOtp.checkVerificationOtp({
             otp: values.code,
             email: identifier,
@@ -129,6 +129,7 @@ export function VerificationForm({
       }
     })();
     setIsSubmitting(false);
+
     if (response?.error) {
       if (response.error.status === 404) {
         form.setError("root", {
@@ -143,21 +144,51 @@ export function VerificationForm({
       });
       return;
     }
-
-    onComplete?.({ mode, identifier, medium, code: values.code });
+    if (
+      mode === "email-code" ||
+      mode === "verification-email-code" ||
+      mode === "phone-code"
+    ) {
+      //email otp login, and email verification are completed here.
+      await successHandler();
+      return;
+    }
+    if (
+      mode === "password-reset-email-code" ||
+      mode === "password-reset-phone-code"
+    ) {
+      //password reset needs to allow users to enter a new password.
+      setView(viewPaths.RESET_PASSWORD);
+      setVerificationInfo({
+        mode,
+        identifier,
+        code: values.code,
+      });
+      return;
+    }
   }
 
   async function resendCode() {
     setIsSubmitting(true);
     const response = await (() => {
       switch (mode) {
-        case "code": {
+        case "email-code": {
           return authClient.emailOtp.sendVerificationOtp({
             email: identifier,
             type: "sign-in",
           });
         }
-        case "password-reset-code": {
+        case "phone-code": {
+          return authClient.phoneNumber.sendOtp({
+            phoneNumber: identifier,
+          });
+        }
+        case "password-reset-phone-code": {
+          return authClient.phoneNumber.requestPasswordReset({
+            phoneNumber: identifier,
+          });
+        }
+        case "password-reset-email-code": {
           return authClient.emailOtp.sendVerificationOtp({
             email: identifier,
             type: "forget-password",
@@ -202,19 +233,6 @@ export function VerificationForm({
 
   return (
     <div className="grid w-full">
-      <div className="flex flex-col gap-1 pb-6">
-        <p className="font-semibold text-2xl">Check your {medium}</p>
-        <p className="text-muted-foreground text-sm">
-          We sent a {typeText[mode]} to{" "}
-          <a
-            className="font-medium text-primary underline"
-            href={`${medium === "email" ? "mailto:" : "sms:"}${identifier}`}
-          >
-            {identifier}
-          </a>
-        </p>
-      </div>
-
       {needsCode && (
         <Form {...form}>
           <form
@@ -255,7 +273,7 @@ export function VerificationForm({
           </form>
         </Form>
       )}
-      {medium === "email" && !needsCode && (
+      {isEmail && !needsCode && (
         <Button
           className="w-full"
           disabled={isSubmitting || isDisabled}
@@ -263,16 +281,6 @@ export function VerificationForm({
           type="button"
         >
           Open Email
-        </Button>
-      )}
-      {medium === "phone" && !needsCode && (
-        <Button
-          className="w-full"
-          disabled={isSubmitting || isDisabled}
-          onClick={openMessages}
-          type="button"
-        >
-          Open Phone
         </Button>
       )}
       <div className="flex items-center gap-2 text-sm">

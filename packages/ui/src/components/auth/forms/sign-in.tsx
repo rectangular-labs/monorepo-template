@@ -22,13 +22,13 @@ import type { VerificationInfo } from "./verification-form";
 
 export function SignInForm({
   setView,
-  isSomethingSubmitting,
-  setIsSomethingSubmitting,
+  shouldDisable,
+  setShouldDisable,
   setVerificationInfo,
 }: {
   setView: (view: AuthViewPath) => void;
-  isSomethingSubmitting: boolean;
-  setIsSomethingSubmitting: (isSomethingSubmitting: boolean) => void;
+  shouldDisable: boolean;
+  setShouldDisable: (disabled: boolean) => void;
   setVerificationInfo: (verificationInfo: VerificationInfo) => void;
 }) {
   const { authClient, viewPaths, credentials, successHandler } = useAuth();
@@ -52,7 +52,7 @@ export function SignInForm({
   });
 
   async function signIn({ email, password, rememberMe }: typeof schema.infer) {
-    setIsSomethingSubmitting(true);
+    setShouldDisable(true);
     setIsSubmitting(true);
     const response = await (async () => {
       if (usernameEnabled) {
@@ -70,24 +70,22 @@ export function SignInForm({
       }
     })();
     setIsSubmitting(false);
-    setIsSomethingSubmitting(false);
+    setShouldDisable(false);
 
     if (response.error) {
       if (response.error.status === 403) {
         // Redirect to verify email address
         if (credentials?.verificationMode === "code") {
-          setView(viewPaths.VERIFICATION_CODE);
+          setView(viewPaths.IDENTITY_VERIFICATION);
           setVerificationInfo({
             mode: "verification-email-code",
-            medium: "email",
             identifier: email,
           });
         }
         if (credentials?.verificationMode === "token") {
-          setView(viewPaths.VERIFICATION_TOKEN);
+          setView(viewPaths.IDENTITY_VERIFICATION);
           setVerificationInfo({
             mode: "verification-email-token",
-            medium: "email",
             identifier: email,
           });
         }
@@ -134,7 +132,7 @@ export function SignInForm({
                   autoComplete={
                     usernameEnabled ? "username webauthn" : "email webauthn"
                   }
-                  disabled={isSubmitting || isSomethingSubmitting}
+                  disabled={isSubmitting || shouldDisable}
                   placeholder={
                     usernameEnabled ? "Enter your username" : "Enter your email"
                   }
@@ -170,7 +168,7 @@ export function SignInForm({
               <FormControl>
                 <PasswordInput
                   autoComplete="current-password webauthn"
-                  disabled={isSubmitting || isSomethingSubmitting}
+                  disabled={isSubmitting || shouldDisable}
                   placeholder="Your password"
                   {...field}
                 />
@@ -190,7 +188,7 @@ export function SignInForm({
                 <FormControl>
                   <Checkbox
                     checked={field.value}
-                    disabled={isSubmitting || isSomethingSubmitting}
+                    disabled={isSubmitting || shouldDisable}
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
@@ -205,7 +203,7 @@ export function SignInForm({
         )}
         <Button
           className={"w-full"}
-          disabled={isSubmitting || isSomethingSubmitting}
+          disabled={isSubmitting || shouldDisable}
           type="submit"
         >
           {isSubmitting && <Loader2 className="animate-spin" />}

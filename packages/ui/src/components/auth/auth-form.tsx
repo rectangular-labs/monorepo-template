@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import { type AuthViewPath, useAuth } from "./auth-provider";
-import { ForgotPasswordForm } from "./forms/forget-password";
 import { IdentifierCaptureForm } from "./forms/identifier-capture";
 import { RecoverAccountForm } from "./forms/recover-account";
 import { SignInForm } from "./forms/sign-in";
@@ -17,106 +15,19 @@ import { ChangePasswordForm } from "./new-forms/change-password";
 export function AuthForm({
   view,
   setView,
-  isSomethingSubmitting,
-  setIsSomethingSubmitting,
+  shouldDisable,
+  setShouldDisable,
+  verificationInfo,
+  setVerificationInfo,
 }: {
   view: AuthViewPath;
   setView: (view: AuthViewPath) => void;
-  isSomethingSubmitting: boolean;
-  setIsSomethingSubmitting: (isSomethingSubmitting: boolean) => void;
+  shouldDisable: boolean;
+  setShouldDisable: (disabled: boolean) => void;
+  verificationInfo: VerificationInfo | null;
+  setVerificationInfo: (info: VerificationInfo | null) => void;
 }) {
-  const {
-    authClient,
-    viewPaths,
-    successHandler,
-    successCallbackURL,
-    errorCallbackURL,
-    newUserCallbackURL,
-  } = useAuth();
-
-  const [verificationInfo, setVerificationInfo] = useState<
-    (VerificationInfo & { code?: string | undefined }) | null
-  >(null);
-
-  async function sendMagicLink({ identifier }: { identifier: string }) {
-    setIsSomethingSubmitting(true);
-    const response = await authClient.signIn.magicLink({
-      email: identifier,
-      callbackURL: successCallbackURL,
-      newUserCallbackURL,
-      errorCallbackURL,
-    });
-    setIsSomethingSubmitting(false);
-    if (!response.error) {
-      setView(viewPaths.VERIFICATION_TOKEN);
-      setVerificationInfo({
-        mode: "magic-link-token",
-        medium: "email",
-        identifier,
-      });
-    }
-    if (response.error?.status === 404) {
-      return {
-        error: {
-          message: "Route not found. Did you enable the `magicLink` plugin?",
-        },
-      };
-    }
-    return response;
-  }
-
-  async function sendEmailOTP({ identifier }: { identifier: string }) {
-    setIsSomethingSubmitting(true);
-    const response = await authClient.emailOtp.sendVerificationOtp({
-      email: identifier,
-      type: "sign-in",
-    });
-    setIsSomethingSubmitting(false);
-    if (!response.error) {
-      setView(viewPaths.VERIFICATION_CODE);
-      setVerificationInfo({
-        medium: "email",
-        mode: "code",
-        identifier,
-      });
-    }
-    if (response.error?.status === 404) {
-      return {
-        error: {
-          message: "Route not found. Did you enable the `emailOtp` plugin?",
-        },
-      };
-    }
-    return response;
-  }
-  async function handleVerificationComplete({
-    mode,
-    code,
-    medium,
-    identifier,
-  }: VerificationInfo & {
-    code: string | undefined;
-  }) {
-    if (!mode.endsWith("code")) {
-      // This is the token based verification.
-      // Pending user to click link in their email/phone.
-      return;
-    }
-    if (mode === "code" || mode === "verification-email-code") {
-      // done with login, do success flow
-      await successHandler();
-    }
-    if (mode === "password-reset-code") {
-      // Password code valid, proceed to reset password
-      setView(viewPaths.RESET_PASSWORD);
-      setVerificationInfo({
-        mode: "password-reset-code",
-        medium,
-        identifier,
-        code,
-      });
-    }
-  }
+  const { viewPaths } = useAuth();
 
   console.log("view", view);
   console.log("verificationInfo", verificationInfo);
@@ -124,65 +35,91 @@ export function AuthForm({
     case viewPaths.SIGN_UP_PASSWORD:
       return (
         <SignUpForm
-          isSomethingSubmitting={isSomethingSubmitting}
-          setIsSomethingSubmitting={setIsSomethingSubmitting}
+          setShouldDisable={setShouldDisable}
           setVerificationInfo={setVerificationInfo}
           setView={setView}
+          shouldDisable={shouldDisable}
         />
       );
     case viewPaths.SIGN_IN_PASSWORD:
       return (
         <SignInForm
-          isSomethingSubmitting={isSomethingSubmitting}
-          setIsSomethingSubmitting={setIsSomethingSubmitting}
+          setShouldDisable={setShouldDisable}
           setVerificationInfo={setVerificationInfo}
           setView={setView}
+          shouldDisable={shouldDisable}
         />
       );
     case viewPaths.MAGIC_LINK:
       return (
         <IdentifierCaptureForm
-          isDisabled={isSomethingSubmitting}
-          medium="email"
-          onSubmit={sendMagicLink}
+          mode="magic-link"
+          setShouldDisable={setShouldDisable}
+          setVerificationInfo={setVerificationInfo}
+          setView={setView}
+          shouldDisable={shouldDisable}
           submitText="Send magic link"
         />
       );
     case viewPaths.EMAIL_OTP:
       return (
         <IdentifierCaptureForm
-          isDisabled={isSomethingSubmitting}
-          medium="email"
-          onSubmit={sendEmailOTP}
+          mode="email-code"
+          setShouldDisable={setShouldDisable}
+          setVerificationInfo={setVerificationInfo}
+          setView={setView}
+          shouldDisable={shouldDisable}
           submitText="Send code"
         />
       );
-    case viewPaths.VERIFICATION_CODE:
+    case viewPaths.PHONE_OTP:
+      return (
+        <IdentifierCaptureForm
+          mode="phone-code"
+          setShouldDisable={setShouldDisable}
+          setVerificationInfo={setVerificationInfo}
+          setView={setView}
+          shouldDisable={shouldDisable}
+          submitText="Send code"
+        />
+      );
+    case viewPaths.IDENTITY_VERIFICATION:
       return verificationInfo ? (
         <VerificationForm
           identifier={verificationInfo.identifier}
-          medium={verificationInfo.medium}
           mode={verificationInfo.mode}
-          onComplete={handleVerificationComplete}
+          setVerificationInfo={setVerificationInfo}
+          setView={setView}
         />
       ) : null;
-    case viewPaths.VERIFICATION_TOKEN:
-      return verificationInfo ? (
-        <VerificationForm
-          identifier={verificationInfo.identifier}
-          medium={verificationInfo.medium}
-          mode={verificationInfo.mode}
-          onComplete={handleVerificationComplete}
+    case viewPaths.FORGOT_PASSWORD:
+      return (
+        <IdentifierCaptureForm
+          mode="forget-password-email"
+          setShouldDisable={setShouldDisable}
+          setVerificationInfo={(info) => setVerificationInfo(info)}
+          setView={setView}
+          shouldDisable={shouldDisable}
+          submitText="Send reset link"
         />
-      ) : null;
+      );
     case viewPaths.TWO_FACTOR:
       return <TwoFactorForm />;
     case viewPaths.RECOVER_ACCOUNT:
       return <RecoverAccountForm />;
-    case viewPaths.FORGOT_PASSWORD:
-      return <ForgotPasswordForm />;
     case viewPaths.RESET_PASSWORD:
-      return <ChangePasswordForm mode={"reset-token"} reset={{ token: "" }} />;
+      return (verificationInfo?.mode === "password-reset-email-code" ||
+        verificationInfo?.mode === "password-reset-phone-code") &&
+        verificationInfo?.code ? (
+        <ChangePasswordForm
+          code={verificationInfo.code}
+          email={verificationInfo.identifier}
+          mode={"reset-code"}
+        />
+      ) : (
+        <ChangePasswordForm mode={"reset-token"} token={""} />
+      );
+
     default:
       return null;
   }
