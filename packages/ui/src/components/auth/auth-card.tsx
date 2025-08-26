@@ -233,7 +233,12 @@ export function AuthCard({
                     ))}
                   </div>
                 )}
-                {showPasskey && <PasskeyButton />}
+                {showPasskey && (
+                  <PasskeyButton
+                    setShouldDisable={setShouldDisable}
+                    shouldDisable={shouldDisable}
+                  />
+                )}
               </div>
             </>
           )}

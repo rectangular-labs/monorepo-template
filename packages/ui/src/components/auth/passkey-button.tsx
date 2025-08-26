@@ -1,61 +1,58 @@
-import { FingerprintIcon } from "lucide-react";
+import { FingerprintIcon, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { type OnAuthComplete, useAuth } from "./auth-provider";
+import { toast } from "../ui/sonner";
+import { useAuth } from "./auth-provider";
 
-interface PasskeyButtonProps extends OnAuthComplete {}
+interface PasskeyButtonProps {
+  shouldDisable: boolean;
+  setShouldDisable: (shouldDisable: boolean) => void;
+}
 
 export function PasskeyButton({
-  onSuccess,
-  onError,
-  successRedirect,
-  errorRedirect,
-  newUserRedirect,
+  shouldDisable,
+  setShouldDisable,
 }: PasskeyButtonProps) {
-  const {
-    authClient,
-    onError: onErrorFallback,
-    onSuccess: onSuccessFallback,
-    successRedirect: successRedirectFallback,
-    errorRedirect: errorRedirectFallback,
-    newUserRedirect: newUserRedirectFallback,
-  } = useAuth();
+  const { authClient, successHandler } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const signInPassKey = async () => {
+    setShouldDisable(true);
     setIsSubmitting(true);
-    try {
-      const response = await authClient.signIn.passkey?.({
-        fetchOptions: {
-          throw: true,
-          ...(onSuccess ||
-            (onSuccessFallback && {
-              onSuccess: onSuccess || onSuccessFallback,
-            })),
-          ...(onError ||
-            (onErrorFallback && { onError: onError || onErrorFallback })),
-        },
-        autoFill: true,
-      });
+    const response = await authClient.signIn.passkey?.({
+      autoFill: true,
+    });
+    setIsSubmitting(false);
+    setShouldDisable(false);
 
-      onSuccess?.();
-    } catch (error) {
-      console.error(error);
-      setIsSubmitting(false);
+    if (response.error) {
+      if (response.error.status === 404) {
+        toast.error(
+          "Passkey route not found. Have you enabled the passkey plugin?",
+        );
+        return;
+      }
+      toast.error(response.error.message ?? "Failed to sign in with passkey");
+      return;
     }
+    await successHandler();
   };
 
   return (
     <Button
       className={"w-full"}
-      disabled={isSubmitting}
+      disabled={isSubmitting || shouldDisable}
       formNoValidate
       name="passkey"
       onClick={signInPassKey}
       value="true"
       variant="secondary"
     >
-      <FingerprintIcon />
+      {isSubmitting ? (
+        <Loader2 className="animate-spin" />
+      ) : (
+        <FingerprintIcon />
+      )}
       Sign in with passkey
     </Button>
   );
