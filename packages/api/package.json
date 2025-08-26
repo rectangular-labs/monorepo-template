@@ -33,18 +33,18 @@
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
-    "@types/node": "^22.17.1",
+    "@types/node": "^22.18.0",
     "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@orpc/arktype": "^1.8.0",
-    "@orpc/client": "^1.8.0",
-    "@orpc/contract": "^1.8.0",
-    "@orpc/json-schema": "^1.7.9",
-    "@orpc/openapi": "^1.7.9",
-    "@orpc/openapi-client": "^1.8.0",
-    "@orpc/server": "^1.7.9",
-    "@orpc/tanstack-query": "^1.7.9",
+    "@orpc/arktype": "^1.8.5",
+    "@orpc/client": "^1.8.5",
+    "@orpc/contract": "^1.8.5",
+    "@orpc/json-schema": "^1.8.5",
+    "@orpc/openapi": "^1.8.5",
+    "@orpc/openapi-client": "^1.8.5",
+    "@orpc/server": "^1.8.5",
+    "@orpc/tanstack-query": "^1.8.5",
     "@rectangular-labs/auth": "workspace:*",
     "@rectangular-labs/db": "workspace:*",
     "@simplewebauthn/server": "^13.1.2",
@@ -52,6 +52,6 @@
     "arktype": "^2.1.20"
   },
   "overrides": {
-    "@tanstack/react-query": "5.85.0"
+    "@tanstack/react-query": "5.85.5"
   }
 }
