@@ -1,8 +1,9 @@
 "use client";
 
 import { ArrowLeftIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { cn } from "../../utils/cn";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -93,6 +94,21 @@ export function AuthCard({
   const [shouldDisable, setShouldDisable] = useState(false);
   const [verificationInfo, setVerificationInfo] =
     useState<VerificationInfo | null>(null);
+  const [queryError, setQueryError] = useState<string | null>(null);
+  const [resetToken, setResetToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const sp = new URLSearchParams(window.location.search);
+    if (sp.get("type") === "reset-password") {
+      setView(viewPaths.RESET_PASSWORD);
+    }
+    const err = sp.get("error");
+    if (err) {
+      setQueryError(err);
+    }
+    const token = sp.get("token");
+    if (token) setResetToken(token);
+  }, [viewPaths.RESET_PASSWORD]);
 
   const socialLayout = (() => {
     if (socialLayoutProp === "auto") {
@@ -158,6 +174,7 @@ export function AuthCard({
         {hasForm && (
           <div className="grid gap-4">
             <AuthForm
+              resetToken={resetToken ?? undefined}
               setShouldDisable={setShouldDisable}
               setVerificationInfo={setVerificationInfo}
               setView={setView}
@@ -237,6 +254,12 @@ export function AuthCard({
               </div>
             </>
           )}
+        {queryError && loginViews.includes(view) && (
+          <Alert variant="destructive">
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{queryError}</AlertDescription>
+          </Alert>
+        )}
       </CardContent>
 
       <CardFooter className="justify-center gap-1.5 text-muted-foreground text-sm">
@@ -269,7 +292,7 @@ export function AuthCard({
         {!signInViews.includes(view) && !signUpViews.includes(view) && (
           <Button
             className="px-0"
-            onClick={() => setView(viewPaths.SIGN_IN_PASSWORD)}
+            onClick={() => setView(defaultFormView.view)}
             size="sm"
             variant="link"
           >

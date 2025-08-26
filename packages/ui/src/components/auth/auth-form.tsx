@@ -1,6 +1,7 @@
 "use client";
 
 import { type AuthViewPath, useAuth } from "./auth-provider";
+import { ChangePasswordForm } from "./forms/change-password";
 import { IdentifierCaptureForm } from "./forms/identifier-capture";
 import { RecoverAccountForm } from "./forms/recover-account";
 import { SignInForm } from "./forms/sign-in";
@@ -10,7 +11,6 @@ import {
   VerificationForm,
   type VerificationInfo,
 } from "./forms/verification-form";
-import { ChangePasswordForm } from "./new-forms/change-password";
 
 export function AuthForm({
   view,
@@ -19,6 +19,7 @@ export function AuthForm({
   setShouldDisable,
   verificationInfo,
   setVerificationInfo,
+  resetToken,
 }: {
   view: AuthViewPath;
   setView: (view: AuthViewPath) => void;
@@ -26,6 +27,7 @@ export function AuthForm({
   setShouldDisable: (disabled: boolean) => void;
   verificationInfo: VerificationInfo | null;
   setVerificationInfo: (info: VerificationInfo | null) => void;
+  resetToken?: string | undefined;
 }) {
   const { viewPaths } = useAuth();
 
@@ -111,7 +113,7 @@ export function AuthForm({
           mode={"reset-code"}
         />
       ) : (
-        <ChangePasswordForm mode={"reset-token"} token={""} />
+        <ChangePasswordForm mode={"reset-token"} token={resetToken ?? ""} />
       );
     case viewPaths.TWO_FACTOR:
       return <TwoFactorForm />;
