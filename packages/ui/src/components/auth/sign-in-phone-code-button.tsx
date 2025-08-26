@@ -27,7 +27,7 @@ export function SignInPhoneCodeButton({
       {view === viewPaths.PHONE_OTP ? <defaultFormView.icon /> : <PhoneIcon />}
       {view === viewPaths.PHONE_OTP
         ? `Sign in with ${defaultFormView.text}`
-        : "Sign in with phone code"}
+        : "Sign in with phone"}
     </Button>
   );
 }

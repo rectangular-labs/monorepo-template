@@ -27,7 +27,7 @@ export function SignInEmailCodeButton({
       {view === viewPaths.EMAIL_OTP ? <defaultFormView.icon /> : <MailIcon />}
       {view === viewPaths.EMAIL_OTP
         ? `Sign in with ${defaultFormView.text}`
-        : "Sign in with email code"}
+        : "Sign in with email"}
     </Button>
   );
 }

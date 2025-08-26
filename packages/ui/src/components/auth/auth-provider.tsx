@@ -4,8 +4,9 @@ import type {
   BaseAuthClient,
   CompleteAuthClient,
 } from "@rectangular-labs/auth/client";
+import { LockIcon, MailIcon, PhoneIcon } from "lucide-react";
 import type { PropsWithChildren } from "react";
-import { createContext, useCallback, useContext, useRef } from "react";
+import { createContext, useCallback, useContext, useMemo, useRef } from "react";
 import type { SocialProvider } from "./social-providers";
 
 const AuthViewPaths = {
@@ -98,13 +99,14 @@ export type CredentialsOptions = {
 };
 
 type AuthContextValue = {
-  // view: AuthViewPath;
-  // setView: (view: AuthViewPath) => void;
-  // isSubmitting: boolean;
-  // setIsSubmitting: (isSubmitting: boolean) => void;
   viewPaths: typeof AuthViewPaths;
   authClient: CompleteAuthClient;
-  credentials?: CredentialsOptions;
+  defaultFormView: {
+    view: AuthViewPath;
+    text: string;
+    icon: React.ElementType;
+  };
+  credentials: CredentialsOptions | undefined;
   socialProviders: SocialProvider[];
   hasMagicLink: boolean;
   hasEmailOTP: boolean;
@@ -132,8 +134,7 @@ export function AuthProvider({
 }: PropsWithChildren<{
   redirects?: Redirects;
   authClient: BaseAuthClient;
-  initialView?: AuthViewPath;
-  credentials?: CredentialsOptions;
+  credentials?: CredentialsOptions | undefined;
   socialProviders?: SocialProvider[];
   plugins?: (
     | "magicLink"
@@ -144,10 +145,10 @@ export function AuthProvider({
     | "phoneOTP"
   )[];
 }>) {
-  // const [view, setView] = useState<AuthViewPath>(initialView);
-  // const [isSubmitting, setIsSubmitting] = useState(false);
-
   const hasUsername = plugins?.includes("username");
+  const hasMagicLink = plugins?.includes("magicLink");
+  const hasEmailOTP = plugins?.includes("emailOTP");
+  const hasPhoneOTP = plugins?.includes("phoneOTP");
   const defaultCredentials = {
     enableConfirmPassword: false,
     enableForgotPassword: true,
@@ -155,6 +156,41 @@ export function AuthProvider({
     useUsername: hasUsername,
     verificationMode: "token" as const,
   };
+  const defaultFormView = useMemo(() => {
+    if (credentials) {
+      return {
+        view: AuthViewPaths.SIGN_IN_PASSWORD,
+        text: "password",
+        icon: LockIcon,
+      };
+    }
+    if (hasMagicLink) {
+      return {
+        view: AuthViewPaths.MAGIC_LINK,
+        text: "magic link",
+        icon: MailIcon,
+      };
+    }
+    if (hasEmailOTP) {
+      return {
+        view: AuthViewPaths.EMAIL_OTP,
+        text: "email code",
+        icon: MailIcon,
+      };
+    }
+    if (hasPhoneOTP) {
+      return {
+        view: AuthViewPaths.PHONE_OTP,
+        text: "phone code",
+        icon: PhoneIcon,
+      };
+    }
+    return {
+      view: AuthViewPaths.SIGN_IN_PASSWORD,
+      text: "password",
+      icon: LockIcon,
+    };
+  }, [credentials, hasMagicLink, hasEmailOTP, hasPhoneOTP]);
 
   const onSuccessRef = useRef(redirects?.onSuccess);
   const successHandler = useCallback(async () => {
@@ -168,12 +204,11 @@ export function AuthProvider({
     <AuthContext.Provider
       value={{
         authClient: authClient as unknown as CompleteAuthClient,
-        // isSubmitting,
-        // setIsSubmitting,
-        // view,
-        // setView,
         viewPaths: AuthViewPaths,
-        credentials: { ...defaultCredentials, ...(credentials ?? {}) },
+        defaultFormView,
+        credentials: credentials
+          ? { ...defaultCredentials, ...(credentials ?? {}) }
+          : undefined,
         socialProviders: socialProviders ?? [],
         successHandler,
         onSuccess: redirects?.onSuccess,
@@ -182,12 +217,12 @@ export function AuthProvider({
         newUserCallbackURL: redirects?.newUserCallbackURL ?? "/",
         resetPasswordCallbackURL:
           redirects?.resetPasswordCallbackURL ?? "/login?type=reset-password",
-        hasMagicLink: plugins?.includes("magicLink"),
-        hasEmailOTP: plugins?.includes("emailOTP"),
+        hasMagicLink,
+        hasEmailOTP,
+        hasPhoneOTP,
+        hasUsername,
         hasPasskey: plugins?.includes("passkey"),
         hasOneTap: plugins?.includes("oneTap"),
-        hasPhoneOTP: plugins?.includes("phoneOTP"),
-        hasUsername,
       }}
     >
       {children}
