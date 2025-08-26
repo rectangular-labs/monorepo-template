@@ -21,6 +21,7 @@ import { OneTap } from "./one-tap";
 import { PasskeyButton } from "./passkey-button";
 import { SignInEmailOTPButton } from "./sign-in-email-otp-button";
 import { SignInMagicLinkButton } from "./sign-in-magic-link-button";
+import { SignInPhoneOTPButton } from "./sign-in-phone-otp-button";
 
 const TITLES: Record<AuthViewPath, string> = {
   SIGN_IN_PASSWORD: "Sign in",
@@ -163,24 +164,27 @@ export function AuthCard({
             verificationInfo={verificationInfo}
             view={view}
           />
-          {hasMagicLink &&
-            (credentials || hasEmailOTP) &&
-            loginViews.includes(view) && (
-              <SignInMagicLinkButton
-                isSubmitting={shouldDisable}
-                setView={setView}
-                view={view}
-              />
-            )}
-          {hasEmailOTP &&
-            (credentials || hasMagicLink) &&
-            loginViews.includes(view) && (
-              <SignInEmailOTPButton
-                isSubmitting={shouldDisable}
-                setView={setView}
-                view={view}
-              />
-            )}
+          {hasMagicLink && credentials && loginViews.includes(view) && (
+            <SignInMagicLinkButton
+              isSubmitting={shouldDisable}
+              setView={setView}
+              view={view}
+            />
+          )}
+          {hasEmailOTP && credentials && loginViews.includes(view) && (
+            <SignInEmailOTPButton
+              isSubmitting={shouldDisable}
+              setView={setView}
+              view={view}
+            />
+          )}
+          {hasPhoneOTP && credentials && loginViews.includes(view) && (
+            <SignInPhoneOTPButton
+              isSubmitting={shouldDisable}
+              setView={setView}
+              view={view}
+            />
+          )}
         </div>
 
         {loginViews.includes(view) && (

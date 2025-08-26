@@ -29,8 +29,6 @@ export function AuthForm({
 }) {
   const { viewPaths } = useAuth();
 
-  console.log("view", view);
-  console.log("verificationInfo", verificationInfo);
   switch (view) {
     case viewPaths.SIGN_UP_PASSWORD:
       return (
@@ -83,15 +81,6 @@ export function AuthForm({
           submitText="Send code"
         />
       );
-    case viewPaths.IDENTITY_VERIFICATION:
-      return verificationInfo ? (
-        <VerificationForm
-          identifier={verificationInfo.identifier}
-          mode={verificationInfo.mode}
-          setVerificationInfo={setVerificationInfo}
-          setView={setView}
-        />
-      ) : null;
     case viewPaths.FORGOT_PASSWORD:
       return (
         <IdentifierCaptureForm
@@ -103,6 +92,15 @@ export function AuthForm({
           submitText="Send reset link"
         />
       );
+    case viewPaths.IDENTITY_VERIFICATION:
+      return verificationInfo ? (
+        <VerificationForm
+          identifier={verificationInfo.identifier}
+          mode={verificationInfo.mode}
+          setVerificationInfo={setVerificationInfo}
+          setView={setView}
+        />
+      ) : null;
     case viewPaths.TWO_FACTOR:
       return <TwoFactorForm />;
     case viewPaths.RECOVER_ACCOUNT:
