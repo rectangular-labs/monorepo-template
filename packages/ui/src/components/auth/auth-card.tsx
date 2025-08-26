@@ -22,9 +22,9 @@ import type {
 import { OneTap } from "./one-tap";
 import { PasskeyButton } from "./passkey-button";
 import { ProviderButton } from "./provider-button";
-import { SignInEmailOTPButton } from "./sign-in-email-otp-button";
+import { SignInEmailCodeButton } from "./sign-in-email-code-button";
 import { SignInMagicLinkButton } from "./sign-in-magic-link-button";
-import { SignInPhoneOTPButton } from "./sign-in-phone-otp-button";
+import { SignInPhoneCodeButton } from "./sign-in-phone-code-button";
 
 const TITLES: Record<AuthViewPath, string> = {
   SIGN_IN_PASSWORD: "Sign in",
@@ -74,6 +74,7 @@ export function AuthCard({
 }: AuthViewProps) {
   const {
     viewPaths,
+    defaultFormView,
     hasMagicLink,
     hasEmailOTP,
     hasPasskey,
@@ -87,19 +88,7 @@ export function AuthCard({
     if (initialView) {
       return initialView;
     }
-    if (credentials) {
-      return viewPaths.SIGN_IN_PASSWORD;
-    }
-    if (hasMagicLink) {
-      return viewPaths.MAGIC_LINK;
-    }
-    if (hasEmailOTP) {
-      return viewPaths.EMAIL_OTP;
-    }
-    if (hasPhoneOTP) {
-      return viewPaths.PHONE_OTP;
-    }
-    return viewPaths.SIGN_IN_PASSWORD;
+    return defaultFormView.view;
   });
   const [shouldDisable, setShouldDisable] = useState(false);
   const [verificationInfo, setVerificationInfo] =
@@ -176,27 +165,33 @@ export function AuthCard({
               verificationInfo={verificationInfo}
               view={view}
             />
-            {hasMagicLink && credentials && loginViews.includes(view) && (
-              <SignInMagicLinkButton
-                isSubmitting={shouldDisable}
-                setView={setView}
-                view={view}
-              />
-            )}
-            {hasEmailOTP && credentials && loginViews.includes(view) && (
-              <SignInEmailOTPButton
-                isSubmitting={shouldDisable}
-                setView={setView}
-                view={view}
-              />
-            )}
-            {hasPhoneOTP && credentials && loginViews.includes(view) && (
-              <SignInPhoneOTPButton
-                isSubmitting={shouldDisable}
-                setView={setView}
-                view={view}
-              />
-            )}
+            {hasMagicLink &&
+              defaultFormView.view !== viewPaths.MAGIC_LINK &&
+              loginViews.includes(view) && (
+                <SignInMagicLinkButton
+                  isSubmitting={shouldDisable}
+                  setView={setView}
+                  view={view}
+                />
+              )}
+            {hasEmailOTP &&
+              defaultFormView.view !== viewPaths.EMAIL_OTP &&
+              loginViews.includes(view) && (
+                <SignInEmailCodeButton
+                  isSubmitting={shouldDisable}
+                  setView={setView}
+                  view={view}
+                />
+              )}
+            {hasPhoneOTP &&
+              defaultFormView.view !== viewPaths.PHONE_OTP &&
+              loginViews.includes(view) && (
+                <SignInPhoneCodeButton
+                  isSubmitting={shouldDisable}
+                  setView={setView}
+                  view={view}
+                />
+              )}
           </div>
         )}
 

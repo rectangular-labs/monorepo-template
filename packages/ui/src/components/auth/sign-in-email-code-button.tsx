@@ -1,9 +1,9 @@
-import { LockIcon, MailIcon } from "lucide-react";
+import { MailIcon } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { Button } from "../ui/button";
 import { type AuthViewPath, useAuth } from "./auth-provider";
 
-export function SignInEmailOTPButton({
+export function SignInEmailCodeButton({
   view,
   setView,
   isSubmitting,
@@ -12,11 +12,9 @@ export function SignInEmailOTPButton({
   setView: (view: AuthViewPath) => void;
   isSubmitting: boolean;
 }) {
-  const { viewPaths } = useAuth();
+  const { viewPaths, defaultFormView } = useAuth();
   const toggledView =
-    view === viewPaths.EMAIL_OTP
-      ? viewPaths.SIGN_IN_PASSWORD
-      : viewPaths.EMAIL_OTP;
+    view === viewPaths.EMAIL_OTP ? defaultFormView.view : viewPaths.EMAIL_OTP;
 
   return (
     <Button
@@ -26,10 +24,10 @@ export function SignInEmailOTPButton({
       type="button"
       variant="secondary"
     >
-      {view === viewPaths.EMAIL_OTP ? <LockIcon /> : <MailIcon />}
+      {view === viewPaths.EMAIL_OTP ? <defaultFormView.icon /> : <MailIcon />}
       {view === viewPaths.EMAIL_OTP
-        ? "Sign in with password"
-        : "Sign in with email OTP"}
+        ? `Sign in with ${defaultFormView.text}`
+        : "Sign in with email code"}
     </Button>
   );
 }

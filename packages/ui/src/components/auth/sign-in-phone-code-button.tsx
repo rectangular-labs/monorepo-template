@@ -1,9 +1,9 @@
-import { LockIcon, PhoneIcon } from "lucide-react";
+import { PhoneIcon } from "lucide-react";
 import { cn } from "../../utils/cn";
 import { Button } from "../ui/button";
 import { type AuthViewPath, useAuth } from "./auth-provider";
 
-export function SignInPhoneOTPButton({
+export function SignInPhoneCodeButton({
   view,
   setView,
   isSubmitting,
@@ -12,11 +12,9 @@ export function SignInPhoneOTPButton({
   setView: (view: AuthViewPath) => void;
   isSubmitting: boolean;
 }) {
-  const { viewPaths } = useAuth();
+  const { viewPaths, defaultFormView } = useAuth();
   const toggledView =
-    view === viewPaths.PHONE_OTP
-      ? viewPaths.SIGN_IN_PASSWORD
-      : viewPaths.PHONE_OTP;
+    view === viewPaths.PHONE_OTP ? defaultFormView.view : viewPaths.PHONE_OTP;
 
   return (
     <Button
@@ -26,10 +24,10 @@ export function SignInPhoneOTPButton({
       type="button"
       variant="secondary"
     >
-      {view === viewPaths.PHONE_OTP ? <LockIcon /> : <PhoneIcon />}
+      {view === viewPaths.PHONE_OTP ? <defaultFormView.icon /> : <PhoneIcon />}
       {view === viewPaths.PHONE_OTP
-        ? "Sign in with password"
-        : "Sign in with phone OTP"}
+        ? `Sign in with ${defaultFormView.text}`
+        : "Sign in with phone code"}
     </Button>
   );
 }
