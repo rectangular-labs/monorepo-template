@@ -103,3 +103,6 @@ sst-env.d.ts
 .aider*
 .cursorrules
 
+# content-collections
+.content-collections
+
