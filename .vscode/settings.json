@@ -1,5 +1,6 @@
 {
   "biome.lsp.bin": "node_modules/@biomejs/biome/bin/biome",
+  "tailwindCSS.experimental.configFile": "packages/ui/src/styles.css",
   // allow autocomplete for ArkType expressions like "string | num"
   "editor.quickSuggestions": {
     "strings": "on"
@@ -44,7 +45,7 @@
     // prioritize ArkType's "type" for autoimports
     "^(node:)?os$",
     // prioritize our own env for autoimports
-    "^(node:)?process$",
+    "^(node:)?process$"
   ],
   "cSpell.words": [
     "arktype",
@@ -53,6 +54,7 @@
     "millis",
     "oklch",
     "orpc",
+    "Scaleway",
     "simplewebauthn",
     "Sonner",
     "totp",
