@@ -4,8 +4,7 @@
   "private": true,
   "sideEffects": false,
   "files": [
-    "tailwind.config.web.ts",
-    "globals.css"
+    "styles.css"
   ],
   "exports": {
     "./*": "./src/*.tsx",
