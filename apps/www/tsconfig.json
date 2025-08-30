@@ -11,7 +11,8 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"]
+      "~/*": ["./src/*"],
+      "@rectangular-labs/ui/*": ["../../packages/ui/src/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],
