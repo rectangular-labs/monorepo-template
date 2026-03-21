@@ -26,10 +26,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx watch ./src/_open-api/open-api-resolver.ts",
-    "clean": "git clean -xdf .turbo node_modules dist .cache",
-    "format": "pnpx @biomejs/biome format . --write",
-    "lint": "pnpx @biomejs/biome lint . --write",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "clean": "git clean -xdf .turbo node_modules dist .cache"
   },
   "dependencies": {
     "@orpc/arktype": "^1.8.5",

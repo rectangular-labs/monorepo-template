@@ -11,9 +11,6 @@
     "serve:production": "pnpm with-env-prod vite preview",
     "test": "vp test run",
     "clean": "git clean -xdf .turbo node_modules dist .cache",
-    "format": "pnpx @biomejs/biome format . --write",
-    "lint": "pnpx @biomejs/biome lint . --write",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env-local": "dotenvx run -f ../../.env.local  -f ../../.env -- ",
     "with-env-preview": "dotenvx run  -f ../../.env -- ",
     "with-env-prod": "dotenvx run -f ../../.env.production -- "

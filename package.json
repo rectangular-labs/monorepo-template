@@ -18,7 +18,6 @@
     "build:production": "turbo build:production",
     "changeset": "changeset",
     "changeset:release": "pnpm run build && changeset publish",
-    "typecheck": "turbo run typecheck --continue",
     "postinstall": "pnpx sherif@latest",
     "prepare": "vp config"
   },
