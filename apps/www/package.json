@@ -45,7 +45,6 @@
     "vite": "catalog:",
     "vite-plugin-mkcert": "^1.17.8",
     "vite-plus": "catalog:",
-    "vite-tsconfig-paths": "^5.1.4",
     "vitest": "catalog:",
     "web-vitals": "^5.1.0"
   }
