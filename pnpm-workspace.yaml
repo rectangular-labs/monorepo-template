@@ -4,6 +4,8 @@ packages:
   - tooling/*
 
 catalog:
+  "@types/node": ^22.18.0
+  arktype: ^2.1.20
   typescript: ^5.9.2
   vite: npm:@voidzero-dev/vite-plus-core@latest
   vite-plus: ^0.1.13
