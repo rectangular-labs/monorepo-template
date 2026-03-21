@@ -11,7 +11,7 @@
     "clean:workspaces": "turbo clean",
     "env:set": "pnpm dotenvx set",
     "env:get": "pnpm dotenvx get",
-    "new:package": "turbo gen package",
+    "new:package": "vp create @rectangular-labs/create-package",
     "dev": "docker compose up -d && turbo run dev",
     "build": "turbo build",
     "build:preview": "turbo build:preview",
