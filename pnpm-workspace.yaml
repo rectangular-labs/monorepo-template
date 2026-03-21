@@ -3,16 +3,23 @@ packages:
   - packages/*
   - tooling/*
 
-onlyBuiltDependencies:
-  - "@tailwindcss/oxide"
-  - better-sqlite3
-  - esbuild
-
 catalog:
   typescript: ^5.9.2
   vite: npm:@voidzero-dev/vite-plus-core@latest
-  vitest: npm:@voidzero-dev/vite-plus-test@latest
   vite-plus: ^0.1.13
+  vitest: npm:@voidzero-dev/vite-plus-test@latest
+
+ignoredBuiltDependencies:
+  - "@prisma/client"
+  - "@prisma/engines"
+  - better-sqlite3
+  - prisma
+
+onlyBuiltDependencies:
+  - "@parcel/watcher"
+  - "@tailwindcss/oxide"
+  - core-js-pure
+  - esbuild
 
 overrides:
   vite: "catalog:"
