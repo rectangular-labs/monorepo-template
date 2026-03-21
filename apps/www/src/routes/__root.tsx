@@ -2,12 +2,7 @@ import { ThemeProvider } from "@rectangular-labs/ui/components/theme-provider";
 import { Toaster } from "@rectangular-labs/ui/components/ui/sonner";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import {
-  createRootRouteWithContext,
-  HeadContent,
-  Outlet,
-  Scripts,
-} from "@tanstack/react-router";
+import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { seo } from "~/lib/seo";
 import appCss from "../styles.css?url";
@@ -24,8 +19,7 @@ export const Route = createRootRouteWithContext<{
       },
       ...seo({
         title: "Elastic Bottle Monorepo template",
-        description:
-          "Simple typescript monorepo template for end to end application development",
+        description: "Simple typescript monorepo template for end to end application development",
       }),
     ],
     links: [

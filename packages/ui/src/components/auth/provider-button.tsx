@@ -19,12 +19,7 @@ export function ProviderButton({
   shouldDisable,
   setShouldDisable,
 }: ProviderButtonProps) {
-  const {
-    successCallbackURL,
-    errorCallbackURL,
-    newUserCallbackURL,
-    authClient,
-  } = useAuth();
+  const { successCallbackURL, errorCallbackURL, newUserCallbackURL, authClient } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const doSignInSocial = async () => {
@@ -62,7 +57,7 @@ export function ProviderButton({
     <Button
       className={cn(socialLayout === "vertical" ? "w-full" : "grow")}
       disabled={isSubmitting || shouldDisable}
-      onClick={doSignInSocial}
+      onClick={void doSignInSocial}
       variant="outline"
     >
       {isSubmitting && <Loader2 className="animate-spin" />}

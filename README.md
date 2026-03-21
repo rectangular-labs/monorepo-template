@@ -19,7 +19,7 @@ Environment variables are managed using `pnpm`. There's 3 layers to it:
 .env.local // used in local development
 ```
 
- To set an environment variable, use:
+To set an environment variable, use:
 
 ```bash
 pnpm env:set <VARIABLE_NAME> <VALUE>
@@ -48,7 +48,7 @@ You'll need Docker to be running.
 Run `pnpm dev` to start up the frontend and server.
 
 Finally visit `https://localhost:6969` to see your dev
- server
+server
 
 ### First time set-up
 

@@ -3,12 +3,7 @@ import { createDb } from "@rectangular-labs/db";
 import type { BetterAuthOptions } from "better-auth";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import {
-  emailOTP,
-  magicLink,
-  oAuthProxy,
-  twoFactor,
-} from "better-auth/plugins";
+import { emailOTP, magicLink, oAuthProxy, twoFactor } from "better-auth/plugins";
 import { authEnv } from "./env";
 
 export function initAuthHandler() {
@@ -49,10 +44,7 @@ export function initAuthHandler() {
     emailVerification: {
       sendVerificationEmail: async ({ user, url, token }) => {
         await Promise.resolve();
-        console.log(
-          "sendVerificationEmail",
-          JSON.stringify({ user, url, token }, null, 2),
-        );
+        console.log("sendVerificationEmail", JSON.stringify({ user, url, token }, null, 2));
       },
     },
     plugins: [

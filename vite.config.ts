@@ -5,6 +5,7 @@ export default defineConfig({
     "*": "vp check --fix",
   },
   lint: {
+    ignorePatterns: ["**/*.ts.hbs", "**/*.gen.ts"],
     options: { typeAware: true, typeCheck: true },
     plugins: ["oxc", "typescript", "unicorn", "react", "promise", "vitest", "import"],
     rules: {
@@ -23,5 +24,7 @@ export default defineConfig({
       "unicorn/no-new-buffer": "error",
     },
   },
-  fmt: {},
+  fmt: {
+    ignorePatterns: ["**/*.hbs", "**/*.gen.ts"],
+  },
 });

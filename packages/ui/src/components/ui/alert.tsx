@@ -37,20 +37,14 @@ function Alert({
 function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn(
-        "col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight",
-        className,
-      )}
+      className={cn("col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight", className)}
       data-slot="alert-title"
       {...props}
     />
   );
 }
 
-function AlertDescription({
-  className,
-  ...props
-}: React.ComponentProps<"div">) {
+function AlertDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       className={cn(

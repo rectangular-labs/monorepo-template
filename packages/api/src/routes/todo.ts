@@ -28,10 +28,7 @@ const list = protectedBase
     console.log("User-Agent:", context.reqHeaders?.get("user-agent"));
     console.log("Database available:", !!context.db);
 
-    return todos.slice(
-      input.cursor ?? 0,
-      (input.cursor ?? 0) + (input.limit ?? 10),
-    );
+    return todos.slice(input.cursor ?? 0, (input.cursor ?? 0) + (input.limit ?? 10));
   });
 const find = protectedBase
   .route({
@@ -52,12 +49,7 @@ const find = protectedBase
     }
 
     // Context is now available for database operations, logging, etc.
-    console.log(
-      "Finding todo with ID:",
-      input.id,
-      "DB available:",
-      !!context.db,
-    );
+    console.log("Finding todo with ID:", input.id, "DB available:", !!context.db);
 
     return todo;
   });

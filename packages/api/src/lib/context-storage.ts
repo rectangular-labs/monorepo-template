@@ -7,9 +7,7 @@ export interface AsyncContext {
   set: <T>(key: string, value: T) => void;
 }
 
-const asyncLocalStorage = new AsyncLocalStorage<
-  InitialContext & AsyncContext
->();
+const asyncLocalStorage = new AsyncLocalStorage<InitialContext & AsyncContext>();
 
 export const asyncStorageMiddleware = os
   .$context<InitialContext>()
@@ -31,9 +29,7 @@ export const asyncStorageMiddleware = os
 export function getContext() {
   const context = asyncLocalStorage.getStore();
   if (!context) {
-    throw new Error(
-      "Context not available. Make sure to use the `asyncStorageMiddleware`",
-    );
+    throw new Error("Context not available. Make sure to use the `asyncStorageMiddleware`");
   }
   return context;
 }

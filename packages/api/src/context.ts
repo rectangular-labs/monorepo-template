@@ -6,9 +6,7 @@ import { asyncStorageMiddleware } from "./lib/context-storage";
 import { loggerMiddleware } from "./lib/logger";
 import type { InitialContext } from "./types";
 
-export const createApiContext = (
-  args: Omit<InitialContext, "db" | "auth"> & { dbUrl: string },
-) => {
+export const createApiContext = (args: Omit<InitialContext, "db" | "auth"> & { dbUrl: string }) => {
   return {
     db: createDb(args.dbUrl),
     auth: initAuthHandler(),

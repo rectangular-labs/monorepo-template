@@ -11,8 +11,7 @@ export const rpcClient = (baseUrl: string): RouterClient =>
       url: `${baseUrl}/api/rpc`,
     }),
   );
-export const rqApiClient = (baseUrl: string) =>
-  createTanstackQueryUtils(rpcClient(baseUrl));
+export const rqApiClient = (baseUrl: string) => createTanstackQueryUtils(rpcClient(baseUrl));
 
 const openApiLink = (baseUrl: string) =>
   new OpenAPILink(contract as Router, {

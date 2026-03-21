@@ -3,10 +3,7 @@
 import type { ComponentProps } from "react";
 import { useLayoutEffect, useRef } from "react";
 
-export function useTextareaResize(
-  value: ComponentProps<"textarea">["value"],
-  rows = 1,
-) {
+export function useTextareaResize(value: ComponentProps<"textarea">["value"], rows = 1) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: from shadCN

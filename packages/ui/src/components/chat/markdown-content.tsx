@@ -16,9 +16,7 @@ const extractTextContent = (node: React.ReactNode): string => {
     return node.map(extractTextContent).join("");
   }
   if (isValidElement(node)) {
-    return extractTextContent(
-      (node.props as unknown as { children: React.ReactNode }).children,
-    );
+    return extractTextContent((node.props as unknown as { children: React.ReactNode }).children);
   }
   return "";
 };
@@ -59,10 +57,7 @@ const HighlightedPre = memo(
               }`}
             >
               {line.map((token, tokenIndex) => {
-                const style =
-                  typeof token.htmlStyle === "string"
-                    ? undefined
-                    : token.htmlStyle;
+                const style = typeof token.htmlStyle === "string" ? undefined : token.htmlStyle;
 
                 return (
                   <span
@@ -91,12 +86,7 @@ interface CodeBlockProps extends React.HTMLAttributes<HTMLPreElement> {
   language: string;
 }
 
-const CodeBlock = ({
-  children,
-  language,
-  className,
-  ...props
-}: CodeBlockProps) => {
+const CodeBlock = ({ children, language, className, ...props }: CodeBlockProps) => {
   return (
     <Suspense
       fallback={
@@ -129,34 +119,22 @@ const components: Partial<Components> = {
     </h2>
   ),
   h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h3
-      className="mt-4 scroll-m-20 font-semibold text-xl tracking-tight"
-      {...props}
-    >
+    <h3 className="mt-4 scroll-m-20 font-semibold text-xl tracking-tight" {...props}>
       {children}
     </h3>
   ),
   h4: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h4
-      className="mt-4 scroll-m-20 font-semibold text-lg tracking-tight"
-      {...props}
-    >
+    <h4 className="mt-4 scroll-m-20 font-semibold text-lg tracking-tight" {...props}>
       {children}
     </h4>
   ),
   h5: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h5
-      className="mt-4 scroll-m-20 font-semibold text-lg tracking-tight"
-      {...props}
-    >
+    <h5 className="mt-4 scroll-m-20 font-semibold text-lg tracking-tight" {...props}>
       {children}
     </h5>
   ),
   h6: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h6
-      className="mt-4 scroll-m-20 font-semibold text-base tracking-tight"
-      {...props}
-    >
+    <h6 className="mt-4 scroll-m-20 font-semibold text-base tracking-tight" {...props}>
       {children}
     </h6>
   ),
@@ -170,10 +148,7 @@ const components: Partial<Components> = {
       {children}
     </span>
   ),
-  a: ({
-    children,
-    ...props
-  }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+  a: ({ children, ...props }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
     <a
       className="font-medium underline underline-offset-4"
       rel="noreferrer"
@@ -198,23 +173,15 @@ const components: Partial<Components> = {
       {children}
     </li>
   ),
-  blockquote: ({
-    children,
-    ...props
-  }: React.HTMLAttributes<HTMLQuoteElement>) => (
+  blockquote: ({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) => (
     <blockquote className="mt-4 border-l-2 pl-6 italic" {...props}>
       {children}
     </blockquote>
   ),
-  hr: (props: React.HTMLAttributes<HTMLHRElement>) => (
-    <hr className="my-4 md:my-8" {...props} />
-  ),
+  hr: (props: React.HTMLAttributes<HTMLHRElement>) => <hr className="my-4 md:my-8" {...props} />,
   table: ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
     <div className="my-6 w-full overflow-y-auto">
-      <table
-        className="relative w-full overflow-hidden border-none text-sm"
-        {...props}
-      >
+      <table className="relative w-full overflow-hidden border-none text-sm" {...props}>
         {children}
       </table>
     </div>
@@ -243,7 +210,7 @@ const components: Partial<Components> = {
   img: ({ alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
     <img alt={alt} className="rounded-md" {...props} />
   ),
-  code: ({ children, node, className, ...props }) => {
+  code: ({ children, className, ...props }) => {
     const match = /language-(\w+)/.exec(className || "");
     if (match) {
       const language = match[1];
@@ -258,10 +225,7 @@ const components: Partial<Components> = {
     }
     return (
       <code
-        className={cn(
-          "rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm",
-          className,
-        )}
+        className={cn("rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm", className)}
         {...props}
       >
         {children}
@@ -297,23 +261,18 @@ const MemoizedMarkdownBlock = memo(
 
 MemoizedMarkdownBlock.displayName = "MemoizedMarkdownBlock";
 
-export const MarkdownContent = memo(
-  ({ content, id }: { content: string; id: string }) => {
-    const blocks = useMemo(
-      () => parseMarkdownIntoBlocks(content || ""),
-      [content],
-    );
+export const MarkdownContent = memo(({ content, id }: { content: string; id: string }) => {
+  const blocks = useMemo(() => parseMarkdownIntoBlocks(content || ""), [content]);
 
-    return blocks.map((block, index) => (
-      <MemoizedMarkdownBlock
-        content={block}
-        key={`${id}-block_${
-          // biome-ignore lint/suspicious/noArrayIndexKey: Needed for react key
-          index
-        }`}
-      />
-    ));
-  },
-);
+  return blocks.map((block, index) => (
+    <MemoizedMarkdownBlock
+      content={block}
+      key={`${id}-block_${
+        // biome-ignore lint/suspicious/noArrayIndexKey: Needed for react key
+        index
+      }`}
+    />
+  ));
+});
 
 MarkdownContent.displayName = "MarkdownContent";

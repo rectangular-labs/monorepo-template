@@ -24,11 +24,7 @@ export const File = FileIcon;
 export const Dot = DotIcon;
 
 export const Logo = (props: IconProps) => (
-  <svg
-    viewBox="107.599 192.599 284.802 284.802"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <svg viewBox="107.599 192.599 284.802 284.802" xmlns="http://www.w3.org/2000/svg" {...props}>
     <title>Scalene Lab Logo</title>
     <ellipse
       cx="250"
@@ -156,19 +152,13 @@ export const GitLabIcon = (props: IconProps) => (
       d="M14.956 91.104L.642 135.16a9.75 9.75 0 0 0 3.542 10.903l123.891 90.012z"
       fill="#fca326"
     />
-    <path
-      d="M14.956 91.105H80.97L52.601 3.79c-1.46-4.493-7.816-4.492-9.275 0z"
-      fill="#e24329"
-    />
+    <path d="M14.956 91.105H80.97L52.601 3.79c-1.46-4.493-7.816-4.492-9.275 0z" fill="#e24329" />
     <path d="m128.075 236.074l47.104-144.97h66.015z" fill="#fc6d26" />
     <path
       d="m241.194 91.104l14.314 44.056a9.75 9.75 0 0 1-3.543 10.903l-123.89 90.012z"
       fill="#fca326"
     />
-    <path
-      d="M241.194 91.105h-66.015l28.37-87.315c1.46-4.493 7.816-4.492 9.275 0z"
-      fill="#e24329"
-    />
+    <path d="M241.194 91.105h-66.015l28.37-87.315c1.46-4.493 7.816-4.492 9.275 0z" fill="#e24329" />
   </svg>
 );
 
@@ -208,13 +198,7 @@ export const HuggingFaceIcon = (props: IconProps) => (
 );
 
 export const KickIcon = (props: IconProps) => (
-  <svg
-    height={24}
-    viewBox="0 0 24 24"
-    width={24}
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <svg height={24} viewBox="0 0 24 24" width={24} xmlns="http://www.w3.org/2000/svg" {...props}>
     <title>Kick</title>
     <path
       d="M1.333 0h8v5.333H12V2.667h2.667V0h8v8H20v2.667h-2.667v2.666H20V16h2.667v8h-8v-2.667H12v-2.666H9.333V24h-8Z"
@@ -389,13 +373,7 @@ export const XIcon = (props: IconProps) => (
 );
 
 export const ZoomIcon = (props: IconProps) => (
-  <svg
-    height={117}
-    viewBox="0 0 512 117"
-    width={512}
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
+  <svg height={117} viewBox="0 0 512 117" width={512} xmlns="http://www.w3.org/2000/svg" {...props}>
     <title>Zoom</title>
     <path
       d="M107.472 114.706H16.348c-5.968 0-11.791-3.203-14.557-8.589C-1.41 99.858-.247 92.434 4.702 87.63L68.17 24.164H22.607C10.088 24.164.044 13.974.044 1.6h83.992c5.968 0 11.79 3.203 14.556 8.589c3.203 6.259 2.038 13.683-2.911 18.486L32.214 92.143h52.55c12.518 0 22.708 10.19 22.708 22.563M468.183 0c-13.1 0-24.746 5.677-32.898 14.702C427.134 5.677 415.488 0 402.388 0c-24.164 0-43.961 20.67-43.961 44.834v69.872c12.518 0 22.562-10.19 22.562-22.563V44.689c0-11.646 9.025-21.544 20.67-21.98c12.228-.437 22.272 9.315 22.272 21.397v48.037c0 12.519 10.19 22.563 22.563 22.563V44.543c0-11.645 9.025-21.544 20.67-21.98c12.228-.437 22.272 9.316 22.272 21.398v48.036c0 12.52 10.19 22.563 22.563 22.563V44.69C512.144 20.67 492.347 0 468.183 0M221.595 58.226c0 32.17-26.056 58.226-58.226 58.226s-58.226-26.056-58.226-58.226S131.199 0 163.369 0s58.226 26.056 58.226 58.226m-22.563 0c0-19.651-16.012-35.663-35.663-35.663s-35.664 16.012-35.664 35.663c0 19.652 16.013 35.664 35.664 35.664s35.663-16.012 35.663-35.664m148.04 0c0 32.17-26.056 58.226-58.226 58.226S230.62 90.396 230.62 58.226S256.676 0 288.846 0s58.227 26.056 58.227 58.226m-22.562 0c0-19.651-16.012-35.663-35.664-35.663c-19.65 0-35.663 16.012-35.663 35.663c0 19.652 16.012 35.664 35.663 35.664c19.652 0 35.664-16.012 35.664-35.664"
@@ -638,14 +616,7 @@ export const TanStack = (props: SVGProps<SVGSVGElement>) => (
           strokeWidth={4.414}
         />
       </g>
-      <ellipse
-        cx={308.5}
-        cy={720.5}
-        fill="url(#l)"
-        mask="url(#c)"
-        rx={266}
-        ry={316.5}
-      />
+      <ellipse cx={308.5} cy={720.5} fill="url(#l)" mask="url(#c)" rx={266} ry={316.5} />
       <ellipse
         cx={308.5}
         cy={720.5}
@@ -764,103 +735,39 @@ export const Pnpm = (props: SVGProps<SVGSVGElement>) => (
   >
     <title>PNPM Icon</title>
     <defs>
-      <path
-        d="M237.6 95L187.6 95L187.6 45L237.6 45L237.6 95Z"
-        id="b45vdTD8hs"
-      />
-      <path
-        d="M182.59 95L132.59 95L132.59 45L182.59 45L182.59 95Z"
-        id="a40WtxIl8d"
-      />
-      <path
-        d="M127.59 95L77.59 95L77.59 45L127.59 45L127.59 95Z"
-        id="h2CN9AEEpe"
-      />
-      <path
-        d="M237.6 150L187.6 150L187.6 100L237.6 100L237.6 150Z"
-        id="dqv5133G8"
-      />
-      <path
-        d="M182.59 150L132.59 150L132.59 100L182.59 100L182.59 150Z"
-        id="b1Lv79ypvm"
-      />
-      <path
-        d="M182.59 205L132.59 205L132.59 155L182.59 155L182.59 205Z"
-        id="hy1IZWwLX"
-      />
-      <path
-        d="M237.6 205L187.6 205L187.6 155L237.6 155L237.6 205Z"
-        id="akQfjxQes"
-      />
-      <path
-        d="M127.59 205L77.59 205L77.59 155L127.59 155L127.59 205Z"
-        id="bdSrwE5pk"
-      />
+      <path d="M237.6 95L187.6 95L187.6 45L237.6 45L237.6 95Z" id="b45vdTD8hs" />
+      <path d="M182.59 95L132.59 95L132.59 45L182.59 45L182.59 95Z" id="a40WtxIl8d" />
+      <path d="M127.59 95L77.59 95L77.59 45L127.59 45L127.59 95Z" id="h2CN9AEEpe" />
+      <path d="M237.6 150L187.6 150L187.6 100L237.6 100L237.6 150Z" id="dqv5133G8" />
+      <path d="M182.59 150L132.59 150L132.59 100L182.59 100L182.59 150Z" id="b1Lv79ypvm" />
+      <path d="M182.59 205L132.59 205L132.59 155L182.59 155L182.59 205Z" id="hy1IZWwLX" />
+      <path d="M237.6 205L187.6 205L187.6 155L237.6 155L237.6 205Z" id="akQfjxQes" />
+      <path d="M127.59 205L77.59 205L77.59 155L127.59 155L127.59 205Z" id="bdSrwE5pk" />
     </defs>
     <g>
       <g>
-        <use
-          fill="#f9ad00"
-          fillOpacity={1}
-          opacity={1}
-          xlinkHref="#b45vdTD8hs"
-        />
+        <use fill="#f9ad00" fillOpacity={1} opacity={1} xlinkHref="#b45vdTD8hs" />
       </g>
       <g>
-        <use
-          fill="#f9ad00"
-          fillOpacity={1}
-          opacity={1}
-          xlinkHref="#a40WtxIl8d"
-        />
+        <use fill="#f9ad00" fillOpacity={1} opacity={1} xlinkHref="#a40WtxIl8d" />
       </g>
       <g>
-        <use
-          fill="#f9ad00"
-          fillOpacity={1}
-          opacity={1}
-          xlinkHref="#h2CN9AEEpe"
-        />
+        <use fill="#f9ad00" fillOpacity={1} opacity={1} xlinkHref="#h2CN9AEEpe" />
       </g>
       <g>
-        <use
-          fill="#f9ad00"
-          fillOpacity={1}
-          opacity={1}
-          xlinkHref="#dqv5133G8"
-        />
+        <use fill="#f9ad00" fillOpacity={1} opacity={1} xlinkHref="#dqv5133G8" />
       </g>
       <g>
-        <use
-          fill="#ffffff"
-          fillOpacity={1}
-          opacity={1}
-          xlinkHref="#b1Lv79ypvm"
-        />
+        <use fill="#ffffff" fillOpacity={1} opacity={1} xlinkHref="#b1Lv79ypvm" />
       </g>
       <g>
-        <use
-          fill="#ffffff"
-          fillOpacity={1}
-          opacity={1}
-          xlinkHref="#hy1IZWwLX"
-        />
+        <use fill="#ffffff" fillOpacity={1} opacity={1} xlinkHref="#hy1IZWwLX" />
       </g>
       <g>
-        <use
-          fill="#ffffff"
-          fillOpacity={1}
-          opacity={1}
-          xlinkHref="#akQfjxQes"
-        />
+        <use fill="#ffffff" fillOpacity={1} opacity={1} xlinkHref="#akQfjxQes" />
       </g>
       <g>
-        <use
-          fill="#ffffff"
-          fillOpacity={1}
-          opacity={1}
-          xlinkHref="#bdSrwE5pk"
-        />
+        <use fill="#ffffff" fillOpacity={1} opacity={1} xlinkHref="#bdSrwE5pk" />
       </g>
     </g>
   </svg>
@@ -887,13 +794,7 @@ export const Apple = (props: IconProps) => (
 );
 
 export const Twitter = (props: IconProps) => (
-  <svg
-    {...props}
-    height="23"
-    viewBox="0 0 1200 1227"
-    width="23"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg {...props} height="23" viewBox="0 0 1200 1227" width="23" xmlns="http://www.w3.org/2000/svg">
     <title>Twitter Icon</title>
     <path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.137 519.284H714.163ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.854V687.828Z" />
   </svg>

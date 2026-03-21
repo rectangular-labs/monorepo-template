@@ -37,10 +37,9 @@ function getSessionContext<T extends Record<string, any>>(
 ): Record<string, Session<T> & { [getSessionPromise]?: Promise<Session<T>> }> {
   const context = contextOverride ?? getContext();
   return (
-    context.get<Record<
-      string,
-      Session<T> & { [getSessionPromise]?: Promise<Session<T>> }
-    > | null>("sessions") ?? {}
+    context.get<Record<string, Session<T> & { [getSessionPromise]?: Promise<Session<T>> }> | null>(
+      "sessions",
+    ) ?? {}
   );
 }
 
@@ -97,9 +96,7 @@ async function getSession<T extends Record<string, any>>(
 }
 
 // biome-ignore lint/suspicious/noExplicitAny: user defined types
-type SessionUpdate<T extends Record<string, any>> =
-  | T
-  | ((oldData: T) => T | undefined);
+type SessionUpdate<T extends Record<string, any>> = T | ((oldData: T) => T | undefined);
 
 // biome-ignore lint/suspicious/noExplicitAny: user defined types
 async function updateSession<T extends Record<string, any>>(

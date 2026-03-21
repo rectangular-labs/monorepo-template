@@ -24,9 +24,7 @@ function App() {
       <div className="container mx-auto flex flex-col items-center justify-center px-4 py-16">
         <h1 className="font-bold text-4xl tracking-tight">{data}</h1>
 
-        <p className="mt-4 text-lg">
-          A modern, full-stack development template
-        </p>
+        <p className="mt-4 text-lg">A modern, full-stack development template</p>
 
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           <Card className="flex flex-col">
@@ -36,8 +34,8 @@ function App() {
             </CardHeader>
             <CardContent>
               <p>
-                A powerful combination for building interactive web applications
-                with type safety and excellent developer experience.
+                A powerful combination for building interactive web applications with type safety
+                and excellent developer experience.
               </p>
             </CardContent>
             <CardFooter className="mt-auto">
@@ -62,8 +60,8 @@ function App() {
             </CardHeader>
             <CardContent>
               <p>
-                Share code between projects, maintain consistency, and scale
-                your development with a modern monorepo setup.
+                Share code between projects, maintain consistency, and scale your development with a
+                modern monorepo setup.
               </p>
             </CardContent>
             <CardFooter className="mt-auto">
@@ -83,14 +81,12 @@ function App() {
           <Card className="flex flex-col">
             <CardHeader>
               <CardTitle>Typesafe APIs with oRPC</CardTitle>
-              <CardDescription>
-                End-to-end typesafe APIs made simple
-              </CardDescription>
+              <CardDescription>End-to-end typesafe APIs made simple</CardDescription>
             </CardHeader>
             <CardContent>
               <p>
-                oRPC is a library for building end-to-end typesafe APIs. No code
-                generation, no schemas, just TypeScript.
+                oRPC is a library for building end-to-end typesafe APIs. No code generation, no
+                schemas, just TypeScript.
               </p>
             </CardContent>
             <CardFooter className="mt-auto">
@@ -127,9 +123,8 @@ function App() {
           </Button>
 
           <p className="mt-8 text-sm">
-            Edit{" "}
-            <code className="rounded px-1 py-0.5">src/routes/index.tsx</code> to
-            customize this page
+            Edit <code className="rounded px-1 py-0.5">src/routes/index.tsx</code> to customize this
+            page
           </p>
         </div>
       </div>

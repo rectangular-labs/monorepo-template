@@ -88,8 +88,7 @@ function ChatInputTextArea({
   const rows = context.rows ?? 1;
 
   // Convert parent variant to textarea variant unless explicitly overridden
-  const variant =
-    variantProp ?? (context.variant === "default" ? "unstyled" : "default");
+  const variant = variantProp ?? (context.variant === "default" ? "unstyled" : "default");
 
   const textareaRef = useTextareaResize(value, rows);
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -145,13 +144,7 @@ function ChatInputSubmit({
 
   if (loading && onStop) {
     return (
-      <Button
-        className={className}
-        onClick={onStop}
-        size={"icon"}
-        variant={"outline"}
-        {...props}
-      >
+      <Button className={className} onClick={onStop} size={"icon"} variant={"outline"} {...props}>
         <svg
           aria-label="Stop"
           fill="currentColor"
@@ -172,9 +165,7 @@ function ChatInputSubmit({
   }
 
   const isDisabled =
-    typeof context.value !== "string" ||
-    context.value.trim().length === 0 ||
-    props.disabled;
+    typeof context.value !== "string" || context.value.trim().length === 0 || props.disabled;
 
   return (
     <Button

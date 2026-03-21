@@ -13,8 +13,7 @@ export function SignInEmailCodeButton({
   isSubmitting: boolean;
 }) {
   const { viewPaths, defaultFormView } = useAuth();
-  const toggledView =
-    view === viewPaths.EMAIL_OTP ? defaultFormView.view : viewPaths.EMAIL_OTP;
+  const toggledView = view === viewPaths.EMAIL_OTP ? defaultFormView.view : viewPaths.EMAIL_OTP;
 
   return (
     <Button
@@ -25,9 +24,7 @@ export function SignInEmailCodeButton({
       variant="secondary"
     >
       {view === viewPaths.EMAIL_OTP ? <defaultFormView.icon /> : <MailIcon />}
-      {view === viewPaths.EMAIL_OTP
-        ? `Sign in with ${defaultFormView.text}`
-        : "Sign in with email"}
+      {view === viewPaths.EMAIL_OTP ? `Sign in with ${defaultFormView.text}` : "Sign in with email"}
     </Button>
   );
 }

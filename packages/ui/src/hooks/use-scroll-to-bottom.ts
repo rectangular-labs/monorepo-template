@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  type RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { type RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 export function useScrollToBottom<T extends HTMLElement>(): [
   RefObject<T | null>,

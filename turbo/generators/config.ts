@@ -15,8 +15,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       {
         type: "input",
         name: "name",
-        message:
-          "What is the name of the package? (You can skip the `@rectangular-labs/` prefix)",
+        message: "What is the name of the package? (You can skip the `@rectangular-labs/` prefix)",
         validate: (input: string) => {
           if (!input) {
             return "package name is required";

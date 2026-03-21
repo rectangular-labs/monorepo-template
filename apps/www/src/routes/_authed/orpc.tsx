@@ -1,11 +1,6 @@
 import { ThemeToggle } from "@rectangular-labs/ui/components/theme-provider";
 import { Button } from "@rectangular-labs/ui/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@rectangular-labs/ui/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@rectangular-labs/ui/components/ui/card";
 import { Input } from "@rectangular-labs/ui/components/ui/input";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
@@ -41,7 +36,7 @@ function ORPCTodos() {
   const { mutate: addTodo } = useMutation(
     apiClientRq.todos.create.mutationOptions({
       onSuccess: () => {
-        refetch();
+        void refetch();
         setTodo("");
       },
     }),
@@ -57,9 +52,7 @@ function ORPCTodos() {
       <LogoutButton className="absolute top-4 right-16" />
 
       <div className="container mx-auto flex flex-col items-center justify-center px-4 py-16">
-        <h1 className="mb-8 font-bold text-4xl tracking-tight">
-          oRPC Todo List
-        </h1>
+        <h1 className="mb-8 font-bold text-4xl tracking-tight">oRPC Todo List</h1>
 
         <div className="w-full max-w-2xl space-y-6">
           <Card>

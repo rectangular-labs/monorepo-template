@@ -64,13 +64,7 @@ export function OrganizationLogo({
   }
 
   return (
-    <Avatar
-      className={cn(
-        "bg-muted",
-        organizationLogoSize({ size: normalizedSize }),
-        className,
-      )}
-    >
+    <Avatar className={cn("bg-muted", organizationLogoSize({ size: normalizedSize }), className)}>
       <AvatarImage alt={name || "Organization"} src={src || undefined} />
       <AvatarFallback className={"text-foreground"} delayMs={src ? 600 : 0}>
         <BuildingIcon className={"size-[50%]"} />

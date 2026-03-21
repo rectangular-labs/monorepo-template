@@ -4,10 +4,7 @@ import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { createRouterClient, onError } from "@orpc/server";
 import { RPCHandler } from "@orpc/server/fetch";
-import {
-  RequestHeadersPlugin,
-  ResponseHeadersPlugin,
-} from "@orpc/server/plugins";
+import { RequestHeadersPlugin, ResponseHeadersPlugin } from "@orpc/server/plugins";
 import { createApiContext } from "./context";
 import { router } from "./routes";
 import { todoSchema } from "./routes/todo";

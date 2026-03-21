@@ -8,28 +8,16 @@ import { useForm } from "react-hook-form";
 
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
 import { InputOTP } from "../../ui/input-otp";
 import { toast } from "../../ui/sonner";
 import { type AuthViewPath, useAuth } from "../auth-provider";
 import { OTPInputGroup } from "../otp-input-group";
 
-export function TwoFactorForm({
-  setView,
-}: {
-  setView: (view: AuthViewPath) => void;
-}) {
+export function TwoFactorForm({ setView }: { setView: (view: AuthViewPath) => void }) {
   const { authClient, successHandler, viewPaths } = useAuth();
   const [isSubmitting, _setIsSubmitting] = useState(false);
-  const { data: session, isPending: isLoadingSession } =
-    authClient.useSession();
+  const { data: session, isPending: isLoadingSession } = authClient.useSession();
 
   const initialSendRef = useRef(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
@@ -53,10 +41,7 @@ export function TwoFactorForm({
 
   useEffect(() => {
     if (coolDownSeconds <= 0) return;
-    const timer = setTimeout(
-      () => setCoolDownSeconds((prev) => prev - 1),
-      1000,
-    );
+    const timer = setTimeout(() => setCoolDownSeconds((prev) => prev - 1), 1000);
     return () => clearTimeout(timer);
   }, [coolDownSeconds]);
 
@@ -65,9 +50,7 @@ export function TwoFactorForm({
       return;
     }
     if (coolDownSeconds > 0) {
-      toast.info(
-        `Please wait ${coolDownSeconds} seconds before requesting for the code again`,
-      );
+      toast.info(`Please wait ${coolDownSeconds} seconds before requesting for the code again`);
       return;
     }
 
@@ -83,7 +66,7 @@ export function TwoFactorForm({
     }
     setCoolDownSeconds(60);
     initialSendRef.current = false;
-  }, [authClient, form.setError, isSendingOtp, coolDownSeconds]);
+  }, [authClient, form, isSendingOtp, coolDownSeconds]);
 
   useEffect(() => {
     if (method === "otp" && coolDownSeconds <= 0 && !initialSendRef.current) {
@@ -92,13 +75,7 @@ export function TwoFactorForm({
     }
   }, [coolDownSeconds, method, sendOtp]);
 
-  async function verifyCode({
-    code,
-    trustDevice,
-  }: {
-    code: string;
-    trustDevice?: boolean;
-  }) {
+  async function verifyCode({ code, trustDevice }: { code: string; trustDevice?: boolean }) {
     if (isLoadingSession) {
       return;
     }
@@ -110,9 +87,7 @@ export function TwoFactorForm({
     }
 
     const verifyMethod =
-      method === "otp"
-        ? authClient.twoFactor.verifyOtp
-        : authClient.twoFactor.verifyTotp;
+      method === "otp" ? authClient.twoFactor.verifyOtp : authClient.twoFactor.verifyTotp;
 
     const response = await verifyMethod({
       code,
@@ -128,15 +103,12 @@ export function TwoFactorForm({
     }
 
     toast.success("Two-factor authentication enabled successfully");
-    successHandler();
+    void successHandler();
   }
 
   return (
     <Form {...form}>
-      <form
-        className={"grid w-full gap-6"}
-        onSubmit={form.handleSubmit(verifyCode)}
-      >
+      <form className={"grid w-full gap-6"} onSubmit={void form.handleSubmit(verifyCode)}>
         <div className="flex items-center justify-between">
           <FormLabel>One-time password</FormLabel>
           <Button
@@ -198,7 +170,7 @@ export function TwoFactorForm({
 
           <Button
             disabled={coolDownSeconds > 0 || isSendingOtp || isSubmitting}
-            onClick={sendOtp}
+            onClick={void sendOtp}
             type="button"
             variant="outline"
           >

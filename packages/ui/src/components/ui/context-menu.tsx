@@ -6,51 +6,32 @@ import type * as React from "react";
 
 import { cn } from "../../utils/cn";
 
-function ContextMenu({
-  ...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Root>) {
+function ContextMenu({ ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Root>) {
   return <ContextMenuPrimitive.Root data-slot="context-menu" {...props} />;
 }
 
 function ContextMenuTrigger({
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.Trigger>) {
-  return (
-    <ContextMenuPrimitive.Trigger data-slot="context-menu-trigger" {...props} />
-  );
+  return <ContextMenuPrimitive.Trigger data-slot="context-menu-trigger" {...props} />;
 }
 
-function ContextMenuGroup({
-  ...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Group>) {
-  return (
-    <ContextMenuPrimitive.Group data-slot="context-menu-group" {...props} />
-  );
+function ContextMenuGroup({ ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Group>) {
+  return <ContextMenuPrimitive.Group data-slot="context-menu-group" {...props} />;
 }
 
-function ContextMenuPortal({
-  ...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Portal>) {
-  return (
-    <ContextMenuPrimitive.Portal data-slot="context-menu-portal" {...props} />
-  );
+function ContextMenuPortal({ ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Portal>) {
+  return <ContextMenuPrimitive.Portal data-slot="context-menu-portal" {...props} />;
 }
 
-function ContextMenuSub({
-  ...props
-}: React.ComponentProps<typeof ContextMenuPrimitive.Sub>) {
+function ContextMenuSub({ ...props }: React.ComponentProps<typeof ContextMenuPrimitive.Sub>) {
   return <ContextMenuPrimitive.Sub data-slot="context-menu-sub" {...props} />;
 }
 
 function ContextMenuRadioGroup({
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.RadioGroup>) {
-  return (
-    <ContextMenuPrimitive.RadioGroup
-      data-slot="context-menu-radio-group"
-      {...props}
-    />
-  );
+  return <ContextMenuPrimitive.RadioGroup data-slot="context-menu-radio-group" {...props} />;
 }
 
 function ContextMenuSubTrigger({
@@ -193,10 +174,7 @@ function ContextMenuLabel({
 }) {
   return (
     <ContextMenuPrimitive.Label
-      className={cn(
-        "px-2 py-1.5 font-medium text-foreground text-sm data-[inset]:pl-8",
-        className,
-      )}
+      className={cn("px-2 py-1.5 font-medium text-foreground text-sm data-[inset]:pl-8", className)}
       data-inset={inset}
       data-slot="context-menu-label"
       {...props}
@@ -217,16 +195,10 @@ function ContextMenuSeparator({
   );
 }
 
-function ContextMenuShortcut({
-  className,
-  ...props
-}: React.ComponentProps<"span">) {
+function ContextMenuShortcut({ className, ...props }: React.ComponentProps<"span">) {
   return (
     <span
-      className={cn(
-        "ml-auto text-muted-foreground text-xs tracking-widest",
-        className,
-      )}
+      className={cn("ml-auto text-muted-foreground text-xs tracking-widest", className)}
       data-slot="context-menu-shortcut"
       {...props}
     />

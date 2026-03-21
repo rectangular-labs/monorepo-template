@@ -21,9 +21,7 @@ export type RouterOutputs = InferRouterOutputs<Router>;
  * Initial context type definition for oRPC procedures
  * This defines the required dependencies that must be passed when calling procedures
  */
-export interface InitialContext
-  extends RequestHeadersPluginContext,
-    ResponseHeadersPluginContext {
+export interface InitialContext extends RequestHeadersPluginContext, ResponseHeadersPluginContext {
   db: DB;
   auth: Auth;
   url: URL;
