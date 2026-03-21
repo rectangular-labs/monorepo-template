@@ -1,7 +1,7 @@
 {
   "name": "@rectangular-labs/api",
-  "private": true,
   "version": "0.0.1",
+  "private": true,
   "type": "module",
   "exports": {
     "./client": {
@@ -31,11 +31,6 @@
     "lint": "pnpx @biomejs/biome lint . --write",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
-  "devDependencies": {
-    "@rectangular-labs/typescript": "workspace:*",
-    "@types/node": "^22.18.0",
-    "typescript": "^5.9.2"
-  },
   "dependencies": {
     "@orpc/arktype": "^1.8.5",
     "@orpc/client": "^1.8.5",
@@ -50,6 +45,11 @@
     "@simplewebauthn/server": "^13.1.2",
     "@t3-oss/env-core": "^0.13.8",
     "arktype": "^2.1.20"
+  },
+  "devDependencies": {
+    "@rectangular-labs/typescript": "workspace:*",
+    "@types/node": "^22.18.0",
+    "typescript": "catalog:"
   },
   "overrides": {
     "@tanstack/react-query": "5.85.5"

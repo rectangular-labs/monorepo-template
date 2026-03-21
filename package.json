@@ -9,12 +9,6 @@
   "scripts": {
     "clean": "git clean -xdf node_modules .turbo .sst",
     "clean:workspaces": "turbo clean",
-    "auth:generate": "pnpm run --filter @rectangular-labs/auth generate",
-    "db:migrate-generate": "pnpm run --filter @rectangular-labs/db migrate-generate",
-    "db:migrate-push": "pnpm run --filter @rectangular-labs/db  migrate-push",
-    "db:push": "pnpm run --filter @rectangular-labs/db push --force",
-    "db:studio": "pnpm run --filter @rectangular-labs/db studio",
-    "ui:add": "cd ./packages/ui && pnpm run ui-add && cd ../..",
     "env:set": "pnpm dotenvx set",
     "env:get": "pnpm dotenvx get",
     "new:package": "turbo gen package",
@@ -24,20 +18,18 @@
     "build:production": "turbo build:production",
     "changeset": "changeset",
     "changeset:release": "pnpm run build && changeset publish",
-    "check": "biome check --fix",
-    "format": "turbo run format --continue",
-    "lint": "turbo run lint --continue",
     "typecheck": "turbo run typecheck --continue",
-    "postinstall": "pnpx sherif@latest"
+    "postinstall": "pnpx sherif@latest",
+    "prepare": "vp config"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.2",
     "@changesets/cli": "^2.29.6",
     "@dotenvx/dotenvx": "^1.49.0",
     "@rectangular-labs/typescript": "workspace:*",
     "@turbo/gen": "^2.5.6",
     "turbo": "^2.5.6",
-    "typescript": "^5.9.2"
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
   },
   "packageManager": "pnpm@10.15.0"
 }
