@@ -10,7 +10,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,6 +25,6 @@ jobs:
       - name: Build
         env:
           DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
-        run: pnpm build
+        run: vp run build
 
       - run: pnpm dlx pkg-pr-new publish './packages/*' --comment=update --packageManager=pnpm
