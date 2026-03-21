@@ -1,11 +1,47 @@
 import { defineConfig } from "vite-plus";
 
+const cacheEnv = ["DOTENV_PRIVATE_KEY"];
+const untrackedEnv = ["NODE_ENV", "npm_lifecycle_event"];
+const envFiles = ["**/.env", "**/.env.*"];
+const buildInputs = [{ auto: true }, ...envFiles, "!**/.cache/tsbuildinfo.json", "!**/dist/**"];
+
+const ignorePatterns = ["**/*.hbs", "**/*.gen.ts"];
+
 export default defineConfig({
   staged: {
     "*": "vp check --fix",
   },
+  run: {
+    enablePrePostScripts: true,
+    cache: {
+      tasks: true,
+      scripts: false,
+    },
+    tasks: {
+      build: {
+        command: "vp run -r build",
+        env: cacheEnv,
+        untrackedEnv,
+        input: buildInputs,
+      },
+      "build:preview": {
+        command: "vp run -r build:preview",
+        dependsOn: ["build"],
+        env: cacheEnv,
+        untrackedEnv,
+        input: buildInputs,
+      },
+      "build:production": {
+        command: "vp run -r build:production",
+        dependsOn: ["build"],
+        env: cacheEnv,
+        untrackedEnv,
+        input: buildInputs,
+      },
+    },
+  },
   lint: {
-    ignorePatterns: ["**/*.ts.hbs", "**/*.gen.ts"],
+    ignorePatterns,
     options: { typeAware: true, typeCheck: true },
     plugins: ["oxc", "typescript", "unicorn", "react", "promise", "vitest", "import"],
     rules: {
@@ -25,6 +61,6 @@ export default defineConfig({
     },
   },
   fmt: {
-    ignorePatterns: ["**/*.hbs", "**/*.gen.ts"],
+    ignorePatterns,
   },
 });

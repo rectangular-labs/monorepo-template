@@ -7,26 +7,22 @@
     "tooling/*"
   ],
   "scripts": {
-    "clean": "git clean -xdf node_modules .turbo .sst",
-    "clean:workspaces": "turbo clean",
+    "clean": "vp run -r clean && git clean -xdf node_modules .turbo .sst",
+    "dev:www": "docker compose up -d && vp run www#dev",
     "env:set": "pnpm dotenvx set",
     "env:get": "pnpm dotenvx get",
     "new:package": "vp create @rectangular-labs/create-package",
-    "dev": "docker compose up -d && turbo run dev",
-    "build": "turbo build",
-    "build:preview": "turbo build:preview",
-    "build:production": "turbo build:production",
     "changeset": "changeset",
-    "changeset:release": "pnpm run build && changeset publish",
+    "changeset:release": "vp run build && changeset publish",
     "postinstall": "pnpx sherif@latest",
     "prepare": "vp config"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.6",
-    "@dotenvx/dotenvx": "^1.49.0",
+    "@changesets/cli": "^2.30.0",
+    "@dotenvx/dotenvx": "^1.57.1",
     "@rectangular-labs/typescript": "workspace:*",
-    "@turbo/gen": "^2.5.6",
-    "turbo": "^2.5.6",
+    "@turbo/gen": "^2.8.20",
+    "turbo": "^2.8.20",
     "typescript": "catalog:",
     "vite-plus": "catalog:"
   },

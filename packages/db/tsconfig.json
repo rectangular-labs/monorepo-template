@@ -1,6 +1,8 @@
 {
   "extends": "@rectangular-labs/typescript/tsconfig.internal-package.json",
-  "compilerOptions": {},
+  "compilerOptions": {
+    "types": ["node"]
+  },
   "include": ["src", "drizzle.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

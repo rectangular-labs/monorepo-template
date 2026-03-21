@@ -4,7 +4,7 @@
   "type": "module",
   "sideEffects": false,
   "scripts": {
-    "dev": "pnpm with-env-local vite",
+    "dev": "pnpm with-env-local vp dev",
     "build:preview": "pnpm with-env-preview vite build && tsc",
     "build:production": "pnpm with-env-prod vite build && tsc",
     "serve:preview": "pnpm with-env-preview vite preview",
@@ -38,7 +38,7 @@
     "@testing-library/react": "^16.3.0",
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.8",
-    "@vitejs/plugin-react": "^5.0.1",
+    "@vitejs/plugin-react": "^6.0.1",
     "jiti": "^2.5.1",
     "jsdom": "^26.1.0",
     "typescript": "catalog:",
