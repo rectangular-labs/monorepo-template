@@ -14,6 +14,5 @@
       "@rectangular-labs/ui/*": ["../../packages/ui/src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "dist", ".turbo", ".cache", ".expo", ".next"]
+  "include": ["**/*.ts", "**/*.tsx"]
 }
