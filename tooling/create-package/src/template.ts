@@ -27,18 +27,18 @@ function sanitizeName(name: string) {
 function createPublicPackageJson(packageName: string, description: string) {
   return {
     name: `${ORGANIZATION}/${packageName}`,
-    version: "0.0.1",
-    type: "module",
     description,
-    keywords: ["rectangular-labs"],
+    type: "module",
+    license: "MIT",
+    version: "0.0.1",
+    keywords: [""],
     repository: {
       type: "git",
       url: "git+https://github.com/rectangular-labs/monorepo-template.git",
       directory: `packages/${packageName}`,
     },
-    license: "MIT",
     homepage: `https://github.com/rectangular-labs/monorepo-template/tree/main/packages/${packageName}#readme`,
-    files: ["dist", "!dist/**/*.map", "README.md"],
+    files: ["dist", "!dist/**/*.map", "README.md", "package.json"],
     publishConfig: { access: "public" },
     exports: {},
     scripts: {
@@ -59,10 +59,10 @@ function createPublicPackageJson(packageName: string, description: string) {
 function createPrivatePackageJson(packageName: string, description: string) {
   return {
     name: `${ORGANIZATION}/${packageName}`,
+    description,
+    type: "module",
     private: true,
     version: "0.0.1",
-    type: "module",
-    description,
     exports: {},
     scripts: {
       build: "vp pack",
@@ -106,7 +106,7 @@ function createViteConfig(type: "public" | "private") {
   const serializedPackConfig = JSON.stringify(packConfig, null, 2)
     .slice(2, -2)
     .split("\n")
-    .map((line) => `    ${line}`)
+    .map((line) => `  ${line}`)
     .join("\n");
 
   return `import { defineConfig } from "vite-plus";
@@ -125,15 +125,14 @@ export default createTemplate({
     name: pkgJson.name,
     description: pkgJson.description,
   },
-
   options: {
     name: z
       .string()
       .trim()
       .min(1, "Package name is required")
       .describe("Package name (you can skip the @rectangular-labs/ prefix)"),
-    description: z.string().trim().optional().describe("Optional package description"),
-    type: z.union([z.literal("public"), z.literal("private")]).describe("Package type"),
+    description: z.string().trim().describe("package description").default("Internal Package"),
+    type: z.union([z.literal("public"), z.literal("private")]).describe("package type"),
   },
   prepare: (args) => {
     return {
@@ -160,7 +159,7 @@ export default createTemplate({
       },
       scripts: [
         {
-          commands: [],
+          commands: ["vp i", "vp run build"],
         },
       ],
     };
