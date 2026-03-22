@@ -6,14 +6,7 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../../ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
 import { toast } from "../../ui/sonner";
 import { useAuth } from "../auth-provider";
 import { PasswordInput } from "../password-input";
@@ -42,9 +35,7 @@ export function ChangePasswordForm(props: ChangePasswordProps) {
   const schema = type({
     oldPassword: props.mode === "update" ? PasswordSchema : type("undefined"),
     newPassword: PasswordSchema,
-    confirmPassword: confirmPasswordEnabled
-      ? PasswordSchema
-      : type("undefined"),
+    confirmPassword: confirmPasswordEnabled ? PasswordSchema : type("undefined"),
   }).narrow((n, ctx) => {
     if (n.confirmPassword?.length && n.confirmPassword !== n.newPassword) {
       return ctx.reject({
@@ -94,9 +85,7 @@ export function ChangePasswordForm(props: ChangePasswordProps) {
 
     if (response.error) {
       form.setError("root", {
-        message:
-          response.error.message ??
-          "Failed to change password. Please try again later.",
+        message: response.error.message ?? "Failed to change password. Please try again later.",
       });
       return;
     }
@@ -108,10 +97,7 @@ export function ChangePasswordForm(props: ChangePasswordProps) {
 
   return (
     <Form {...form}>
-      <form
-        className={"grid w-full gap-6"}
-        onSubmit={form.handleSubmit(handleSubmit)}
-      >
+      <form className={"grid w-full gap-6"} onSubmit={void form.handleSubmit(handleSubmit)}>
         {props.mode === "update" && (
           <FormField
             control={form.control}

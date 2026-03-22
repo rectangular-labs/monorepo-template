@@ -2,50 +2,50 @@
   "name": "@rectangular-labs/db",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/client.d.ts",
-      "default": "./src/client.ts"
-    },
-    "./env": {
-      "types": "./dist/env.d.ts",
-      "default": "./src/env.ts"
-    },
-    "./schema/*": {
-      "types": "./dist/schema/*.d.ts",
-      "default": "./src/schema/*.ts"
+    ".": "./src/client.ts",
+    "./env": "./src/env.ts",
+    "./schema/_helper": "./src/schema/_helper.ts",
+    "./schema/_table": "./src/schema/_table.ts",
+    "./schema/auth-schema": "./src/schema/auth-schema.ts",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": "./dist/index.mjs",
+      "./env": "./dist/env.mjs",
+      "./schema/_helper": "./dist/schema/_helper.mjs",
+      "./schema/_table": "./dist/schema/_table.mjs",
+      "./schema/auth-schema": "./dist/schema/auth-schema.mjs",
+      "./package.json": "./package.json"
     }
   },
-  "license": "MIT",
   "scripts": {
     "migrate-generate": "pnpm with-env drizzle-kit generate",
     "migrate-push": "pnpm with-env drizzle-kit migrate",
     "push": "pnpm with-env drizzle-kit push",
     "studio": "pnpm with-env drizzle-kit studio",
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "vp pack",
+    "dev": "vp pack --watch",
     "clean": "git clean -xdf .turbo node_modules dist .cache",
-    "format": "pnpx @biomejs/biome format . --write",
-    "lint": "pnpx @biomejs/biome lint . --write",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "dotenvx run -f ../../.env.local  -f ../../.env -- "
   },
   "dependencies": {
     "@t3-oss/env-core": "^0.13.8",
-    "arktype": "^2.1.20",
+    "arktype": "catalog:",
     "drizzle-arktype": "^0.1.3",
-    "drizzle-orm": "^0.44.5",
+    "drizzle-orm": "^0.45.1",
     "pg": "^8.16.3"
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
-    "@types/node": "^22.18.0",
+    "@types/node": "catalog:",
     "@types/pg": "^8.15.5",
+    "@typescript/native-preview": "catalog:",
     "drizzle-kit": "^0.31.4",
-    "typescript": "^5.9.2"
-  },
-  "overrides": {
-    "drizzle-orm": "^0.44.5"
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
   }
 }

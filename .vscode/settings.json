@@ -1,30 +1,19 @@
 {
-  "biome.lsp.bin": "node_modules/@biomejs/biome/bin/biome",
   "tailwindCSS.experimental.configFile": "packages/ui/src/styles.css",
   // allow autocomplete for ArkType expressions like "string | num"
   "editor.quickSuggestions": {
     "strings": "on"
   },
-  "[javascript]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "biomejs.biome"
-  },
-  "[css]": {
-    "editor.defaultFormatter": "biomejs.biome"
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "oxc.fmt.configPath": "./vite.config.ts",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "explicit",
+    "source.sortImports": "explicit",
+    "source.organizeImports": "explicit",
+    "source.addMissingImports": "always",
+    "source.removeUnusedImports": "explicit"
   },
   "files.watcherExclude": {
     "**/routeTree.gen.ts": true,
@@ -41,12 +30,7 @@
     "**/orpc-contract.json": true,
     "**/auth-schema.ts": true
   },
-  "typescript.preferences.autoImportSpecifierExcludeRegexes": [
-    // prioritize ArkType's "type" for autoimports
-    "^(node:)?os$",
-    // prioritize our own env for autoimports
-    "^(node:)?process$"
-  ],
+  "typescript.preferences.autoImportSpecifierExcludeRegexes": ["^(node:)?os$", "^(node:)?process$"],
   "cSpell.words": [
     "arktype",
     "Creds",
@@ -60,6 +44,7 @@
     "totp",
     "turso",
     "Unlazied",
+    "Vite",
     "webauthn"
   ]
 }

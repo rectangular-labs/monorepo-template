@@ -7,14 +7,7 @@ import type * as React from "react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../../ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
 import { Input } from "../../ui/input";
 import { PhoneInput } from "../../ui/phone-input";
 import type { AuthViewPath } from "../auth-provider";
@@ -47,11 +40,7 @@ export function IdentifierCaptureForm({
   setShouldDisable,
   children,
 }: IdentifierCaptureFormProps) {
-  if (
-    mode === "magic-link" ||
-    mode === "email-code" ||
-    mode === "forget-password-email"
-  ) {
+  if (mode === "magic-link" || mode === "email-code" || mode === "forget-password-email") {
     return (
       <EmailForm
         mode={mode}
@@ -109,9 +98,7 @@ function EmailForm({
       return;
     }
     if (mode === "forget-password-email" && !credentials) {
-      console.warn(
-        "Attempted to use forgot password when no credentials were passed.",
-      );
+      console.warn("Attempted to use forgot password when no credentials were passed.");
     }
     const isCode = credentials?.verificationMode === "code";
 
@@ -144,7 +131,7 @@ function EmailForm({
         }
         default: {
           const _never: never = mode;
-          throw new Error(`Invalid mode for email: ${_never}`);
+          throw new Error(`Invalid mode for email`);
         }
       }
     })();
@@ -168,9 +155,7 @@ function EmailForm({
         return;
       }
       form.setError("root", {
-        message:
-          response.error.message ??
-          "Something went wrong. Please try again later.",
+        message: response.error.message ?? "Something went wrong. Please try again later.",
       });
       return;
     }
@@ -195,10 +180,7 @@ function EmailForm({
 
   return (
     <Form {...form}>
-      <form
-        className={"grid w-full gap-6"}
-        onSubmit={form.handleSubmit(handleSubmit)}
-      >
+      <form className={"grid w-full gap-6"} onSubmit={() => void form.handleSubmit(handleSubmit)()}>
         <FormField
           control={form.control}
           name="email"
@@ -222,11 +204,7 @@ function EmailForm({
           <FormMessage>{form.formState.errors.root.message}</FormMessage>
         )}
         {children ?? (
-          <Button
-            className={"w-full"}
-            disabled={isSubmitting || shouldDisable}
-            type="submit"
-          >
+          <Button className={"w-full"} disabled={isSubmitting || shouldDisable} type="submit">
             {isSubmitting && <Loader2 className="animate-spin" />}
             {submitText}
           </Button>
@@ -254,17 +232,11 @@ function PhoneForm({
   });
 
   async function handleSubmit({ phone }: typeof schema.infer) {
-    if (
-      mode === "magic-link" ||
-      mode === "email-code" ||
-      mode === "forget-password-email"
-    ) {
+    if (mode === "magic-link" || mode === "email-code" || mode === "forget-password-email") {
       return;
     }
     if (mode === "forget-password-phone" && !credentials) {
-      console.warn(
-        "Attempted to use forgot password when no credentials were passed.",
-      );
+      console.warn("Attempted to use forgot password when no credentials were passed.");
     }
     const isCode = credentials?.verificationMode === "code";
     if (!isCode && mode === "forget-password-phone") {
@@ -289,7 +261,7 @@ function PhoneForm({
         }
         default: {
           const _never: never = mode;
-          throw new Error(`Invalid mode for phone: ${_never}`);
+          throw new Error(`Invalid mode for phone`);
         }
       }
     })();
@@ -303,9 +275,7 @@ function PhoneForm({
         return;
       }
       form.setError("root", {
-        message:
-          response.error.message ??
-          "Something went wrong. Please try again later.",
+        message: response.error.message ?? "Something went wrong. Please try again later.",
       });
       return;
     }
@@ -328,10 +298,7 @@ function PhoneForm({
 
   return (
     <Form {...form}>
-      <form
-        className={"grid w-full gap-6"}
-        onSubmit={form.handleSubmit(handleSubmit)}
-      >
+      <form className={"grid w-full gap-6"} onSubmit={void form.handleSubmit(handleSubmit)}>
         <FormField
           control={form.control}
           name="phone"
@@ -339,11 +306,7 @@ function PhoneForm({
             <FormItem>
               <FormLabel>Phone number</FormLabel>
               <FormControl>
-                <PhoneInput
-                  defaultCountry="US"
-                  placeholder="(555) 123-4567"
-                  {...field}
-                />
+                <PhoneInput defaultCountry="US" placeholder="(555) 123-4567" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -353,11 +316,7 @@ function PhoneForm({
           <FormMessage>{form.formState.errors.root.message}</FormMessage>
         )}
         {children ?? (
-          <Button
-            className={"w-full"}
-            disabled={isSubmitting || shouldDisable}
-            type="submit"
-          >
+          <Button className={"w-full"} disabled={isSubmitting || shouldDisable} type="submit">
             {isSubmitting && <Loader2 className="animate-spin" />}
             {submitText}
           </Button>

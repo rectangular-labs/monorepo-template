@@ -1,10 +1,6 @@
 import { AuthCard } from "@rectangular-labs/ui/components/auth/auth-card";
 import { AuthProvider } from "@rectangular-labs/ui/components/auth/auth-provider";
-import {
-  DiscordIcon,
-  GitHubIcon,
-  GoogleIcon,
-} from "@rectangular-labs/ui/components/icon";
+import { DiscordIcon, GitHubIcon, GoogleIcon } from "@rectangular-labs/ui/components/icon";
 import { ThemeToggle } from "@rectangular-labs/ui/components/theme-provider";
 import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { type } from "arktype";

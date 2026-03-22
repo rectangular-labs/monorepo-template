@@ -12,7 +12,7 @@ export function LogoutButton({ className }: { className?: string }) {
       className={className}
       disabled={isPending}
       onClick={() =>
-        authClient.signOut({
+        void authClient.signOut({
           fetchOptions: {
             onRequest: () => {
               setIsPending(true);

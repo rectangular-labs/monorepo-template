@@ -39,9 +39,7 @@ interface MessageContextValue extends VariantProps<typeof chatMessageVariants> {
   id: string;
 }
 
-const ChatMessageContext = React.createContext<MessageContextValue | null>(
-  null,
-);
+const ChatMessageContext = React.createContext<MessageContextValue | null>(null);
 
 const useChatMessage = () => {
   const context = React.useContext(ChatMessageContext);
@@ -50,31 +48,16 @@ const useChatMessage = () => {
 
 // Root component
 interface ChatMessageProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof chatMessageVariants> {
+  extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof chatMessageVariants> {
   children?: React.ReactNode;
   id: string;
 }
 
 const ChatMessage = React.forwardRef<HTMLDivElement, ChatMessageProps>(
-  (
-    {
-      className,
-      variant = "default",
-      type = "incoming",
-      id,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
+  ({ className, variant = "default", type = "incoming", id, children, ...props }, ref) => {
     return (
       <ChatMessageContext.Provider value={{ variant, type, id }}>
-        <div
-          className={cn(chatMessageVariants({ variant, type, className }))}
-          ref={ref}
-          {...props}
-        >
+        <div className={cn(chatMessageVariants({ variant, type, className }))} ref={ref} {...props}>
           {children}
         </div>
       </ChatMessageContext.Provider>
@@ -105,34 +88,22 @@ interface ChatMessageAvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   icon?: ReactNode;
 }
 
-const ChatMessageAvatar = React.forwardRef<
-  HTMLDivElement,
-  ChatMessageAvatarProps
->(({ className, icon: iconProps, imageSrc, ...props }, ref) => {
-  const context = useChatMessage();
-  const type = context?.type ?? "incoming";
-  const icon =
-    iconProps ?? (type === "incoming" ? <SparklesIcon /> : <UserIcon />);
-  return (
-    <div
-      className={cn(chatMessageAvatarVariants({ type, className }))}
-      ref={ref}
-      {...props}
-    >
-      {imageSrc ? (
-        <img
-          alt="Avatar"
-          className="h-full w-full object-cover"
-          src={imageSrc}
-        />
-      ) : (
-        <div className="translate-y-px [&_svg]:size-4 [&_svg]:shrink-0">
-          {icon}
-        </div>
-      )}
-    </div>
-  );
-});
+const ChatMessageAvatar = React.forwardRef<HTMLDivElement, ChatMessageAvatarProps>(
+  ({ className, icon: iconProps, imageSrc, ...props }, ref) => {
+    const context = useChatMessage();
+    const type = context?.type ?? "incoming";
+    const icon = iconProps ?? (type === "incoming" ? <SparklesIcon /> : <UserIcon />);
+    return (
+      <div className={cn(chatMessageAvatarVariants({ type, className }))} ref={ref} {...props}>
+        {imageSrc ? (
+          <img alt="Avatar" className="h-full w-full object-cover" src={imageSrc} />
+        ) : (
+          <div className="translate-y-px [&_svg]:size-4 [&_svg]:shrink-0">{icon}</div>
+        )}
+      </div>
+    );
+  },
+);
 ChatMessageAvatar.displayName = "ChatMessageAvatar";
 
 // Define the content part types here as well for component props
@@ -178,78 +149,74 @@ const chatMessageContentVariants = cva("flex flex-col gap-2", {
   },
 });
 
-interface ChatMessageContentProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "content"> {
+interface ChatMessageContentProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "content"> {
   id?: string;
   messageContent: string | MessageContentPart[];
 }
 
-const ChatMessageContent = React.forwardRef<
-  HTMLDivElement,
-  ChatMessageContentProps
->(({ className, messageContent, id: idProp, children, ...props }, ref) => {
-  const context = useChatMessage();
+const ChatMessageContent = React.forwardRef<HTMLDivElement, ChatMessageContentProps>(
+  ({ className, messageContent, id: idProp, children, ...props }, ref) => {
+    const context = useChatMessage();
 
-  const variant = context?.variant ?? "default";
-  const type = context?.type ?? "incoming";
-  const id = idProp ?? context?.id ?? "";
+    const variant = context?.variant ?? "default";
+    const type = context?.type ?? "incoming";
+    const id = idProp ?? context?.id ?? "";
 
-  const renderContent = () => {
-    if (typeof messageContent === "string") {
-      return messageContent.length > 0 ? (
-        <MarkdownContent content={messageContent} id={id} />
-      ) : null;
-    }
+    const renderContent = () => {
+      if (typeof messageContent === "string") {
+        return messageContent.length > 0 ? (
+          <MarkdownContent content={messageContent} id={id} />
+        ) : null;
+      }
 
-    if (Array.isArray(messageContent)) {
-      return messageContent.map((part, index) => {
-        const partId = `${id}-part-${index}`;
-        switch (part.type) {
-          case "text":
-            return (
-              <MarkdownContent content={part.text} id={partId} key={partId} />
-            );
-          case "image":
-            return (
-              <img
-                alt="User uploaded content"
-                className="mt-2 max-w-xs rounded-md border md:max-w-md"
-                key={partId}
-                src={`data:${part.mimeType};base64,${part.data}`}
-              />
-            );
-          case "file":
-            return (
-              <div
-                className="mt-2 flex items-center gap-2 rounded-md border bg-muted p-2 text-sm"
-                key={partId}
-              >
-                <File className="h-5 w-5 shrink-0 text-muted-foreground" />
-                <span className="truncate text-muted-foreground">
-                  {part.name || "Attached File"}
-                </span>
-              </div>
-            );
-          default:
-            return null;
-        }
-      });
-    }
+      if (Array.isArray(messageContent)) {
+        return messageContent.map((part, index) => {
+          const partId = `${id}-part-${index}`;
+          switch (part.type) {
+            case "text":
+              return <MarkdownContent content={part.text} id={partId} key={partId} />;
+            case "image":
+              return (
+                <img
+                  alt="User uploaded content"
+                  className="mt-2 max-w-xs rounded-md border md:max-w-md"
+                  key={partId}
+                  src={`data:${part.mimeType};base64,${part.data}`}
+                />
+              );
+            case "file":
+              return (
+                <div
+                  className="mt-2 flex items-center gap-2 rounded-md border bg-muted p-2 text-sm"
+                  key={partId}
+                >
+                  <File className="h-5 w-5 shrink-0 text-muted-foreground" />
+                  <span className="truncate text-muted-foreground">
+                    {part.name || "Attached File"}
+                  </span>
+                </div>
+              );
+            default:
+              return null;
+          }
+        });
+      }
 
-    return null;
-  };
+      return null;
+    };
 
-  return (
-    <div
-      className={cn(chatMessageContentVariants({ variant, type, className }))}
-      ref={ref}
-      {...props}
-    >
-      {renderContent()}
-      {children}
-    </div>
-  );
-});
+    return (
+      <div
+        className={cn(chatMessageContentVariants({ variant, type, className }))}
+        ref={ref}
+        {...props}
+      >
+        {renderContent()}
+        {children}
+      </div>
+    );
+  },
+);
 ChatMessageContent.displayName = "ChatMessageContent";
 
 export { ChatMessage, ChatMessageAvatar, ChatMessageContent };

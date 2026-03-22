@@ -6,14 +6,7 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../../ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
 import { InputOTP } from "../../ui/input-otp";
 import { toast } from "../../ui/sonner";
 import { type AuthViewPath, useAuth } from "../auth-provider";
@@ -146,19 +139,12 @@ export function VerificationForm({
       });
       return;
     }
-    if (
-      mode === "email-code" ||
-      mode === "verification-email-code" ||
-      mode === "phone-code"
-    ) {
+    if (mode === "email-code" || mode === "verification-email-code" || mode === "phone-code") {
       //email otp login, and email verification are completed here.
       await successHandler();
       return;
     }
-    if (
-      mode === "password-reset-email-code" ||
-      mode === "password-reset-phone-code"
-    ) {
+    if (mode === "password-reset-email-code" || mode === "password-reset-phone-code") {
       //password reset needs to allow users to enter a new password.
       setView(viewPaths.RESET_PASSWORD);
       setVerificationInfo({
@@ -237,10 +223,7 @@ export function VerificationForm({
     <div className="grid w-full">
       {needsCode && (
         <Form {...form}>
-          <form
-            className={"grid w-full gap-6"}
-            onSubmit={form.handleSubmit(handleComplete)}
-          >
+          <form className={"grid w-full gap-6"} onSubmit={void form.handleSubmit(handleComplete)}>
             <FormField
               control={form.control}
               name="code"
@@ -290,7 +273,7 @@ export function VerificationForm({
         <Button
           className="px-0"
           disabled={isSubmitting || isDisabled}
-          onClick={resendCode}
+          onClick={void resendCode}
           type="button"
           variant="link"
         >

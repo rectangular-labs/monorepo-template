@@ -2,10 +2,10 @@
   "name": "@rectangular-labs/ui",
   "version": "0.1.0",
   "private": true,
-  "sideEffects": false,
   "files": [
     "styles.css"
   ],
+  "sideEffects": false,
   "exports": {
     "./*": "./src/*.tsx",
     "./styles.css": "./src/styles.css",
@@ -13,23 +13,7 @@
   },
   "scripts": {
     "clean": "git clean -xdf .turbo node_modules",
-    "format": "pnpx @biomejs/biome format . --write",
-    "lint": "pnpx @biomejs/biome lint . --write",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "ui-add": "pnpx shadcn@canary add && pnpx @biomejs/biome lint --write --unsafe"
-  },
-  "devDependencies": {
-    "@rectangular-labs/typescript": "workspace:*",
-    "@types/react": "^19.1.11",
-    "@types/react-dom": "^19.1.8",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "tailwindcss": "^4.1.12",
-    "typescript": "^5.9.2"
-  },
-  "peerDependencies": {
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
@@ -61,7 +45,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@radix-ui/react-use-controllable-state": "^1.2.2",
     "@rectangular-labs/auth": "workspace:*",
-    "arktype": "^2.1.20",
+    "arktype": "catalog:",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.1.1",
@@ -83,5 +67,18 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2"
+  },
+  "devDependencies": {
+    "@rectangular-labs/typescript": "workspace:*",
+    "@types/react": "^19.1.11",
+    "@types/react-dom": "^19.1.8",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwindcss": "^4.1.12",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
   }
 }

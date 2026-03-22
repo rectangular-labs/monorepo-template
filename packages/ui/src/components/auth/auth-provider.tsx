@@ -1,9 +1,6 @@
 "use client";
 
-import type {
-  BaseAuthClient,
-  CompleteAuthClient,
-} from "@rectangular-labs/auth/client";
+import type { BaseAuthClient, CompleteAuthClient } from "@rectangular-labs/auth/client";
 import { LockIcon, MailIcon, PhoneIcon } from "lucide-react";
 import type { PropsWithChildren } from "react";
 import { createContext, useCallback, useContext, useMemo, useRef } from "react";
@@ -136,14 +133,7 @@ export function AuthProvider({
   authClient: BaseAuthClient;
   credentials?: CredentialsOptions | undefined;
   socialProviders?: SocialProvider[];
-  plugins?: (
-    | "magicLink"
-    | "emailOTP"
-    | "passkey"
-    | "oneTap"
-    | "username"
-    | "phoneOTP"
-  )[];
+  plugins?: ("magicLink" | "emailOTP" | "passkey" | "oneTap" | "username" | "phoneOTP")[];
 }>) {
   const hasUsername = plugins?.includes("username");
   const hasMagicLink = plugins?.includes("magicLink");
@@ -206,9 +196,7 @@ export function AuthProvider({
         authClient: authClient as unknown as CompleteAuthClient,
         viewPaths: AuthViewPaths,
         defaultFormView,
-        credentials: credentials
-          ? { ...defaultCredentials, ...(credentials ?? {}) }
-          : undefined,
+        credentials: credentials ? { ...defaultCredentials, ...credentials } : undefined,
         socialProviders: socialProviders ?? [],
         successHandler,
         onSuccess: redirects?.onSuccess,

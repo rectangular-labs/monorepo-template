@@ -13,8 +13,7 @@ export function SignInPhoneCodeButton({
   isSubmitting: boolean;
 }) {
   const { viewPaths, defaultFormView } = useAuth();
-  const toggledView =
-    view === viewPaths.PHONE_OTP ? defaultFormView.view : viewPaths.PHONE_OTP;
+  const toggledView = view === viewPaths.PHONE_OTP ? defaultFormView.view : viewPaths.PHONE_OTP;
 
   return (
     <Button
@@ -25,9 +24,7 @@ export function SignInPhoneCodeButton({
       variant="secondary"
     >
       {view === viewPaths.PHONE_OTP ? <defaultFormView.icon /> : <PhoneIcon />}
-      {view === viewPaths.PHONE_OTP
-        ? `Sign in with ${defaultFormView.text}`
-        : "Sign in with phone"}
+      {view === viewPaths.PHONE_OTP ? `Sign in with ${defaultFormView.text}` : "Sign in with phone"}
     </Button>
   );
 }

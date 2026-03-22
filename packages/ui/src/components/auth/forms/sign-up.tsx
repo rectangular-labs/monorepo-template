@@ -8,14 +8,7 @@ import { useForm } from "react-hook-form";
 import { cn } from "../../../utils/cn";
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
 import { Input } from "../../ui/input";
 import { toast } from "../../ui/sonner";
 import { Textarea } from "../../ui/textarea";
@@ -46,9 +39,7 @@ export function SignUpForm({
     email: "string.email >= 1",
     password: PasswordSchema,
     username: usernameEnabled ? "string >= 3" : "undefined",
-    confirmPassword: confirmPasswordEnabled
-      ? PasswordSchema
-      : type("undefined"),
+    confirmPassword: confirmPasswordEnabled ? PasswordSchema : type("undefined"),
   });
 
   const additionalSchema: Record<string, string> = {};
@@ -64,19 +55,18 @@ export function SignUpForm({
     }
   }
   const defaultValues = useMemo<typeof baseSchema.infer>(() => {
-    const values: typeof baseSchema.infer &
-      Record<string, number | string | boolean | undefined> = {
-      email: "",
-      password: "",
-      username: usernameEnabled ? "" : undefined,
-      confirmPassword: confirmPasswordEnabled ? "" : undefined,
-    };
-
-    for (const key of Object.keys(additionalFields)) {
+    const values: typeof baseSchema.infer & Record<string, number | string | boolean | undefined> =
+      {
+        email: "",
+        password: "",
+        username: usernameEnabled ? "" : undefined,
+        confirmPassword: confirmPasswordEnabled ? "" : undefined,
+      };
+    for (const key of Object.keys(credentials?.additionalFields ?? {})) {
       values[key] = undefined;
     }
     return values;
-  }, [usernameEnabled, confirmPasswordEnabled, additionalFields]);
+  }, [usernameEnabled, confirmPasswordEnabled, credentials?.additionalFields]);
 
   const form = useForm<typeof baseSchema.infer>({
     resolver: arktypeResolver(
@@ -97,8 +87,7 @@ export function SignUpForm({
   });
 
   async function signUp(
-    values: typeof baseSchema.infer &
-      Record<string, number | string | boolean | undefined>,
+    values: typeof baseSchema.infer & Record<string, number | string | boolean | undefined>,
   ) {
     for (const [key, cfg] of Object.entries(additionalFields)) {
       if (!cfg.validate) continue;
@@ -136,8 +125,7 @@ export function SignUpForm({
       }
 
       form.setError("root", {
-        message:
-          response.error.message ?? "Failed to sign up. Please try again.",
+        message: response.error.message ?? "Failed to sign up. Please try again.",
       });
       return;
     }
@@ -174,10 +162,7 @@ export function SignUpForm({
 
   return (
     <Form {...form}>
-      <form
-        className={"grid w-full gap-6"}
-        onSubmit={form.handleSubmit(signUp)}
-      >
+      <form className={"grid w-full gap-6"} onSubmit={void form.handleSubmit(signUp)}>
         {Object.keys(additionalFields).includes("name") && (
           <FormField
             control={form.control}
@@ -354,11 +339,7 @@ export function SignUpForm({
           <FormMessage>{form.formState.errors.root.message}</FormMessage>
         )}
 
-        <Button
-          className={cn("w-full")}
-          disabled={isSubmitting || shouldDisable}
-          type="submit"
-        >
+        <Button className={cn("w-full")} disabled={isSubmitting || shouldDisable} type="submit">
           {isSubmitting && <Loader2 className="animate-spin" />}
           Sign Up
         </Button>

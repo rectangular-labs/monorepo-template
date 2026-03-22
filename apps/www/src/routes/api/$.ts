@@ -16,13 +16,10 @@ async function handle({ request }: { request: Request }) {
     url: new URL(request.url),
   });
 
-  const { response } = await openAPIHandler(`${env.VITE_APP_URL}/api`).handle(
-    request,
-    {
-      prefix: "/api",
-      context,
-    },
-  );
+  const { response } = await openAPIHandler(`${env.VITE_APP_URL}/api`).handle(request, {
+    prefix: "/api",
+    context,
+  });
 
   return response ?? new Response("Not Found", { status: 404 });
 }

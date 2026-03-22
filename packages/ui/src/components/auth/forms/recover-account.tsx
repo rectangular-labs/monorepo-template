@@ -4,14 +4,7 @@ import { type } from "arktype";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../../ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
 import { Input } from "../../ui/input";
 import { useAuth } from "../auth-provider";
 
@@ -42,15 +35,12 @@ export function RecoverAccountForm() {
     }
 
     // TODO: handle success / redirect to callbackURL
-    onSuccess?.();
+    void onSuccess?.();
   }
 
   return (
     <Form {...form}>
-      <form
-        className={"grid w-full gap-6"}
-        onSubmit={form.handleSubmit(verifyBackupCode)}
-      >
+      <form className={"grid w-full gap-6"} onSubmit={void form.handleSubmit(verifyBackupCode)}>
         <FormField
           control={form.control}
           name="code"

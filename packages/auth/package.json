@@ -1,42 +1,41 @@
 {
   "name": "@rectangular-labs/auth",
-  "private": true,
   "version": "0.0.1",
+  "private": true,
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/server.d.ts",
-      "default": "./src/server.ts"
-    },
-    "./client": {
-      "types": "./dist/client.d.ts",
-      "default": "./src/client.ts"
-    },
-    "./env": {
-      "types": "./dist/env.d.ts",
-      "default": "./src/env.ts"
+    ".": "./src/server.ts",
+    "./client": "./src/client.ts",
+    "./env": "./src/env.ts",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": "./dist/index.mjs",
+      "./client": "./dist/client.mjs",
+      "./env": "./dist/env.mjs",
+      "./package.json": "./package.json"
     }
   },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "vp pack",
+    "dev": "vp pack --watch",
     "generate": "pnpm with-env pnpx @better-auth/cli generate --config ./src/generate.ts --output ../db/src/schema/auth-schema.ts",
     "clean": "git clean -xdf .turbo node_modules dist .cache",
-    "format": "pnpx @biomejs/biome format . --write",
-    "lint": "pnpx @biomejs/biome lint . --write",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "with-env": "dotenvx run -f ../../.env.local  -f ../../.env -- "
-  },
-  "devDependencies": {
-    "@rectangular-labs/typescript": "workspace:*",
-    "@types/node": "^22.18.0",
-    "typescript": "^5.9.2"
   },
   "dependencies": {
     "@better-auth/expo": "^1.3.7",
     "@rectangular-labs/db": "workspace:*",
     "@t3-oss/env-core": "^0.13.8",
-    "arktype": "^2.1.20",
+    "arktype": "catalog:",
     "better-auth": "^1.3.7"
+  },
+  "devDependencies": {
+    "@rectangular-labs/typescript": "workspace:*",
+    "@types/node": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
   }
 }

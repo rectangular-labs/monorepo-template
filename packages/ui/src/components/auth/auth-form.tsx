@@ -7,10 +7,7 @@ import { RecoverAccountForm } from "./forms/recover-account";
 import { SignInForm } from "./forms/sign-in";
 import { SignUpForm } from "./forms/sign-up";
 import { TwoFactorForm } from "./forms/two-factor";
-import {
-  VerificationForm,
-  type VerificationInfo,
-} from "./forms/verification-form";
+import { VerificationForm, type VerificationInfo } from "./forms/verification-form";
 
 export function AuthForm({
   view,

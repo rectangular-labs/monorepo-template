@@ -5,21 +5,11 @@ import { useEffect, useMemo, useState } from "react";
 import { cn } from "../../utils/cn";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { Button } from "../ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Separator } from "../ui/separator";
 import { AuthForm } from "./auth-form";
 import { type AuthViewPath, useAuth } from "./auth-provider";
-import type {
-  VerificationInfo,
-  VerificationMode,
-} from "./forms/verification-form";
+import type { VerificationInfo, VerificationMode } from "./forms/verification-form";
 import { OneTap } from "./one-tap";
 import { PasskeyButton } from "./passkey-button";
 import { ProviderButton } from "./provider-button";
@@ -48,8 +38,7 @@ const DESCRIPTIONS: Record<`${AuthViewPath}_DESCRIPTION`, string> = {
   MAGIC_LINK_DESCRIPTION: "Enter your email to receive a magic link",
   EMAIL_OTP_DESCRIPTION: "Enter your email to receive an OTP",
   PHONE_OTP_DESCRIPTION: "Enter your phone number to receive a code",
-  FORGOT_PASSWORD_DESCRIPTION:
-    "Enter your email to receive a password reset link",
+  FORGOT_PASSWORD_DESCRIPTION: "Enter your email to receive a password reset link",
   RESET_PASSWORD_DESCRIPTION: "Enter your new password",
   RECOVER_ACCOUNT_DESCRIPTION: "Use your backup code to recover your account",
 };
@@ -69,10 +58,7 @@ export interface AuthViewProps {
   initialView?: AuthViewPath;
   socialLayout?: "auto" | "horizontal" | "grid" | "vertical";
 }
-export function AuthCard({
-  initialView,
-  socialLayout: socialLayoutProp = "auto",
-}: AuthViewProps) {
+export function AuthCard({ initialView, socialLayout: socialLayoutProp = "auto" }: AuthViewProps) {
   const {
     viewPaths,
     defaultFormView,
@@ -92,8 +78,7 @@ export function AuthCard({
     return defaultFormView.view;
   });
   const [shouldDisable, setShouldDisable] = useState(false);
-  const [verificationInfo, setVerificationInfo] =
-    useState<VerificationInfo | null>(null);
+  const [verificationInfo, setVerificationInfo] = useState<VerificationInfo | null>(null);
   const [queryError, setQueryError] = useState<string | null>(null);
   const [resetToken, setResetToken] = useState<string | null>(null);
 
@@ -149,8 +134,7 @@ export function AuthCard({
 
     return {
       title: TITLES[view as keyof typeof TITLES],
-      description:
-        DESCRIPTIONS[`${view}_DESCRIPTION` as keyof typeof DESCRIPTIONS],
+      description: DESCRIPTIONS[`${view}_DESCRIPTION` as keyof typeof DESCRIPTIONS],
     };
   }, [view, verificationInfo, viewPaths.IDENTITY_VERIFICATION]);
 
@@ -158,13 +142,9 @@ export function AuthCard({
     <Card className={"w-full max-w-sm"}>
       {(title || description) && (
         <CardHeader>
-          {title && (
-            <CardTitle className={"text-lg md:text-xl"}>{title}</CardTitle>
-          )}
+          {title && <CardTitle className={"text-lg md:text-xl"}>{title}</CardTitle>}
           {description && (
-            <CardDescription className={"text-xs md:text-sm"}>
-              {description}
-            </CardDescription>
+            <CardDescription className={"text-xs md:text-sm"}>{description}</CardDescription>
           )}
         </CardHeader>
       )}
@@ -185,75 +165,59 @@ export function AuthCard({
             {hasMagicLink &&
               defaultFormView.view !== viewPaths.MAGIC_LINK &&
               loginViews.includes(view) && (
-                <SignInMagicLinkButton
-                  isSubmitting={shouldDisable}
-                  setView={setView}
-                  view={view}
-                />
+                <SignInMagicLinkButton isSubmitting={shouldDisable} setView={setView} view={view} />
               )}
             {hasEmailOTP &&
               defaultFormView.view !== viewPaths.EMAIL_OTP &&
               loginViews.includes(view) && (
-                <SignInEmailCodeButton
-                  isSubmitting={shouldDisable}
-                  setView={setView}
-                  view={view}
-                />
+                <SignInEmailCodeButton isSubmitting={shouldDisable} setView={setView} view={view} />
               )}
             {hasPhoneOTP &&
               defaultFormView.view !== viewPaths.PHONE_OTP &&
               loginViews.includes(view) && (
-                <SignInPhoneCodeButton
-                  isSubmitting={shouldDisable}
-                  setView={setView}
-                  view={view}
-                />
+                <SignInPhoneCodeButton isSubmitting={shouldDisable} setView={setView} view={view} />
               )}
           </div>
         )}
 
-        {loginViews.includes(view) &&
-          (showPasskey || socialProviders.length > 0) && (
-            <>
-              {hasForm && (
-                <div className={"flex items-center gap-2"}>
-                  <Separator className={"!w-auto grow"} />
-                  <span className="flex-shrink-0 text-muted-foreground text-sm">
-                    Or continue with
-                  </span>
-                  <Separator className={"!w-auto grow"} />
+        {loginViews.includes(view) && (showPasskey || socialProviders.length > 0) && (
+          <>
+            {hasForm && (
+              <div className={"flex items-center gap-2"}>
+                <Separator className={"!w-auto grow"} />
+                <span className="flex-shrink-0 text-muted-foreground text-sm">
+                  Or continue with
+                </span>
+                <Separator className={"!w-auto grow"} />
+              </div>
+            )}
+            <div className="grid gap-4">
+              {socialProviders.length > 0 && (
+                <div
+                  className={cn(
+                    "flex w-full items-center justify-between gap-4",
+                    socialLayout === "horizontal" && "flex-wrap",
+                    socialLayout === "vertical" && "flex-col",
+                    socialLayout === "grid" && "grid grid-cols-2",
+                  )}
+                >
+                  {socialProviders.map((socialProvider) => (
+                    <ProviderButton
+                      key={socialProvider.name}
+                      provider={socialProvider}
+                      setShouldDisable={setShouldDisable}
+                      shouldDisable={shouldDisable}
+                      socialLayout={socialLayout || "vertical"}
+                    />
+                  ))}
                 </div>
               )}
-              <div className="grid gap-4">
-                {socialProviders.length > 0 && (
-                  <div
-                    className={cn(
-                      "flex w-full items-center justify-between gap-4",
-                      socialLayout === "horizontal" && "flex-wrap",
-                      socialLayout === "vertical" && "flex-col",
-                      socialLayout === "grid" && "grid grid-cols-2",
-                    )}
-                  >
-                    {socialProviders.map((socialProvider) => (
-                      <ProviderButton
-                        key={socialProvider.name}
-                        provider={socialProvider}
-                        setShouldDisable={setShouldDisable}
-                        shouldDisable={shouldDisable}
-                        socialLayout={socialLayout || "vertical"}
-                      />
-                    ))}
-                  </div>
-                )}
-                {showPasskey && (
-                  <PasskeyButton
-                    setShouldDisable={setShouldDisable}
-                    shouldDisable={shouldDisable}
-                  />
-                )}
-              </div>
-            </>
-          )}
+              {showPasskey && (
+                <PasskeyButton setShouldDisable={setShouldDisable} shouldDisable={shouldDisable} />
+              )}
+            </div>
+          </>
+        )}
         {queryError && loginViews.includes(view) && (
           <Alert variant="destructive">
             <AlertTitle>Error</AlertTitle>

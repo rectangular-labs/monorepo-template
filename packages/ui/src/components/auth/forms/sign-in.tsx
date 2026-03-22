@@ -7,14 +7,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../../ui/button";
 import { Checkbox } from "../../ui/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
 import { Input } from "../../ui/input";
 import { type AuthViewPath, useAuth } from "../auth-provider";
 import { PasswordInput } from "../password-input";
@@ -93,9 +86,7 @@ export function SignInForm({
       }
 
       form.setError("root", {
-        message:
-          response.error.message ??
-          "Something went wrong. Please try again later.",
+        message: response.error.message ?? "Something went wrong. Please try again later.",
       });
       return;
     }
@@ -116,10 +107,7 @@ export function SignInForm({
 
   return (
     <Form {...form}>
-      <form
-        className={"grid w-full gap-6"}
-        onSubmit={form.handleSubmit(signIn)}
-      >
+      <form className={"grid w-full gap-6"} onSubmit={void form.handleSubmit(signIn)}>
         <FormField
           control={form.control}
           name="email"
@@ -129,13 +117,9 @@ export function SignInForm({
 
               <FormControl>
                 <Input
-                  autoComplete={
-                    usernameEnabled ? "username webauthn" : "email webauthn"
-                  }
+                  autoComplete={usernameEnabled ? "username webauthn" : "email webauthn"}
                   disabled={isSubmitting || shouldDisable}
-                  placeholder={
-                    usernameEnabled ? "Enter your username" : "Enter your email"
-                  }
+                  placeholder={usernameEnabled ? "Enter your username" : "Enter your email"}
                   type={usernameEnabled ? "text" : "email"}
                   {...field}
                 />
@@ -202,11 +186,7 @@ export function SignInForm({
         {form.formState.errors.root && (
           <FormMessage>{form.formState.errors.root.message}</FormMessage>
         )}
-        <Button
-          className={"w-full"}
-          disabled={isSubmitting || shouldDisable}
-          type="submit"
-        >
+        <Button className={"w-full"} disabled={isSubmitting || shouldDisable} type="submit">
           {isSubmitting && <Loader2 className="animate-spin" />}
           Sign in
         </Button>

@@ -9,7 +9,6 @@
 
     /* Linting */
     "noUncheckedSideEffectImports": true,
-    "baseUrl": ".",
     "paths": {
       "~/*": ["./src/*"],
       "@rectangular-labs/ui/*": ["../../packages/ui/src/*"]

@@ -12,8 +12,7 @@ export function SignInMagicLinkButton({
   isSubmitting: boolean;
 }) {
   const { viewPaths, defaultFormView } = useAuth();
-  const toggledView =
-    view === viewPaths.MAGIC_LINK ? defaultFormView.view : viewPaths.MAGIC_LINK;
+  const toggledView = view === viewPaths.MAGIC_LINK ? defaultFormView.view : viewPaths.MAGIC_LINK;
 
   return (
     <Button

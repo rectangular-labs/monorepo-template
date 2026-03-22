@@ -11,8 +11,7 @@ export const clientEnv = () =>
     },
     runtimeEnv: import.meta.env,
     emptyStringAsUndefined: true,
-    skipValidation:
-      !!process.env.CI || process.env.npm_lifecycle_event === "lint",
+    skipValidation: !!process.env.CI || process.env.npm_lifecycle_event === "lint",
   });
 
 export const serverEnv = () =>
@@ -21,6 +20,5 @@ export const serverEnv = () =>
     server: {},
     runtimeEnv: process.env,
     emptyStringAsUndefined: true,
-    skipValidation:
-      !!process.env.CI || process.env.npm_lifecycle_event === "lint",
+    skipValidation: !!process.env.CI || process.env.npm_lifecycle_event === "lint",
   });

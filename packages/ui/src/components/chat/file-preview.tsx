@@ -9,23 +9,21 @@ interface FilePreviewProps {
   onRemove?: () => void;
 }
 
-export const FilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
-  (props, ref) => {
-    if (props.file.type.startsWith("image/")) {
-      return <ImageFilePreview {...props} ref={ref} />;
-    }
+export const FilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>((props, ref) => {
+  if (props.file.type.startsWith("image/")) {
+    return <ImageFilePreview {...props} ref={ref} />;
+  }
 
-    if (
-      props.file.type.startsWith("text/") ||
-      props.file.name.endsWith(".txt") ||
-      props.file.name.endsWith(".md")
-    ) {
-      return <TextFilePreview {...props} ref={ref} />;
-    }
+  if (
+    props.file.type.startsWith("text/") ||
+    props.file.name.endsWith(".txt") ||
+    props.file.name.endsWith(".md")
+  ) {
+    return <TextFilePreview {...props} ref={ref} />;
+  }
 
-    return <GenericFilePreview {...props} ref={ref} />;
-  },
-);
+  return <GenericFilePreview {...props} ref={ref} />;
+});
 FilePreview.displayName = "FilePreview";
 
 const ImageFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
@@ -46,9 +44,7 @@ const ImageFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
             className="grid h-10 w-10 shrink-0 place-items-center rounded-sm border bg-muted object-cover"
             src={URL.createObjectURL(file)}
           />
-          <span className="w-full truncate text-muted-foreground">
-            {file.name}
-          </span>
+          <span className="w-full truncate text-muted-foreground">{file.name}</span>
         </div>
 
         {onRemove ? (
@@ -95,9 +91,7 @@ const TextFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
               {preview || "Loading..."}
             </div>
           </div>
-          <span className="w-full truncate text-muted-foreground">
-            {file.name}
-          </span>
+          <span className="w-full truncate text-muted-foreground">{file.name}</span>
         </div>
 
         {onRemove ? (
@@ -131,9 +125,7 @@ const GenericFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-sm border bg-muted">
             <FileIcon className="h-6 w-6 text-foreground" />
           </div>
-          <span className="w-full truncate text-muted-foreground">
-            {file.name}
-          </span>
+          <span className="w-full truncate text-muted-foreground">{file.name}</span>
         </div>
 
         {onRemove ? (

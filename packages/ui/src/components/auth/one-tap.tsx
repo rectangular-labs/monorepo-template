@@ -23,7 +23,7 @@ export function OneTap() {
           console.warn("Route not found. Did you enable the `oneTap` plugin?");
         }
       });
-  }, [authClient.oneTap, successCallbackURL]);
+  }, [authClient, successCallbackURL]);
 
   return null;
 }

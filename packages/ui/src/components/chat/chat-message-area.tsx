@@ -13,11 +13,7 @@ interface ScrollButtonProps {
   className?: string;
 }
 
-export function ScrollButton({
-  onClick,
-  alignment = "right",
-  className,
-}: ScrollButtonProps) {
+export function ScrollButton({ onClick, alignment = "right", className }: ScrollButtonProps) {
   const alignmentClasses = {
     left: "left-4",
     center: "left-1/2 -translate-x-1/2",
@@ -51,8 +47,7 @@ export function ChatMessageArea({
   className,
   scrollButtonAlignment = "right",
 }: ChatMessageAreaProps) {
-  const [containerRef, showScrollButton, scrollToBottom] =
-    useScrollToBottom<HTMLDivElement>();
+  const [containerRef, showScrollButton, scrollToBottom] = useScrollToBottom<HTMLDivElement>();
 
   return (
     <ScrollArea className="relative">

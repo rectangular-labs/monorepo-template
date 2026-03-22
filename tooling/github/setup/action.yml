@@ -4,16 +4,10 @@ description: "Common setup steps for Actions"
 runs:
   using: composite
   steps:
-    - uses: pnpm/action-setup@v4
-    # - uses: oven-sh/setup-bun@v2
-    #   with:
-    #     bun-version: latest
-    - uses: actions/setup-node@v4
+    - uses: voidzero-dev/setup-vp@v1
       with:
-        node-version-file: ".nvmrc"
+        node-version: "24.7.0"
+        cache: true
 
     - shell: bash
-      run: pnpm add -g turbo
-
-    - shell: bash
-      run: pnpm install
+      run: vp install
