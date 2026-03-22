@@ -27,7 +27,7 @@
     "build": "vp pack",
     "dev": "vp pack --watch",
     "dev:openapi": "tsx watch ./src/_open-api/open-api-resolver.ts",
-    "clean": "git clean -xdf .turbo node_modules dist .cache"
+    "clean": "git clean -xdf node_modules dist .cache"
   },
   "dependencies": {
     "@orpc/arktype": "^1.13.9",

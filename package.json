@@ -7,7 +7,7 @@
     "tooling/*"
   ],
   "scripts": {
-    "clean": "vp run -r clean && git clean -xdf node_modules .turbo .sst",
+    "clean": "vp run -r clean && git clean -xdf node_modules .sst",
     "dev:www": "docker compose up -d && vp run --cache build -r && vp run www#dev",
     "env:set": "pnpm dotenvx set",
     "env:get": "pnpm dotenvx get",

@@ -6,7 +6,7 @@ runs:
   steps:
     - uses: voidzero-dev/setup-vp@v1
       with:
-        node-version: "24.7.0"
+        node-version: "25.8.1"
         cache: true
 
     - shell: bash

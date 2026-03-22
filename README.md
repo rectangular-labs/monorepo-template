@@ -1,89 +1,112 @@
-# Basic Monorepo Template
+# Vite Plus Monorepo Template
 
-This repo sets up a basic typescript monorepo.
+This repo is a TypeScript monorepo based on `vite-plus` for task orchestration, builds, linting, and package workflows.
 
-## Structure
+## Workspace Structure
 
-This monorepo uses Turborepo and contains the following structure:
+- `apps`: runnable applications such as `www`
+- `packages`: shared workspace packages such as `api`, `auth`, `db`, and `ui`
+- `tooling`: internal generators and shared tooling
 
-- `apps`: Contains the applications (e.g., `web`, `docs`).
-- `packages`: Contains shared packages used across applications (e.g., `ui`, `config`, `db`).
+## Tooling
+
+- pre-commit hooks run automatically on staged files.
+- Create new packages (public and private) via `vp run new:package`.
+- `vp check --fix` to run all int and format with automatic fixes being applied.
+- Supports running tasks with caching in [`vite.config.ts`](./vite.config.ts).
+- For workspace task that don't need caching, you can add it directly to [`package.json`](./package.json) scripts.
 
 ## Environment Variables
 
-Environment variables are managed using `pnpm`. There's 3 layers to it:
+Environment variables are managed with `dotenvx` and layered like this:
 
 ```bash
-.env.production // used for production builds
-.env // used in local development and preview builds
-.env.local // used in local development
+.env.production # production builds
+.env            # preview builds and shared local defaults
+.env.local      # local-only overrides
 ```
 
-To set an environment variable, use:
+Set a variable in the root `.env` file:
 
 ```bash
 pnpm env:set <VARIABLE_NAME> <VALUE>
 ```
 
-This command updates the `.env` file in the root by default.
-
-Use the `-f` flag to target a specific file, for e.g. `.env.local`or `.env.production` :
+Target a specific file with `-f`:
 
 ```bash
-pnpm env:set <VARIABLE_NAME> <VALUE> -f .env.local
+pnpm env:set <VARIABLE_NAME> <VALUE> -f .env.production
 ```
 
-The `.env.local` file is ignored by Git and allows you to have local-specific settings.
+`.env.local` and `.env.key` are ignored by Git. Feel free to add values in `.env.local` without going through the CLI.
 
-The values in all `.env` files are encrypted by default so it can be easily shared across teams. Refer to the [dotenvx](https://dotenvx.com/) documentation for more.
+By default, `dotenvx` encrypts values so they can be shared safely across the team.
 
-## Database
+## First-Time Setup
 
-This project uses PostgreSQL as its database. A Docker Compose setup is provided for easy local development when you run `pnpm dev`
+1. [Install vite plus](https://viteplus.dev/guide/#install-vp)
+
+2. Install workspace dependencies:
+
+   ```bash
+   vp install
+   ```
+
+3. Install dev3000 (we use for passing browser logs to agent)
+
+   ```bash
+   vp i -g dev3000
+   ```
+
+4. Push the default schema to the local database:
+
+   ```bash
+   vp run db#push
+   ```
+
+5. Start the web app from the repo root:
+
+   ```bash
+   vp run dev:www
+   ```
+
+6. Open `https://www.localhost:1355`.
+
+On the first run, Portless will need to approve various self-signed certs so that we can use SSL locally.
 
 ## Development
 
-You'll need Docker to be running.
-
-Run `pnpm dev` to start up the frontend and server.
-
-Finally visit `https://localhost:6969` to see your dev
-server
-
-### First time set-up
-
-If this is your first time setting things up, you'll have to do a few extra things:
-
-1. Run `docker compose up -d` to launch the postgres DB.
-2. Run `pnpm db:push` to update the db with the default schema
-3. Run `pnpm dev`. Note you might have to accept some certs since we use the `mkcert` vite plugin to develop on `https` by default.
-
-### Adding new package
-
-To add a new package to the monorepo, run:
+The main development entrypoint is:
 
 ```bash
-pnpm new:package
+vp run dev:www
 ```
 
-This command will walk you through the process of scaffolding a new package directory under `packages/`with the necessary basic configuration files.
+That command:
+
+- starts the local PostgreSQL container
+- runs the cached workspace build with `vite-plus`
+- starts the `www` app in dev mode through Portless and Vite
 
 ## Building
 
-To build the applications for production, run:
+Workspace builds are exposed through `vite-plus` tasks at the repo root:
 
 ```bash
-pnpm build:production
+vp run build:preview
+vp run build:production
 ```
 
-To build and preview the applications, run:
+- `vp build:preview` uses `.env`
+- `vp build:production` uses `.env.production`
+
+To build or preview only the `www` app directly:
 
 ```bash
-pnpm build:preview
+vp run www#build:preview
+vp run www#build:production
 ```
-
-The main difference is that `pnpm build:production` uses the `.env.production` file while `build:preview` uses the `.env` file.
 
 ## Credits
 
-This repository was originally inspired by via [create t3 turbo](https://github.com/t3-oss/create-t3-turbo) and wouldn't be possible without all the other open source tooling.
+This repository was originally inspired by [create t3 turbo](https://github.com/t3-oss/create-t3-turbo).

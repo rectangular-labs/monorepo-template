@@ -34,17 +34,17 @@ function createPublicPackageJson(packageName: string, description: string) {
     keywords: [""],
     repository: {
       type: "git",
-      url: "git+https://github.com/rectangular-labs/monorepo-template.git",
+      url: "git+https://github.com/rectangular-labs/vite-plus-monorepo-template.git",
       directory: `packages/${packageName}`,
     },
-    homepage: `https://github.com/rectangular-labs/monorepo-template/tree/main/packages/${packageName}#readme`,
+    homepage: `https://github.com/rectangular-labs/vite-plus-monorepo-template/tree/main/packages/${packageName}#readme`,
     files: ["dist", "!dist/**/*.map", "README.md", "package.json"],
     publishConfig: { access: "public" },
     exports: {},
     scripts: {
       build: "vp pack",
       dev: "vp pack --watch",
-      clean: "git clean -xdf .turbo node_modules dist .cache",
+      clean: "git clean -xdf node_modules dist .cache",
     },
     devDependencies: {
       "@rectangular-labs/typescript": "workspace:*",
@@ -67,7 +67,7 @@ function createPrivatePackageJson(packageName: string, description: string) {
     scripts: {
       build: "vp pack",
       dev: "vp pack --watch",
-      clean: "git clean -xdf .turbo node_modules dist .cache",
+      clean: "git clean -xdf node_modules dist .cache",
     },
     devDependencies: {
       "@rectangular-labs/typescript": "workspace:*",

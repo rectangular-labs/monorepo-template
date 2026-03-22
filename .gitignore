@@ -95,3 +95,6 @@ temp-store
 # sst
 .sst
 sst-env.d.ts
+
+# pnpm
+.pnpm-store

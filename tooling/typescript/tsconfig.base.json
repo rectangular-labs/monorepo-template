@@ -36,5 +36,16 @@
     "moduleResolution": "Bundler",
     "noEmit": true
   },
-  "exclude": ["node_modules", "build", "dist", ".next", ".expo", "routeTree.gen.ts"]
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist",
+    "routeTree.gen.ts",
+    ".sst",
+    ".expo",
+    ".next",
+    ".cache",
+    ".turbo",
+    ".tanstack"
+  ]
 }

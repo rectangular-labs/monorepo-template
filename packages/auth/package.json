@@ -21,7 +21,7 @@
     "build": "vp pack",
     "dev": "vp pack --watch",
     "generate": "pnpm with-env pnpx @better-auth/cli generate --config ./src/generate.ts --output ../db/src/schema/auth-schema.ts",
-    "clean": "git clean -xdf .turbo node_modules dist .cache",
+    "clean": "git clean -xdf node_modules dist .cache",
     "with-env": "dotenvx run -f ../../.env.local  -f ../../.env -- "
   },
   "dependencies": {
