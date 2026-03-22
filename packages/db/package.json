@@ -29,7 +29,7 @@
     "studio": "pnpm with-env drizzle-kit studio",
     "build": "vp pack",
     "dev": "vp pack --watch",
-    "clean": "git clean -xdf .turbo node_modules dist .cache",
+    "clean": "git clean -xdf node_modules dist .cache",
     "with-env": "dotenvx run -f ../../.env.local  -f ../../.env -- "
   },
   "dependencies": {

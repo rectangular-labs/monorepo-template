@@ -44,7 +44,7 @@ function createPublicPackageJson(packageName: string, description: string) {
     scripts: {
       build: "vp pack",
       dev: "vp pack --watch",
-      clean: "git clean -xdf .turbo node_modules dist .cache",
+      clean: "git clean -xdf node_modules dist .cache",
     },
     devDependencies: {
       "@rectangular-labs/typescript": "workspace:*",
@@ -67,7 +67,7 @@ function createPrivatePackageJson(packageName: string, description: string) {
     scripts: {
       build: "vp pack",
       dev: "vp pack --watch",
-      clean: "git clean -xdf .turbo node_modules dist .cache",
+      clean: "git clean -xdf node_modules dist .cache",
     },
     devDependencies: {
       "@rectangular-labs/typescript": "workspace:*",

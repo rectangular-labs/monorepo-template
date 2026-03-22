@@ -12,7 +12,7 @@
     "./utils/*": "./src/utils/*.ts"
   },
   "scripts": {
-    "clean": "git clean -xdf .turbo node_modules",
+    "clean": "git clean -xdf node_modules",
     "ui-add": "pnpx shadcn@canary add && pnpx @biomejs/biome lint --write --unsafe"
   },
   "dependencies": {
