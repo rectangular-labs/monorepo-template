@@ -5,17 +5,21 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/client.d.ts",
-      "default": "./src/client.ts"
-    },
-    "./env": {
-      "types": "./dist/env.d.ts",
-      "default": "./src/env.ts"
-    },
-    "./schema/*": {
-      "types": "./dist/schema/*.d.ts",
-      "default": "./src/schema/*.ts"
+    "./client": "./src/client.ts",
+    "./env": "./src/env.ts",
+    "./schema/_helper": "./src/schema/_helper.ts",
+    "./schema/_table": "./src/schema/_table.ts",
+    "./schema/auth-schema": "./src/schema/auth-schema.ts",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "exports": {
+      "./client": "./dist/client.mjs",
+      "./env": "./dist/env.mjs",
+      "./schema/_helper": "./dist/schema/_helper.mjs",
+      "./schema/_table": "./dist/schema/_table.mjs",
+      "./schema/auth-schema": "./dist/schema/auth-schema.mjs",
+      "./package.json": "./package.json"
     }
   },
   "scripts": {
@@ -23,8 +27,8 @@
     "migrate-push": "pnpm with-env drizzle-kit migrate",
     "push": "pnpm with-env drizzle-kit push",
     "studio": "pnpm with-env drizzle-kit studio",
-    "build": "tsc",
-    "dev": "tsc --watch",
+    "build": "vp pack",
+    "dev": "vp pack --watch",
     "clean": "git clean -xdf .turbo node_modules dist .cache",
     "with-env": "dotenvx run -f ../../.env.local  -f ../../.env -- "
   },
@@ -39,10 +43,9 @@
     "@rectangular-labs/typescript": "workspace:*",
     "@types/node": "catalog:",
     "@types/pg": "^8.15.5",
+    "@typescript/native-preview": "catalog:",
     "drizzle-kit": "^0.31.4",
-    "typescript": "catalog:"
-  },
-  "overrides": {
-    "drizzle-orm": "^0.44.5"
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
   }
 }

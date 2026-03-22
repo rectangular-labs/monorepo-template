@@ -4,51 +4,50 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./client": {
-      "default": "./src/client.ts"
-    },
-    "./server": {
-      "default": "./src/server.ts"
-    },
-    "./context": {
-      "default": "./src/context.ts"
-    },
-    "./env": {
-      "default": "./src/env.ts"
-    },
-    "./types": {
-      "default": "./src/types.ts"
-    },
-    "./schemas/*": {
-      "default": "./src/schemas/*.ts"
+    "./client": "./src/client.ts",
+    "./context": "./src/context.ts",
+    "./env": "./src/env.ts",
+    "./schema/passkey": "./src/schema/passkey.ts",
+    "./server": "./src/server.ts",
+    "./types": "./src/types.ts",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "exports": {
+      "./client": "./dist/client.mjs",
+      "./context": "./dist/context.mjs",
+      "./env": "./dist/env.mjs",
+      "./schema/passkey": "./dist/schema/passkey.mjs",
+      "./server": "./dist/server.mjs",
+      "./types": "./dist/types.mjs",
+      "./package.json": "./package.json"
     }
   },
   "scripts": {
-    "build": "tsc",
-    "dev": "tsx watch ./src/_open-api/open-api-resolver.ts",
+    "build": "vp pack",
+    "dev": "vp pack --watch",
+    "dev:openapi": "tsx watch ./src/_open-api/open-api-resolver.ts",
     "clean": "git clean -xdf .turbo node_modules dist .cache"
   },
   "dependencies": {
-    "@orpc/arktype": "^1.8.5",
-    "@orpc/client": "^1.8.5",
-    "@orpc/contract": "^1.8.5",
-    "@orpc/json-schema": "^1.8.5",
-    "@orpc/openapi": "^1.8.5",
-    "@orpc/openapi-client": "^1.8.5",
-    "@orpc/server": "^1.8.5",
-    "@orpc/tanstack-query": "^1.8.5",
+    "@orpc/arktype": "^1.13.9",
+    "@orpc/client": "^1.13.9",
+    "@orpc/contract": "^1.13.9",
+    "@orpc/json-schema": "^1.13.9",
+    "@orpc/openapi": "^1.13.9",
+    "@orpc/openapi-client": "^1.13.9",
+    "@orpc/server": "^1.13.9",
+    "@orpc/tanstack-query": "^1.13.9",
     "@rectangular-labs/auth": "workspace:*",
     "@rectangular-labs/db": "workspace:*",
-    "@simplewebauthn/server": "^13.1.2",
     "@t3-oss/env-core": "^0.13.8",
     "arktype": "catalog:"
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
     "@types/node": "catalog:",
-    "typescript": "catalog:"
-  },
-  "overrides": {
-    "@tanstack/react-query": "5.85.5"
+    "@typescript/native-preview": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
   }
 }

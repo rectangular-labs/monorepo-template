@@ -1,4 +1,5 @@
-import { drizzle } from "drizzle-orm/node-postgres";
+import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
+import type { Pool } from "pg";
 import * as authSchema from "./schema/auth-schema";
 
 export * from "drizzle-orm";
@@ -7,7 +8,9 @@ const schema = {
   ...authSchema,
 };
 
-export const createDb = (connectionString: string) => {
+type DbInstance = NodePgDatabase<typeof schema> & { $client: Pool };
+
+export const createDb = (connectionString: string): DbInstance => {
   return drizzle(connectionString, {
     schema,
     casing: "snake_case",

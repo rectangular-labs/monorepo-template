@@ -11,7 +11,7 @@
     "dev:www": "docker compose up -d && vp run www#dev",
     "env:set": "pnpm dotenvx set",
     "env:get": "pnpm dotenvx get",
-    "new:package": "vp create @rectangular-labs/create-package",
+    "new:package": "vp create @rectangular-labs/create-package && find apps packages tooling -type d -name .vscode -prune -exec rm -rf '{}' +",
     "changeset": "changeset",
     "changeset:release": "vp run build && changeset publish",
     "postinstall": "pnpx sherif@latest",

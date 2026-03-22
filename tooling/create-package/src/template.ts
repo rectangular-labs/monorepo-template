@@ -1,18 +1,17 @@
 import { createTemplate } from "bingo";
+import type { UserConfig } from "vite-plus";
 import z from "zod";
 
 import pkgJson from "../package.json" with { type: "json" };
 
-const scope = "@rectangular-labs";
+const ORGANIZATION = "@rectangular-labs";
+type VitePackConfig = NonNullable<UserConfig["pack"]>;
 
 function toJson(value: unknown) {
   return `${JSON.stringify(value, null, 2)}\n`;
 }
 
-function sanitizeName(name: string) {
-  return name.replace(new RegExp(`^${scope}/`), "").trim();
-}
-
+// this converts camelCase to kebab-case
 function toDashCase(value: string) {
   return value
     .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
@@ -21,64 +20,104 @@ function toDashCase(value: string) {
     .toLowerCase();
 }
 
-function createPublicPackageJson(packageName: string, directoryName: string, description: string) {
+function sanitizeName(name: string) {
+  return toDashCase(name.replace(new RegExp(`^${ORGANIZATION}/`), "").trim());
+}
+
+function createPublicPackageJson(packageName: string, description: string) {
   return {
-    name: `${scope}/${packageName}`,
+    name: `${ORGANIZATION}/${packageName}`,
     version: "0.0.1",
     type: "module",
-    publishConfig: { access: "public" },
     description,
     keywords: ["rectangular-labs"],
     repository: {
       type: "git",
-      url: "git+https://github.com/ElasticBottle/rectangular-labs.git",
-      directory: `packages/${directoryName}`,
+      url: "git+https://github.com/rectangular-labs/monorepo-template.git",
+      directory: `packages/${packageName}`,
     },
     license: "MIT",
-    homepage: `https://github.com/ElasticBottle/rectangular-labs/tree/main/packages/${directoryName}#readme`,
+    homepage: `https://github.com/rectangular-labs/monorepo-template/tree/main/packages/${packageName}#readme`,
     files: ["dist", "!dist/**/*.map", "README.md"],
-    exports: {
-      ".": {
-        types: "./dist/index.d.ts",
-        import: "./dist/index.js",
-      },
-    },
+    publishConfig: { access: "public" },
+    exports: {},
     scripts: {
-      build: "tsup",
-      dev: "tsup --watch",
+      build: "vp pack",
+      dev: "vp pack --watch",
       clean: "git clean -xdf .turbo node_modules dist .cache",
     },
     devDependencies: {
       "@rectangular-labs/typescript": "workspace:*",
-      tsup: "^8.4.0",
+      "@typescript/native-preview": "catalog:",
+      publint: "catalog:",
       typescript: "catalog:",
+      "vite-plus": "catalog:",
     },
   };
 }
 
 function createPrivatePackageJson(packageName: string, description: string) {
   return {
-    name: `${scope}/${packageName}`,
+    name: `${ORGANIZATION}/${packageName}`,
     private: true,
     version: "0.0.1",
     type: "module",
     description,
-    exports: {
-      ".": {
-        types: "./dist/index.d.ts",
-        default: "./src/index.ts",
-      },
-    },
+    exports: {},
     scripts: {
-      build: "tsc",
-      dev: "tsc --watch",
+      build: "vp pack",
+      dev: "vp pack --watch",
       clean: "git clean -xdf .turbo node_modules dist .cache",
     },
     devDependencies: {
       "@rectangular-labs/typescript": "workspace:*",
-      typescript: "^5.9.2",
+      "@typescript/native-preview": "catalog:",
+      typescript: "catalog:",
+      "vite-plus": "catalog:",
     },
   };
+}
+
+function createTsConfig() {
+  return {
+    extends: "@rectangular-labs/typescript/tsconfig.base.json",
+    compilerOptions: {},
+    include: ["src"],
+    exclude: ["node_modules"],
+  };
+}
+
+function createViteConfig(type: "public" | "private") {
+  const packConfig: VitePackConfig = {
+    dts: {
+      tsgo: true,
+    },
+    exports: {
+      enabled: true,
+      devExports: true,
+    },
+    entry: ["./src/index.ts"],
+    format: ["esm"],
+    sourcemap: "hidden",
+    clean: true,
+    failOnWarn: "ci-only",
+    ...(type === "public" ? { publint: true } : {}),
+  };
+  const serializedPackConfig = JSON.stringify(packConfig, null, 2)
+    .slice(2, -2)
+    .split("\n")
+    .map((line) => `    ${line}`)
+    .join("\n");
+
+  return `import { defineConfig } from "vite-plus";
+
+export default defineConfig(({ command }) => ({
+  pack: {
+${serializedPackConfig},
+    minify: command === "build",
+  },
+}));
+`;
 }
 
 export default createTemplate({
@@ -92,9 +131,9 @@ export default createTemplate({
       .string()
       .trim()
       .min(1, "Package name is required")
-      .describe("package name (you can skip the @rectangular-labs/ prefix)"),
-    description: z.string().trim().optional().describe("optional package description"),
-    type: z.union([z.literal("public"), z.literal("private")]).describe("package type"),
+      .describe("Package name (you can skip the @rectangular-labs/ prefix)"),
+    description: z.string().trim().optional().describe("Optional package description"),
+    type: z.union([z.literal("public"), z.literal("private")]).describe("Package type"),
   },
   prepare: (args) => {
     return {
@@ -104,47 +143,20 @@ export default createTemplate({
   },
   produce({ options }) {
     const packageName = sanitizeName(options.name);
-    const directoryName = toDashCase(packageName);
     const description = options.description ?? "";
     const packageJson =
       options.type === "public"
-        ? createPublicPackageJson(packageName, directoryName, description)
+        ? createPublicPackageJson(packageName, description)
         : createPrivatePackageJson(packageName, description);
 
     return {
       files: {
         "package.json": toJson(packageJson),
-        "tsconfig.json": toJson({
-          extends: "@rectangular-labs/typescript/tsconfig.internal-package.json",
-          compilerOptions: {
-            rootDir: "src",
-          },
-          include: ["src"],
-          exclude: ["node_modules"],
-        }),
+        "tsconfig.json": toJson(createTsConfig()),
+        "vite.config.ts": createViteConfig(options.type),
         src: {
           "index.ts": `export const name = "${packageName}";\n`,
         },
-        ...(options.type === "public"
-          ? {
-              "tsup.config.ts": `import { defineConfig } from "tsup";
-
-export default defineConfig((options) => {
-  const isWatch = options.watch;
-  return {
-    ...options,
-    entry: ["src/index.ts"],
-    format: ["esm" as const],
-    splitting: true,
-    sourcemap: !isWatch,
-    minify: !isWatch,
-    clean: !isWatch,
-    onSuccess: "tsc",
-  };
-});
-`,
-            }
-          : {}),
       },
       scripts: [
         {

@@ -52,14 +52,25 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
       },
       {
         type: "add",
-        path: "{{ turbo.paths.root }}/packages/{{ dashCase name }}/tsup.config.ts",
+        path: "{{ turbo.paths.root }}/packages/{{ dashCase name }}/vite.config.ts",
         skip: (answer: object) => {
           if ("type" in answer && answer.type === "private") {
-            return "Skipping tsup.config.ts for private package";
+            return "Skipping public vite.config.ts for private package";
           }
           return;
         },
-        templateFile: "templates/tsup.config.ts.hbs",
+        templateFile: "templates/public-vite.config.ts.hbs",
+      },
+      {
+        type: "add",
+        path: "{{ turbo.paths.root }}/packages/{{ dashCase name }}/vite.config.ts",
+        skip: (answer: object) => {
+          if ("type" in answer && answer.type === "public") {
+            return "Skipping private vite.config.ts for public package";
+          }
+          return;
+        },
+        templateFile: "templates/private-vite.config.ts.hbs",
       },
       {
         type: "add",
@@ -108,6 +119,9 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
           const pkg = JSON.parse(content) as PackageJson;
           if (pkg.devDependencies) {
             for (const devDep of Object.keys(pkg.devDependencies)) {
+              if (pkg.devDependencies[devDep] === "catalog:") {
+                continue;
+              }
               const version = await grabPackageVersion(devDep);
               if (version.startsWith("workspace:")) {
                 pkg.devDependencies[devDep] = version;
@@ -118,6 +132,9 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
           }
           if (pkg.dependencies) {
             for (const dep of Object.keys(pkg.dependencies)) {
+              if (pkg.dependencies[dep] === "catalog:") {
+                continue;
+              }
               const version = await grabPackageVersion(dep);
               if (version.startsWith("workspace:")) {
                 pkg.dependencies[dep] = version;
