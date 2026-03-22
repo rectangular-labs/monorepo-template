@@ -52,10 +52,10 @@ By default, `dotenvx` encrypts values so they can be shared safely across the te
    vp install
    ```
 
-3. Install portless (we use for stable dev URLs)
+3. Install dev3000 (we use for passing browser logs to agent)
 
    ```bash
-   npm add -g portless
+   vp i -g dev3000
    ```
 
 4. Push the default schema to the local database:

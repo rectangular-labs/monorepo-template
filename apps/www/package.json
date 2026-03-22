@@ -4,7 +4,8 @@
   "type": "module",
   "sideEffects": false,
   "scripts": {
-    "dev": "portless proxy start --https && pnpm with-env-local portless www vite",
+    "dev": "pnpm with-env-local vite",
+    "dev:stable-url": "portless proxy start --https && pnpm with-env-local portless www vite",
     "prebuild:preview": "pnpm with-env-preview tsx ./scripts/validate-env.ts",
     "build:preview": "pnpm with-env-preview vp build",
     "prebuild:production": "pnpm with-env-prod tsx ./scripts/validate-env.ts",
