@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    "./client": "./src/client.ts",
+    ".": "./src/client.ts",
     "./env": "./src/env.ts",
     "./schema/_helper": "./src/schema/_helper.ts",
     "./schema/_table": "./src/schema/_table.ts",
@@ -14,7 +14,7 @@
   },
   "publishConfig": {
     "exports": {
-      "./client": "./dist/client.mjs",
+      ".": "./dist/index.mjs",
       "./env": "./dist/env.mjs",
       "./schema/_helper": "./dist/schema/_helper.mjs",
       "./schema/_table": "./dist/schema/_table.mjs",

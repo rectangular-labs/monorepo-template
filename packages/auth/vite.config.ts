@@ -9,7 +9,7 @@ export default defineConfig(({ command }) => ({
       enabled: true,
       devExports: true,
     },
-    entry: ["./src/server.ts", "./src/client.ts", "./src/env.ts"],
+    entry: [{ index: "./src/server.ts" }, "./src/client.ts", "./src/env.ts"],
     format: ["esm" as const],
     sourcemap: "hidden",
     minify: command === "build",

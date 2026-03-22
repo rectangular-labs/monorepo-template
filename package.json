@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "clean": "vp run -r clean && git clean -xdf node_modules .turbo .sst",
-    "dev:www": "docker compose up -d && vp run www#dev",
+    "dev:www": "docker compose up -d && vp run --cache build -r && vp run www#dev",
     "env:set": "pnpm dotenvx set",
     "env:get": "pnpm dotenvx get",
     "new:package": "vp create @rectangular-labs/create-package && find apps packages tooling -type d -name .vscode -prune -exec rm -rf '{}' +",

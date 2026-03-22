@@ -4,16 +4,16 @@
   "private": true,
   "type": "module",
   "exports": {
+    ".": "./src/server.ts",
     "./client": "./src/client.ts",
     "./env": "./src/env.ts",
-    "./server": "./src/server.ts",
     "./package.json": "./package.json"
   },
   "publishConfig": {
     "exports": {
+      ".": "./dist/index.mjs",
       "./client": "./dist/client.mjs",
       "./env": "./dist/env.mjs",
-      "./server": "./dist/server.mjs",
       "./package.json": "./package.json"
     }
   },
