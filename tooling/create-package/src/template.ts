@@ -34,10 +34,10 @@ function createPublicPackageJson(packageName: string, description: string) {
     keywords: [""],
     repository: {
       type: "git",
-      url: "git+https://github.com/rectangular-labs/monorepo-template.git",
+      url: "git+https://github.com/rectangular-labs/vite-plus-monorepo-template.git",
       directory: `packages/${packageName}`,
     },
-    homepage: `https://github.com/rectangular-labs/monorepo-template/tree/main/packages/${packageName}#readme`,
+    homepage: `https://github.com/rectangular-labs/vite-plus-monorepo-template/tree/main/packages/${packageName}#readme`,
     files: ["dist", "!dist/**/*.map", "README.md", "package.json"],
     publishConfig: { access: "public" },
     exports: {},

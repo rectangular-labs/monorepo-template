@@ -113,7 +113,7 @@ function App() {
 
           <Button asChild className="gap-2" variant="secondary">
             <a
-              href="https://github.com/ElasticBottle/monorepo-template"
+              href="https://github.com/rectangular-labs/vite-plus-monorepo-template"
               rel="noopener noreferrer"
               target="_blank"
             >
