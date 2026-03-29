@@ -185,7 +185,7 @@ export function AuthCard({ initialView, socialLayout: socialLayoutProp = "auto" 
             {hasForm && (
               <div className={"flex items-center gap-2"}>
                 <Separator className={"!w-auto grow"} />
-                <span className="flex-shrink-0 text-muted-foreground text-sm">
+                <span className="flex-shrink-0 text-sm text-muted-foreground">
                   Or continue with
                 </span>
                 <Separator className={"!w-auto grow"} />
@@ -226,7 +226,7 @@ export function AuthCard({ initialView, socialLayout: socialLayoutProp = "auto" 
         )}
       </CardContent>
 
-      <CardFooter className="justify-center gap-1.5 text-muted-foreground text-sm">
+      <CardFooter className="justify-center gap-1.5 text-sm text-muted-foreground">
         {signInViews.includes(view) && (
           <>
             <span>Don't have an account?</span>

@@ -50,7 +50,7 @@ const ImageFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
         {onRemove ? (
           <button
             aria-label="Remove attachment"
-            className="-right-2 -top-2 absolute flex h-4 w-4 items-center justify-center rounded-full border bg-background"
+            className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full border bg-background"
             onClick={onRemove}
             type="button"
           >
@@ -87,7 +87,7 @@ const TextFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
       >
         <div className="flex w-full items-center space-x-2">
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-sm border bg-muted p-0.5">
-            <div className="h-full w-full overflow-hidden text-[6px] text-muted-foreground leading-none">
+            <div className="h-full w-full overflow-hidden text-[6px] leading-none text-muted-foreground">
               {preview || "Loading..."}
             </div>
           </div>
@@ -97,7 +97,7 @@ const TextFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
         {onRemove ? (
           <button
             aria-label="Remove attachment"
-            className="-right-2 -top-2 absolute flex h-4 w-4 items-center justify-center rounded-full border bg-background"
+            className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full border bg-background"
             onClick={onRemove}
             type="button"
           >
@@ -131,7 +131,7 @@ const GenericFilePreview = React.forwardRef<HTMLDivElement, FilePreviewProps>(
         {onRemove ? (
           <button
             aria-label="Remove attachment"
-            className="-right-2 -top-2 absolute flex h-4 w-4 items-center justify-center rounded-full border bg-background"
+            className="absolute -top-2 -right-2 flex h-4 w-4 items-center justify-center rounded-full border bg-background"
             onClick={onRemove}
             type="button"
           >
