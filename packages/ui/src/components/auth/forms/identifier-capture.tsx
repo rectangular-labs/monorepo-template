@@ -1,14 +1,12 @@
 "use client";
 
-import { arktypeResolver } from "@hookform/resolvers/arktype";
+import { SpinnerIcon } from "@phosphor-icons/react";
 import { type } from "arktype";
-import { Loader2 } from "lucide-react";
 import type * as React from "react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Button } from "../../ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
-import { Input } from "../../ui/input";
+import { Button } from "../../core/button";
+import { Field, FieldContent, FieldError, FieldLabel } from "../../core/field";
+import { clearFormError, setFormError, toFieldErrors, useAppForm } from "../../ui/tanstack-form";
 import { PhoneInput } from "../../ui/phone-input";
 import type { AuthViewPath } from "../auth-provider";
 import { useAuth } from "../auth-provider";
@@ -22,13 +20,13 @@ type IdentifierCaptureMode =
   | "forget-password-phone";
 
 type IdentifierCaptureFormProps = {
-  mode: IdentifierCaptureMode;
-  submitText?: React.ReactNode | undefined;
-  setView: (view: AuthViewPath) => void;
-  setVerificationInfo: (info: VerificationInfo) => void;
-  shouldDisable?: boolean;
-  setShouldDisable: (disabled: boolean) => void;
   children?: React.ReactNode;
+  mode: IdentifierCaptureMode;
+  setShouldDisable: (disabled: boolean) => void;
+  setVerificationInfo: (info: VerificationInfo) => void;
+  setView: (view: AuthViewPath) => void;
+  shouldDisable?: boolean;
+  submitText?: React.ReactNode | undefined;
 };
 
 export function IdentifierCaptureForm({
@@ -54,6 +52,7 @@ export function IdentifierCaptureForm({
       </EmailForm>
     );
   }
+
   return (
     <PhoneForm
       mode={mode}
@@ -86,131 +85,136 @@ function EmailForm({
     newUserCallbackURL,
     resetPasswordCallbackURL,
   } = useAuth();
+  const auth = authClient as any;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const schema = type({ email: "string.email >= 1" });
-  const form = useForm({
-    resolver: arktypeResolver(schema),
+
+  const form = useAppForm({
     defaultValues: { email: "" },
-  });
-
-  async function handleSubmit({ email }: typeof schema.infer) {
-    if (mode === "phone-code" || mode === "forget-password-phone") {
-      return;
-    }
-    if (mode === "forget-password-email" && !credentials) {
-      console.warn("Attempted to use forgot password when no credentials were passed.");
-    }
-    const isCode = credentials?.verificationMode === "code";
-
-    setShouldDisable(true);
-    setIsSubmitting(true);
-    const response = await (() => {
-      switch (mode) {
-        case "magic-link":
-          return authClient.signIn.magicLink({
-            email,
-            callbackURL: successCallbackURL,
-            newUserCallbackURL,
-            errorCallbackURL,
-          });
-        case "email-code":
-          return authClient.emailOtp.sendVerificationOtp({
-            email,
-            type: "sign-in",
-          });
-        case "forget-password-email": {
-          return isCode
-            ? authClient.emailOtp.sendVerificationOtp({
-                email,
-                type: "forget-password",
-              })
-            : authClient.requestPasswordReset({
-                email,
-                redirectTo: resetPasswordCallbackURL,
-              });
-        }
-        default: {
-          const _never: never = mode;
-          throw new Error(`Invalid mode for email`);
-        }
-      }
-    })();
-    setIsSubmitting(false);
-    setShouldDisable(false);
-
-    if (response?.error) {
-      if (response.error.status === 404) {
-        const msg = () => {
-          switch (mode) {
-            case "magic-link":
-              return "Route not found. Did you enable the `magicLink` plugin?";
-            case "forget-password-email":
-            case "email-code":
-              return "Route not found. Did you enable the `emailOtp` plugin?";
-            default:
-              return "Route not found.";
-          }
-        };
-        form.setError("root", { message: msg() });
+    listeners: {
+      onChange: ({ formApi }) => clearFormError(formApi),
+    },
+    onSubmit: async ({ formApi, value }) => {
+      if (mode === "phone-code" || mode === "forget-password-phone") {
         return;
       }
-      form.setError("root", {
-        message: response.error.message ?? "Something went wrong. Please try again later.",
-      });
-      return;
-    }
 
-    // success routing
-    setView(viewPaths.IDENTITY_VERIFICATION);
-    const verificationMode = (() => {
-      switch (mode) {
-        case "magic-link":
-          return "magic-link-token";
-        case "email-code":
-          return "email-code";
-        case "forget-password-email":
-          return isCode ? "password-reset-email-code" : "password-reset-token";
+      if (mode === "forget-password-email" && !credentials) {
+        console.warn("Attempted to use forgot password when no credentials were passed.");
       }
-    })();
-    setVerificationInfo({
-      mode: verificationMode,
-      identifier: email,
-    });
-  }
+
+      const isCode = credentials?.verificationMode === "code";
+
+      setShouldDisable(true);
+      setIsSubmitting(true);
+
+      const response = await (() => {
+        switch (mode) {
+          case "magic-link":
+            return auth.signIn.magicLink({
+              callbackURL: successCallbackURL,
+              email: value.email,
+              errorCallbackURL,
+              newUserCallbackURL,
+            });
+          case "email-code":
+            return auth.emailOtp.sendVerificationOtp({
+              email: value.email,
+              type: "sign-in",
+            });
+          case "forget-password-email":
+            return isCode
+              ? auth.emailOtp.sendVerificationOtp({
+                  email: value.email,
+                  type: "forget-password",
+                })
+              : authClient.requestPasswordReset({
+                  email: value.email,
+                  redirectTo: resetPasswordCallbackURL,
+                });
+          default: {
+            const _never: never = mode;
+            throw new Error("Invalid mode for email");
+          }
+        }
+      })();
+
+      setIsSubmitting(false);
+      setShouldDisable(false);
+
+      if (response?.error) {
+        if (response.error.status === 404) {
+          const message =
+            mode === "magic-link"
+              ? "Route not found. Did you enable the `magicLink` plugin?"
+              : "Route not found. Did you enable the `emailOtp` plugin?";
+          setFormError(formApi, message);
+          return;
+        }
+
+        setFormError(
+          formApi,
+          response.error.message ?? "Something went wrong. Please try again later.",
+        );
+        return;
+      }
+
+      setView(viewPaths.IDENTITY_VERIFICATION);
+      const verificationMode = (() => {
+        switch (mode) {
+          case "magic-link":
+            return "magic-link-token";
+          case "email-code":
+            return "email-code";
+          case "forget-password-email":
+            return isCode ? "password-reset-email-code" : "password-reset-token";
+        }
+      })();
+
+      setVerificationInfo({
+        identifier: value.email,
+        mode: verificationMode,
+      });
+    },
+    validators: {
+      onChange: schema,
+      onSubmit: schema,
+    },
+  });
 
   return (
-    <Form {...form}>
-      <form className={"grid w-full gap-6"} onSubmit={() => void form.handleSubmit(handleSubmit)()}>
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  autoComplete="email webauthn"
-                  placeholder="you@example.com"
-                  type="email"
-                  {...field}
-                />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
+    <form.AppForm>
+      <form
+        className="grid w-full gap-6"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+      >
+        <form.AppField name="email">
+          {(field) => (
+            <field.TextField
+              autoComplete="email webauthn"
+              disabled={isSubmitting || shouldDisable}
+              field={field}
+              label="Email"
+              placeholder="you@example.com"
+              type="email"
+            />
           )}
-        />
-        {form.formState.errors.root && (
-          <FormMessage>{form.formState.errors.root.message}</FormMessage>
-        )}
+        </form.AppField>
+
+        <form.Subscribe selector={(state) => state.errorMap.onSubmit}>
+          {(error) => <FieldError errors={toFieldErrors(error)} />}
+        </form.Subscribe>
+
         {children ?? (
-          <Button className={"w-full"} disabled={isSubmitting || shouldDisable} type="submit">
-            {isSubmitting && <Loader2 className="animate-spin" />}
+          <form.SubmitButton className="w-full" disabled={shouldDisable}>
             {submitText}
-          </Button>
+          </form.SubmitButton>
         )}
       </form>
-    </Form>
+    </form.AppForm>
   );
 }
 
@@ -224,104 +228,129 @@ function PhoneForm({
   setShouldDisable,
 }: IdentifierCaptureFormProps) {
   const { authClient, viewPaths, credentials } = useAuth();
+  const auth = authClient as any;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const schema = type({ phone: "string >= 6" });
-  const form = useForm({
-    resolver: arktypeResolver(schema),
+
+  const form = useAppForm({
     defaultValues: { phone: "" },
-  });
-
-  async function handleSubmit({ phone }: typeof schema.infer) {
-    if (mode === "magic-link" || mode === "email-code" || mode === "forget-password-email") {
-      return;
-    }
-    if (mode === "forget-password-phone" && !credentials) {
-      console.warn("Attempted to use forgot password when no credentials were passed.");
-    }
-    const isCode = credentials?.verificationMode === "code";
-    if (!isCode && mode === "forget-password-phone") {
-      console.warn(
-        "Attempting to use token verification for phone number. This is likely a mistake. Please set verificationMode to 'code' in the AuthProvider.",
-      );
-      return;
-    }
-
-    setShouldDisable(true);
-    setIsSubmitting(true);
-    const response = await (() => {
-      switch (mode) {
-        case "phone-code":
-          return authClient.phoneNumber.sendOtp({
-            phoneNumber: phone,
-          });
-        case "forget-password-phone": {
-          return authClient.phoneNumber.requestPasswordReset({
-            phoneNumber: phone,
-          });
-        }
-        default: {
-          const _never: never = mode;
-          throw new Error(`Invalid mode for phone`);
-        }
-      }
-    })();
-    setIsSubmitting(false);
-    setShouldDisable(false);
-    if (response?.error) {
-      if (response.error.status === 404) {
-        form.setError("root", {
-          message: "Route not found. Did you enable the `phoneNumber` plugin?",
-        });
+    listeners: {
+      onChange: ({ formApi }) => clearFormError(formApi),
+    },
+    onSubmit: async ({ formApi, value }) => {
+      if (mode === "magic-link" || mode === "email-code" || mode === "forget-password-email") {
         return;
       }
-      form.setError("root", {
-        message: response.error.message ?? "Something went wrong. Please try again later.",
-      });
-      return;
-    }
 
-    // success routing
-    setView(viewPaths.IDENTITY_VERIFICATION);
-    const verificationMode = (() => {
-      switch (mode) {
-        case "phone-code":
-          return "phone-code";
-        case "forget-password-phone":
-          return "password-reset-phone-code";
+      if (mode === "forget-password-phone" && !credentials) {
+        console.warn("Attempted to use forgot password when no credentials were passed.");
       }
-    })();
-    setVerificationInfo({
-      mode: verificationMode,
-      identifier: phone,
-    });
-  }
+
+      const isCode = credentials?.verificationMode === "code";
+      if (!isCode && mode === "forget-password-phone") {
+        console.warn(
+          "Attempting to use token verification for phone number. This is likely a mistake. Please set verificationMode to 'code' in the AuthProvider.",
+        );
+        return;
+      }
+
+      setShouldDisable(true);
+      setIsSubmitting(true);
+
+      const response = await (() => {
+        switch (mode) {
+          case "phone-code":
+            return auth.phoneNumber.sendOtp({
+              phoneNumber: value.phone,
+            });
+          case "forget-password-phone":
+            return auth.phoneNumber.requestPasswordReset({
+              phoneNumber: value.phone,
+            });
+          default: {
+            const _never: never = mode;
+            throw new Error("Invalid mode for phone");
+          }
+        }
+      })();
+
+      setIsSubmitting(false);
+      setShouldDisable(false);
+
+      if (response?.error) {
+        if (response.error.status === 404) {
+          setFormError(formApi, "Route not found. Did you enable the `phoneNumber` plugin?");
+          return;
+        }
+
+        setFormError(
+          formApi,
+          response.error.message ?? "Something went wrong. Please try again later.",
+        );
+        return;
+      }
+
+      setView(viewPaths.IDENTITY_VERIFICATION);
+      const verificationMode = mode === "phone-code" ? "phone-code" : "password-reset-phone-code";
+      setVerificationInfo({
+        identifier: value.phone,
+        mode: verificationMode,
+      });
+    },
+    validators: {
+      onChange: schema,
+      onSubmit: schema,
+    },
+  });
 
   return (
-    <Form {...form}>
-      <form className={"grid w-full gap-6"} onSubmit={void form.handleSubmit(handleSubmit)}>
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Phone number</FormLabel>
-              <FormControl>
-                <PhoneInput defaultCountry="US" placeholder="(555) 123-4567" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {form.formState.errors.root && (
-          <FormMessage>{form.formState.errors.root.message}</FormMessage>
-        )}
+    <form.AppForm>
+      <form
+        className="grid w-full gap-6"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+      >
+        <form.AppField name="phone">
+          {(field) => {
+            const errors = toFieldErrors(field.state.meta.errors);
+            return (
+              <Field
+                data-disabled={isSubmitting || shouldDisable ? true : undefined}
+                data-invalid={errors.length > 0 ? true : undefined}
+              >
+                <FieldLabel htmlFor={field.name}>Phone number</FieldLabel>
+                <FieldContent>
+                  <PhoneInput
+                    defaultCountry="US"
+                    disabled={Boolean(isSubmitting || shouldDisable)}
+                    onBlur={field.handleBlur}
+                    onChange={(value) => {
+                      field.handleChange((value ?? "") as never);
+                      field.setErrorMap({ onSubmit: undefined });
+                    }}
+                    placeholder="(555) 123-4567"
+                    value={(field.state.value as string | undefined) ?? ""}
+                  />
+                  <FieldError errors={errors} />
+                </FieldContent>
+              </Field>
+            );
+          }}
+        </form.AppField>
+
+        <form.Subscribe selector={(state) => state.errorMap.onSubmit}>
+          {(error) => <FieldError errors={toFieldErrors(error)} />}
+        </form.Subscribe>
+
         {children ?? (
-          <Button className={"w-full"} disabled={isSubmitting || shouldDisable} type="submit">
-            {isSubmitting && <Loader2 className="animate-spin" />}
+          <Button className="w-full" disabled={isSubmitting || shouldDisable} type="submit">
+            {isSubmitting ? <SpinnerIcon className="animate-spin" /> : null}
             {submitText}
           </Button>
         )}
       </form>
-    </Form>
+    </form.AppForm>
   );
 }

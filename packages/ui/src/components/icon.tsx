@@ -8,7 +8,6 @@ import {
   FileIcon,
   ListIcon,
   MoonIcon,
-  SpinnerIcon,
   SunIcon,
   TerminalIcon,
 } from "@phosphor-icons/react";
@@ -24,7 +23,6 @@ export const EyeOn = EyeIcon;
 export const File = FileIcon;
 export const Menu = ListIcon;
 export const Moon = MoonIcon;
-export const Spinner = SpinnerIcon;
 export const Sun = SunIcon;
 export const Terminal = TerminalIcon;
 export const X = CloseIcon;

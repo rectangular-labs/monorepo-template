@@ -1,14 +1,11 @@
 "use client";
 
-import { arktypeResolver } from "@hookform/resolvers/arktype";
 import { type } from "arktype";
-import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Button } from "../../ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
-import { InputOTP } from "../../ui/input-otp";
-import { toast } from "../../ui/sonner";
+import { Button } from "../../core/button";
+import { FieldError } from "../../core/field";
+import { toast } from "../../core/sonner";
+import { clearFormError, setFormError, toFieldErrors, useAppForm } from "../../ui/tanstack-form";
 import { type AuthViewPath, useAuth } from "../auth-provider";
 import { OTPInputGroup } from "../otp-input-group";
 import { CodeSchema } from "../schema/code";
@@ -24,8 +21,8 @@ export type VerificationMode =
   | "verification-email-token";
 
 export interface VerificationInfo {
-  mode: VerificationMode;
   identifier: string;
+  mode: VerificationMode;
   code?: string | undefined;
 }
 
@@ -51,166 +48,157 @@ export function VerificationForm({
     newUserCallbackURL,
     resetPasswordCallbackURL,
   } = useAuth();
+  const auth = authClient as any;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const needsCode = mode.endsWith("code");
-
-  const codeSchema = type({ code: needsCode ? CodeSchema : type("undefined") });
-  const form = useForm({
-    resolver: arktypeResolver(codeSchema),
-  });
-
   const isPhone = mode.includes("phone");
   const isEmail = !isPhone;
-
   const verificationType = needsCode ? "code" : "link";
+  const codeSchema = type({ code: needsCode ? CodeSchema : type("undefined") });
+
+  const form = useAppForm({
+    defaultValues: {
+      code: "",
+    },
+    listeners: {
+      onChange: ({ formApi }) => clearFormError(formApi),
+    },
+    onSubmit: async ({ formApi, value }) => {
+      if (
+        mode === "magic-link-token" ||
+        mode === "password-reset-token" ||
+        mode === "verification-email-token"
+      ) {
+        return;
+      }
+
+      if (!value.code) {
+        throw new Error("Code is required");
+      }
+
+      setIsSubmitting(true);
+
+      const response = await (() => {
+        switch (mode) {
+          case "email-code":
+            return auth.signIn.emailOtp({
+              email: identifier,
+              otp: value.code,
+            });
+          case "phone-code":
+            return auth.phoneNumber.verify({
+              code: value.code,
+              disableSession: false,
+              phoneNumber: identifier,
+            });
+          case "password-reset-phone-code":
+            return;
+          case "password-reset-email-code":
+            return auth.emailOtp.checkVerificationOtp({
+              email: identifier,
+              otp: value.code,
+              type: "forget-password",
+            });
+          case "verification-email-code":
+            return auth.emailOtp.verifyEmail({
+              email: identifier,
+              otp: value.code,
+            });
+          default: {
+            const _never: never = mode;
+            throw new Error("Invalid verification type");
+          }
+        }
+      })();
+
+      setIsSubmitting(false);
+
+      if (response?.error) {
+        if (response.error.status === 404) {
+          setFormError(formApi, "Route not found. Have you enabled the emailOTP plugin?");
+          return;
+        }
+
+        setFormError(
+          formApi,
+          response.error.message ??
+            "Something went wrong verifying your code. Please try again later.",
+        );
+        return;
+      }
+
+      if (mode === "email-code" || mode === "verification-email-code" || mode === "phone-code") {
+        await successHandler();
+        return;
+      }
+
+      if (mode === "password-reset-email-code" || mode === "password-reset-phone-code") {
+        setView(viewPaths.RESET_PASSWORD);
+        setVerificationInfo({
+          code: value.code,
+          identifier,
+          mode,
+        });
+      }
+    },
+    validators: {
+      onChange: codeSchema,
+      onSubmit: codeSchema,
+    },
+  });
 
   const openEmail = () => {
     window.open("mailto:", "_self");
   };
 
-  async function handleComplete(values: typeof codeSchema.infer) {
-    if (
-      mode === "magic-link-token" ||
-      mode === "password-reset-token" ||
-      mode === "verification-email-token"
-    ) {
-      // There isn't anything to be done with token based verification types.
-      // User will click the link in their email or SMS and be redirected to the app.
-      return;
-    }
-
-    if (!values.code) {
-      // This should never happen, since the form validation should prevent this. Mostly for typescript linting.
-      throw new Error("Code is required");
-    }
-
-    setIsSubmitting(true);
-    const response = await (() => {
-      switch (mode) {
-        case "email-code": {
-          return authClient.signIn.emailOtp({
-            otp: values.code,
-            email: identifier,
-          });
-        }
-        case "phone-code": {
-          return authClient.phoneNumber.verify({
-            code: values.code,
-            phoneNumber: identifier,
-            disableSession: false,
-          });
-        }
-        case "password-reset-phone-code": {
-          // no otp verification for password reset phone code for some reason.
-          return;
-        }
-        case "password-reset-email-code": {
-          return authClient.emailOtp.checkVerificationOtp({
-            otp: values.code,
-            email: identifier,
-            type: "forget-password",
-          });
-        }
-        case "verification-email-code": {
-          return authClient.emailOtp.verifyEmail({
-            otp: values.code,
-            email: identifier,
-          });
-        }
-        default: {
-          const _never: never = mode;
-          throw new Error("Invalid verification type");
-        }
-      }
-    })();
-    setIsSubmitting(false);
-
-    if (response?.error) {
-      if (response.error.status === 404) {
-        form.setError("root", {
-          message: "Route not found. Have you enabled the emailOTP plugin?",
-        });
-        return;
-      }
-      form.setError("root", {
-        message:
-          response.error.message ??
-          "Something went wrong verifying your code. Please try again later.",
-      });
-      return;
-    }
-    if (mode === "email-code" || mode === "verification-email-code" || mode === "phone-code") {
-      //email otp login, and email verification are completed here.
-      await successHandler();
-      return;
-    }
-    if (mode === "password-reset-email-code" || mode === "password-reset-phone-code") {
-      //password reset needs to allow users to enter a new password.
-      setView(viewPaths.RESET_PASSWORD);
-      setVerificationInfo({
-        mode,
-        identifier,
-        code: values.code,
-      });
-      return;
-    }
-  }
-
   async function resendCode() {
     setIsSubmitting(true);
     const response = await (() => {
       switch (mode) {
-        case "email-code": {
-          return authClient.emailOtp.sendVerificationOtp({
+        case "email-code":
+          return auth.emailOtp.sendVerificationOtp({
             email: identifier,
             type: "sign-in",
           });
-        }
-        case "phone-code": {
-          return authClient.phoneNumber.sendOtp({
+        case "phone-code":
+          return auth.phoneNumber.sendOtp({
             phoneNumber: identifier,
           });
-        }
-        case "password-reset-phone-code": {
-          return authClient.phoneNumber.requestPasswordReset({
+        case "password-reset-phone-code":
+          return auth.phoneNumber.requestPasswordReset({
             phoneNumber: identifier,
           });
-        }
-        case "password-reset-email-code": {
-          return authClient.emailOtp.sendVerificationOtp({
+        case "password-reset-email-code":
+          return auth.emailOtp.sendVerificationOtp({
             email: identifier,
             type: "forget-password",
           });
-        }
-        case "verification-email-code": {
-          return authClient.emailOtp.sendVerificationOtp({
+        case "verification-email-code":
+          return auth.emailOtp.sendVerificationOtp({
             email: identifier,
             type: "email-verification",
           });
-        }
-        case "magic-link-token": {
-          return authClient.signIn.magicLink({
-            email: identifier,
+        case "magic-link-token":
+          return auth.signIn.magicLink({
             callbackURL: successCallbackURL,
+            email: identifier,
             errorCallbackURL,
             newUserCallbackURL,
           });
-        }
-        case "password-reset-token": {
+        case "password-reset-token":
           return authClient.requestPasswordReset({
             email: identifier,
             redirectTo: resetPasswordCallbackURL,
           });
-        }
-        case "verification-email-token": {
+        case "verification-email-token":
           return authClient.sendVerificationEmail({
-            email: identifier,
             callbackURL: successCallbackURL,
+            email: identifier,
           });
-        }
       }
     })();
     setIsSubmitting(false);
+
     if (response?.error) {
       toast.error(
         response.error.message ??
@@ -221,44 +209,40 @@ export function VerificationForm({
 
   return (
     <div className="grid w-full">
-      {needsCode && (
-        <Form {...form}>
-          <form className={"grid w-full gap-6"} onSubmit={void form.handleSubmit(handleComplete)}>
-            <FormField
-              control={form.control}
-              name="code"
-              render={({ field: { value, ...field } }) => (
-                <FormItem>
-                  <FormLabel>One-time code</FormLabel>
-                  <FormControl>
-                    <InputOTP
-                      disabled={isSubmitting || isDisabled}
-                      maxLength={6}
-                      onComplete={form.handleSubmit(handleComplete)}
-                      {...field}
-                      {...(value ? { value } : {})}
-                    >
-                      <OTPInputGroup otpSeparators={1} />
-                    </InputOTP>
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
+      {needsCode ? (
+        <form.AppForm>
+          <form
+            className="grid w-full gap-6"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void form.handleSubmit();
+            }}
+          >
+            <form.AppField name="code">
+              {(field) => (
+                <field.OtpField
+                  disabled={isSubmitting || isDisabled}
+                  field={field}
+                  label="One-time code"
+                  onComplete={() => {
+                    void form.handleSubmit();
+                  }}
+                >
+                  <OTPInputGroup otpSeparators={1} />
+                </field.OtpField>
               )}
-            />
+            </form.AppField>
 
-            {form.formState.errors.root && (
-              <FormMessage>{form.formState.errors.root.message}</FormMessage>
-            )}
+            <form.Subscribe selector={(state) => state.errorMap.onSubmit}>
+              {(error) => <FieldError errors={toFieldErrors(error)} />}
+            </form.Subscribe>
 
-            <Button disabled={isSubmitting || isDisabled} type="submit">
-              {isSubmitting && <Loader2 className="animate-spin" />}
-              Verify code
-            </Button>
+            <form.SubmitButton disabled={isDisabled}>Verify code</form.SubmitButton>
           </form>
-        </Form>
-      )}
-      {isEmail && !needsCode && (
+        </form.AppForm>
+      ) : null}
+
+      {isEmail && !needsCode ? (
         <Button
           className="w-full"
           disabled={isSubmitting || isDisabled}
@@ -267,13 +251,16 @@ export function VerificationForm({
         >
           Open Email
         </Button>
-      )}
+      ) : null}
+
       <div className="flex items-center gap-2 text-sm">
         Didn't receive a {verificationType}?{" "}
         <Button
           className="px-0"
           disabled={isSubmitting || isDisabled}
-          onClick={void resendCode}
+          onClick={() => {
+            void resendCode();
+          }}
           type="button"
           variant="link"
         >
