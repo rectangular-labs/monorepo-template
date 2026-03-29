@@ -6,15 +6,30 @@ settings:
 
 catalogs:
   default:
+    '@t3-oss/env-core':
+      specifier: ^0.13.11
+      version: 0.13.11
     '@types/node':
       specifier: ^25.5.0
       version: 25.5.0
+    '@types/react':
+      specifier: ^19.2.14
+      version: 19.2.14
+    '@types/react-dom':
+      specifier: ^19.2.3
+      version: 19.2.3
     '@typescript/native-preview':
       specifier: 7.0.0-dev.20260321.1
       version: 7.0.0-dev.20260321.1
     arktype:
       specifier: ^2.1.20
       version: 2.1.20
+    react:
+      specifier: ^19.2.4
+      version: 19.2.4
+    react-dom:
+      specifier: ^19.2.4
+      version: 19.2.4
     typescript:
       specifier: ^5.9.3
       version: 5.9.2
@@ -64,8 +79,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/ui
       '@t3-oss/env-core':
-        specifier: ^0.13.10
-        version: 0.13.10(arktype@2.1.20)(typescript@5.9.2)(zod@4.3.6)
+        specifier: 'catalog:'
+        version: 0.13.11(arktype@2.1.20)(typescript@5.9.2)(zod@4.3.6)
       '@tanstack/react-query':
         specifier: ^5.90.10
         version: 5.94.5(react@19.2.4)
@@ -91,10 +106,10 @@ importers:
         specifier: ^12.23.24
         version: 12.38.0(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
       react:
-        specifier: ^19.2.3
+        specifier: 'catalog:'
         version: 19.2.4
       react-dom:
-        specifier: ^19.2.3
+        specifier: 'catalog:'
         version: 19.2.4(react@19.2.4)
       three:
         specifier: ^0.183.2
@@ -119,10 +134,10 @@ importers:
         specifier: 'catalog:'
         version: 25.5.0
       '@types/react':
-        specifier: ^19.2.7
+        specifier: 'catalog:'
         version: 19.2.14
       '@types/react-dom':
-        specifier: ^19.2.3
+        specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.14)
       '@types/three':
         specifier: ^0.183.1
@@ -191,8 +206,8 @@ importers:
         specifier: workspace:*
         version: link:../db
       '@t3-oss/env-core':
-        specifier: ^0.13.10
-        version: 0.13.10(arktype@2.1.20)(typescript@5.9.2)(zod@4.3.6)
+        specifier: 'catalog:'
+        version: 0.13.11(arktype@2.1.20)(typescript@5.9.2)(zod@4.3.6)
       arktype:
         specifier: 'catalog:'
         version: 2.1.20
@@ -222,8 +237,8 @@ importers:
         specifier: workspace:*
         version: link:../db
       '@t3-oss/env-core':
-        specifier: ^0.13.10
-        version: 0.13.10(arktype@2.1.20)(typescript@5.9.2)(zod@4.3.6)
+        specifier: 'catalog:'
+        version: 0.13.11(arktype@2.1.20)(typescript@5.9.2)(zod@4.3.6)
       arktype:
         specifier: 'catalog:'
         version: 2.1.20
@@ -250,8 +265,8 @@ importers:
   packages/db:
     dependencies:
       '@t3-oss/env-core':
-        specifier: ^0.13.10
-        version: 0.13.10(arktype@2.1.20)(typescript@5.9.2)(zod@4.3.6)
+        specifier: 'catalog:'
+        version: 0.13.11(arktype@2.1.20)(typescript@5.9.2)(zod@4.3.6)
       arktype:
         specifier: 'catalog:'
         version: 2.1.20
@@ -447,16 +462,16 @@ importers:
         specifier: workspace:*
         version: link:../../tooling/typescript
       '@types/react':
-        specifier: ^19.2.7
+        specifier: 'catalog:'
         version: 19.2.14
       '@types/react-dom':
-        specifier: ^19.2.3
+        specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.14)
       react:
-        specifier: ^19.2.3
+        specifier: 'catalog:'
         version: 19.2.4
       react-dom:
-        specifier: ^19.2.3
+        specifier: 'catalog:'
         version: 19.2.4(react@19.2.4)
       tailwindcss:
         specifier: ^4.1.12
@@ -3380,8 +3395,8 @@ packages:
   '@standard-schema/utils@0.3.0':
     resolution: {integrity: sha512-e7Mew686owMaPJVNNLs55PUvgz371nKgwsc4vxE49zsODpJEnxgxRo2y/OKrqueavXgZNMDVj3DdHFlaSAeU8g==}
 
-  '@t3-oss/env-core@0.13.10':
-    resolution: {integrity: sha512-NNFfdlJ+HmPHkLi2HKy7nwuat9SIYOxei9K10lO2YlcSObDILY7mHZNSHsieIM3A0/5OOzw/P/b+yLvPdaG52g==}
+  '@t3-oss/env-core@0.13.11':
+    resolution: {integrity: sha512-sM7GYY+KL7H/Hl0BE0inWfk3nRHZOLhmVn7sHGxaZt9FAR6KqREXAE+6TqKfiavfXmpRxO/OZ2QgKRd+oiBYRQ==}
     peerDependencies:
       arktype: ^2.1.0
       typescript: '>=5.0.0'
@@ -9422,7 +9437,7 @@ snapshots:
 
   '@standard-schema/utils@0.3.0': {}
 
-  '@t3-oss/env-core@0.13.10(arktype@2.1.20)(typescript@5.9.2)(zod@4.3.6)':
+  '@t3-oss/env-core@0.13.11(arktype@2.1.20)(typescript@5.9.2)(zod@4.3.6)':
     optionalDependencies:
       arktype: 2.1.20
       typescript: 5.9.2
