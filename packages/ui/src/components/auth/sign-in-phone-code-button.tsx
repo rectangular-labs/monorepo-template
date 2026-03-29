@@ -1,6 +1,6 @@
-import { PhoneIcon } from "lucide-react";
-import { cn } from "../../utils/cn";
-import { Button } from "../ui/button";
+import { PhoneIcon } from "@phosphor-icons/react";
+import { cn } from "../../utils";
+import { Button } from "../core/button";
 import { type AuthViewPath, useAuth } from "./auth-provider";
 
 export function SignInPhoneCodeButton({

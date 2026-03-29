@@ -1,10 +1,10 @@
 "use client";
 
+import { BuildingsIcon } from "@phosphor-icons/react";
 import { cva, type VariantProps } from "class-variance-authority";
-import { BuildingIcon } from "lucide-react";
-import { cn } from "../../../utils/cn";
-import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
-import { Skeleton } from "../../ui/skeleton";
+import { cn } from "../../../utils";
+import { Avatar, AvatarFallback, AvatarImage } from "../../core/avatar";
+import { Skeleton } from "../../core/skeleton";
 
 const organizationLogoSize = cva("", {
   variants: {
@@ -66,8 +66,8 @@ export function OrganizationLogo({
   return (
     <Avatar className={cn("bg-muted", organizationLogoSize({ size: normalizedSize }), className)}>
       <AvatarImage alt={name || "Organization"} src={src || undefined} />
-      <AvatarFallback className={"text-foreground"} delayMs={src ? 600 : 0}>
-        <BuildingIcon className={"size-[50%]"} />
+      <AvatarFallback className={"text-foreground"} delay={src ? 600 : 0}>
+        <BuildingsIcon className={"size-[50%]"} />
       </AvatarFallback>
     </Avatar>
   );

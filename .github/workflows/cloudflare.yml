@@ -95,8 +95,8 @@ jobs:
         run: |
           FILE_WWW="apps/www/wrangler.jsonc"
           # Replace placeholder with computed slug
-          sed -i "s|{env.PULL_REQUEST}|$ENVIRONMENT|g" "$FILE_WWW"
-          sed -i "s|{env.PULL_REQUEST}|$ENVIRONMENT|g" "$ENV_PATH"
+          sed -i "s|\\[env\\.PULL_REQUEST\\]|$ENVIRONMENT|g" "$FILE_WWW"
+          sed -i "s|\\[env\\.PULL_REQUEST\\]|$ENVIRONMENT|g" "$ENV_PATH"
 
       - name: Prepare secrets
         id: prepare_secrets
@@ -108,7 +108,7 @@ jobs:
         env:
           NODE_OPTIONS: "--max_old_space_size=8192"
         run: |
-          vp run build:${{ steps.resolve.outputs.stage }} -- --mode ${{ steps.resolve.outputs.ENVIRONMENT }}
+          vp run build:${{ steps.resolve.outputs.stage }} -- --mode ${{ steps.resolve.outputs.environment }}
 
       # - name: Migrate Database
       #   run: vp run db#migrate-push:${{ steps.resolve.outputs.stage }}
@@ -148,7 +148,7 @@ jobs:
         run: |
           FILE_WWW="apps/www/wrangler.jsonc"
           # Replace placeholder with computed slug
-          sed -i "s|{env.PULL_REQUEST}|$STAGE|g" "$FILE_WWW"
+          sed -i "s|\\[env\\.PULL_REQUEST\\]|$STAGE|g" "$FILE_WWW"
       - name: Destroy Preview Environment for WWW
         uses: cloudflare/wrangler-action@v3
         with:

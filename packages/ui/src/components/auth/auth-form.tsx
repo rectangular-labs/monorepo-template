@@ -83,6 +83,9 @@ export function AuthForm({
     case viewPaths.FORGOT_PASSWORD:
       return (
         <IdentifierCaptureForm
+          // ! Better Auth 1.5 removed the deprecated email-OTP forget-password flow.
+          // ! Replace this with token-based authClient.requestPasswordReset() and authClient.resetPassword().
+          // ! More info: https://better-auth.com/blog/1-5
           mode="forget-password-email"
           setShouldDisable={setShouldDisable}
           setVerificationInfo={(info) => setVerificationInfo(info)}

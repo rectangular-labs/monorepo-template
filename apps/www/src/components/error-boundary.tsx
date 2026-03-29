@@ -1,6 +1,6 @@
+import { Alert, AlertDescription, AlertTitle } from "@rectangular-labs/ui/components/core/alert";
+import { Button } from "@rectangular-labs/ui/components/core/button";
 import { Terminal } from "@rectangular-labs/ui/components/icon";
-import { Alert, AlertDescription, AlertTitle } from "@rectangular-labs/ui/components/ui/alert";
-import { Button } from "@rectangular-labs/ui/components/ui/button";
 import type { ErrorComponentProps } from "@tanstack/react-router";
 import { Link, rootRouteId, useMatch, useRouter } from "@tanstack/react-router";
 
@@ -32,9 +32,7 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
           Try again
         </Button>
         {isRoot ? (
-          <Button asChild>
-            <Link to="/">Home</Link>
-          </Button>
+          <Button render={<Link to="/" />}>Home</Button>
         ) : (
           <Button
             onClick={() => {

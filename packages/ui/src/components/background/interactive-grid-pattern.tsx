@@ -1,6 +1,6 @@
 "use client";
 // credits: https://magicui.design/docs/components/interactive-grid-pattern
-import { cn } from "@rectangular-labs/ui/utils/cn";
+import { cn } from "@rectangular-labs/ui/utils";
 import type React from "react";
 import { useState } from "react";
 

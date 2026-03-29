@@ -1,4 +1,4 @@
-import { cn } from "@rectangular-labs/ui/utils/cn";
+import { cn } from "@rectangular-labs/ui/utils";
 
 export function Section({
   children,

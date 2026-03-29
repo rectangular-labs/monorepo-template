@@ -45,7 +45,6 @@
     ".expo",
     ".next",
     ".cache",
-    ".turbo",
     ".tanstack"
   ]
 }

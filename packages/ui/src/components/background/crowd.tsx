@@ -5,7 +5,7 @@
  * illustration by https://www.openpeeps.com/
  */
 import { useIsMobile } from "@rectangular-labs/ui/hooks/use-mobile";
-import { cn } from "@rectangular-labs/ui/utils/cn";
+import { cn } from "@rectangular-labs/ui/utils";
 import { animate } from "motion";
 import { cubicBezier } from "motion/react";
 import { useEffect, useRef } from "react";

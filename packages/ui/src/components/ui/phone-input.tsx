@@ -1,9 +1,9 @@
-import { CheckIcon, ChevronsUpDown } from "lucide-react";
+import { CaretUpDownIcon, CheckIcon } from "@phosphor-icons/react";
 import * as React from "react";
 import * as RPNInput from "react-phone-number-input";
 import flags from "react-phone-number-input/flags";
-import { cn } from "../../utils/cn";
-import { Button } from "./button";
+import { cn } from "../../utils";
+import { Button } from "../core/button";
 import {
   Command,
   CommandEmpty,
@@ -11,10 +11,10 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "./command";
-import { Input } from "./input";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { ScrollArea } from "./scroll-area";
+} from "../core/command";
+import { Input } from "../core/input";
+import { Popover, PopoverContent, PopoverTrigger } from "../core/popover";
+import { ScrollArea } from "../core/scroll-area";
 
 type PhoneInputProps = Omit<React.ComponentProps<"input">, "onChange" | "value" | "ref"> &
   Omit<RPNInput.Props<typeof RPNInput.default>, "onChange"> & {
@@ -79,7 +79,7 @@ const CountrySelect = ({
   return (
     <Popover
       modal
-      onOpenChange={(open) => {
+      onOpenChange={(open: boolean) => {
         setIsOpen(open);
         if (open) {
           setSearchValue("");
@@ -87,23 +87,25 @@ const CountrySelect = ({
       }}
       open={isOpen}
     >
-      <PopoverTrigger asChild>
-        <Button
-          className="flex gap-1 rounded-s-lg rounded-e-none border-r-0 px-3 focus:z-10"
-          disabled={disabled}
-          type="button"
-          variant="outline"
-        >
-          <FlagComponent country={selectedCountry} countryName={selectedCountry} />
-          <ChevronsUpDown
-            className={cn("-mr-2 size-4 opacity-50", disabled ? "hidden" : "opacity-100")}
+      <PopoverTrigger
+        render={
+          <Button
+            className="flex gap-1 rounded-s-lg rounded-e-none border-r-0 px-3 focus:z-10"
+            disabled={disabled}
+            type="button"
+            variant="outline"
           />
-        </Button>
+        }
+      >
+        <FlagComponent country={selectedCountry} countryName={selectedCountry} />
+        <CaretUpDownIcon
+          className={cn("-mr-2 size-4 opacity-50", disabled ? "hidden" : "opacity-100")}
+        />
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
         <Command>
           <CommandInput
-            onValueChange={(value) => {
+            onValueChange={(value: string) => {
               setSearchValue(value);
               setTimeout(() => {
                 if (scrollAreaRef.current) {

@@ -1,12 +1,19 @@
 "use client";
 
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
-import { cn } from "../../utils/cn";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Button } from "../ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card";
-import { Separator } from "../ui/separator";
+import { cn } from "../../utils";
+import { Alert, AlertDescription, AlertTitle } from "../core/alert";
+import { Button } from "../core/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../core/card";
+import { Separator } from "../core/separator";
 import { AuthForm } from "./auth-form";
 import { type AuthViewPath, useAuth } from "./auth-provider";
 import type { VerificationInfo, VerificationMode } from "./forms/verification-form";

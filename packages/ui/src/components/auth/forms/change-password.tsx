@@ -1,13 +1,10 @@
 "use client";
 
-import { arktypeResolver } from "@hookform/resolvers/arktype";
 import { type } from "arktype";
-import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Button } from "../../ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../ui/form";
-import { toast } from "../../ui/sonner";
+import { FieldError } from "../../core/field";
+import { toast } from "../../core/sonner";
+import { clearFormError, setFormError, toFieldErrors, useAppForm } from "../../ui/tanstack-form";
 import { useAuth } from "../auth-provider";
 import { PasswordInput } from "../password-input";
 import { PasswordSchema } from "../schema/password";
@@ -17,9 +14,9 @@ type ChangePasswordProps = { onComplete?: () => void | Promise<void> } & (
       mode: "update";
     }
   | {
-      mode: "reset-code";
-      email: string;
       code: string;
+      email: string;
+      mode: "reset-code";
     }
   | {
       mode: "reset-token";
@@ -29,6 +26,7 @@ type ChangePasswordProps = { onComplete?: () => void | Promise<void> } & (
 
 export function ChangePasswordForm(props: ChangePasswordProps) {
   const { authClient, credentials } = useAuth();
+  const auth = authClient as any;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const confirmPasswordEnabled = credentials?.enableConfirmPassword;
@@ -36,8 +34,8 @@ export function ChangePasswordForm(props: ChangePasswordProps) {
     oldPassword: props.mode === "update" ? PasswordSchema : type("undefined"),
     newPassword: PasswordSchema,
     confirmPassword: confirmPasswordEnabled ? PasswordSchema : type("undefined"),
-  }).narrow((n, ctx) => {
-    if (n.confirmPassword?.length && n.confirmPassword !== n.newPassword) {
+  }).narrow((value, ctx) => {
+    if (value.confirmPassword?.length && value.confirmPassword !== value.newPassword) {
       return ctx.reject({
         message: "Passwords do not match",
         path: ["confirmPassword"],
@@ -46,135 +44,146 @@ export function ChangePasswordForm(props: ChangePasswordProps) {
     return true;
   });
 
-  const form = useForm({
-    resolver: arktypeResolver(schema),
+  const form = useAppForm({
     defaultValues: {
-      oldPassword: props.mode === "update" ? "" : undefined,
-      newPassword: "",
       confirmPassword: confirmPasswordEnabled ? "" : undefined,
+      newPassword: "",
+      oldPassword: props.mode === "update" ? "" : undefined,
+    },
+    listeners: {
+      onChange: ({ formApi }) => clearFormError(formApi),
+    },
+    onSubmit: async ({ formApi, value }) => {
+      setIsSubmitting(true);
+
+      const response = await (() => {
+        if (props.mode === "update") {
+          return authClient.changePassword({
+            currentPassword: value.oldPassword ?? "",
+            newPassword: value.newPassword,
+            revokeOtherSessions: true,
+          });
+        }
+        if (props.mode === "reset-token") {
+          return authClient.resetPassword({
+            newPassword: value.newPassword,
+            token: props.token,
+          });
+        }
+        // ! Better Auth 1.5 removed the deprecated email-OTP forget-password reset endpoint.
+        // ! Replace this with the token-based authClient.requestPasswordReset() + authClient.resetPassword() flow.
+        // ! More info: https://better-auth.com/blog/1-5
+        return auth.emailOtp.resetPassword({
+          email: props.email,
+          otp: props.code,
+          password: value.newPassword,
+        });
+      })();
+
+      setIsSubmitting(false);
+
+      if (response.error) {
+        setFormError(
+          formApi,
+          response.error.message ?? "Failed to change password. Please try again later.",
+        );
+        return;
+      }
+
+      await Promise.resolve(props.onComplete?.());
+      toast.success("Password updated successfully");
+      formApi.reset();
+    },
+    validators: {
+      onChange: schema,
+      onSubmit: schema,
     },
   });
 
-  async function handleSubmit(values: typeof schema.infer) {
-    setIsSubmitting(true);
-    const response = await (() => {
-      if (props.mode === "update") {
-        return authClient.changePassword({
-          newPassword: values.newPassword,
-          currentPassword: values.oldPassword ?? "",
-          revokeOtherSessions: true,
-        });
-      }
-      if (props.mode === "reset-token") {
-        return authClient.resetPassword({
-          newPassword: values.newPassword,
-          token: props.token,
-        });
-      }
-      if (props.mode === "reset-code") {
-        return authClient.emailOtp.resetPassword({
-          email: props.email,
-          otp: props.code,
-          password: values.newPassword,
-        });
-      }
-      const _never: never = props;
-      throw new Error("Invalid mode");
-    })();
-    setIsSubmitting(false);
-
-    if (response.error) {
-      form.setError("root", {
-        message: response.error.message ?? "Failed to change password. Please try again later.",
-      });
-      return;
-    }
-    await Promise.resolve(props.onComplete?.());
-
-    toast.success("Password updated successfully");
-    form.reset();
-  }
-
   return (
-    <Form {...form}>
-      <form className={"grid w-full gap-6"} onSubmit={void form.handleSubmit(handleSubmit)}>
-        {props.mode === "update" && (
-          <FormField
-            control={form.control}
-            name="oldPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Current password</FormLabel>
-                <FormControl>
-                  <PasswordInput
-                    autoComplete="current-password"
-                    disabled={isSubmitting}
-                    enableToggle
-                    placeholder="Your current password"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+    <form.AppForm>
+      <form
+        className="grid w-full gap-6"
+        onSubmit={(event) => {
+          event.preventDefault();
+          void form.handleSubmit();
+        }}
+      >
+        {props.mode === "update" ? (
+          <form.AppField name="oldPassword">
+            {(field) => (
+              <field.FieldShell field={field} label="Current password">
+                <PasswordInput
+                  autoComplete="current-password"
+                  disabled={isSubmitting}
+                  enableToggle
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    field.handleChange(event.currentTarget.value as never);
+                    field.setErrorMap({ onSubmit: undefined });
+                  }}
+                  placeholder="Your current password"
+                  value={field.state.value ?? ""}
+                />
+              </field.FieldShell>
             )}
-          />
-        )}
+          </form.AppField>
+        ) : null}
 
-        <FormField
-          control={form.control}
-          name="newPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>New password</FormLabel>
+        <form.AppField name="newPassword">
+          {(field) => (
+            <field.FieldShell field={field} label="New password">
+              <PasswordInput
+                autoComplete="new-password"
+                disabled={isSubmitting}
+                enableToggle
+                id={field.name}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(event) => {
+                  field.handleChange(event.currentTarget.value as never);
+                  field.setErrorMap({ onSubmit: undefined });
+                }}
+                placeholder="At least 8 characters"
+                value={field.state.value ?? ""}
+              />
+            </field.FieldShell>
+          )}
+        </form.AppField>
 
-              <FormControl>
+        {confirmPasswordEnabled ? (
+          <form.AppField name="confirmPassword">
+            {(field) => (
+              <field.FieldShell field={field} label="Confirm password">
                 <PasswordInput
                   autoComplete="new-password"
                   disabled={isSubmitting}
                   enableToggle
-                  placeholder="At least 8 characters"
-                  {...field}
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    field.handleChange(event.currentTarget.value as never);
+                    field.setErrorMap({ onSubmit: undefined });
+                  }}
+                  placeholder="Repeat new password"
+                  value={field.state.value ?? ""}
                 />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        {confirmPasswordEnabled && (
-          <FormField
-            control={form.control}
-            name="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Confirm password</FormLabel>
-
-                <FormControl>
-                  <PasswordInput
-                    autoComplete="new-password"
-                    disabled={isSubmitting}
-                    enableToggle
-                    placeholder="Repeat new password"
-                    {...field}
-                  />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
+              </field.FieldShell>
             )}
-          />
-        )}
+          </form.AppField>
+        ) : null}
 
-        {form.formState.errors.root && (
-          <FormMessage>{form.formState.errors.root.message}</FormMessage>
-        )}
+        <form.Subscribe selector={(state) => state.errorMap.onSubmit}>
+          {(error) => <FieldError errors={toFieldErrors(error)} />}
+        </form.Subscribe>
 
-        <Button className={"w-full"} disabled={isSubmitting} type="submit">
-          {isSubmitting && <Loader2 className="animate-spin" />}
+        <form.SubmitButton className="w-full">
           {props.mode === "update" ? "Update password" : "Reset password"}
-        </Button>
+        </form.SubmitButton>
       </form>
-    </Form>
+    </form.AppForm>
   );
 }
