@@ -1,5 +1,8 @@
+import { Terminal } from "@rectangular-labs/ui/components/icon";
+import { Alert, AlertDescription, AlertTitle } from "@rectangular-labs/ui/components/ui/alert";
+import { Button } from "@rectangular-labs/ui/components/ui/button";
 import type { ErrorComponentProps } from "@tanstack/react-router";
-import { ErrorComponent, Link, rootRouteId, useMatch, useRouter } from "@tanstack/react-router";
+import { Link, rootRouteId, useMatch, useRouter } from "@tanstack/react-router";
 
 export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
   const router = useRouter();
@@ -9,38 +12,38 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
   });
 
   console.error(error);
+  const message = error instanceof Error ? error.message : "An unexpected error occurred.";
 
   return (
-    <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-6 p-4">
-      <ErrorComponent error={error} />
-      <div className="flex flex-wrap items-center gap-2">
-        <button
-          className="rounded bg-gray-600 px-2 py-1 font-extrabold text-white uppercase dark:bg-gray-700"
+    <div className="mx-auto flex max-w-lg flex-col items-center justify-center gap-4 p-6">
+      <Alert variant="default">
+        <Terminal />
+        <AlertTitle>Something went wrong</AlertTitle>
+        <AlertDescription>{message}</AlertDescription>
+      </Alert>
+      <div className="flex flex-wrap items-center justify-center gap-3">
+        <Button
           onClick={() => {
             void router.invalidate();
           }}
           type="button"
+          variant="outline"
         >
-          Try Again
-        </button>
+          Try again
+        </Button>
         {isRoot ? (
-          <Link
-            className="rounded bg-gray-600 px-2 py-1 font-extrabold text-white uppercase dark:bg-gray-700"
-            to="/"
-          >
-            Home
-          </Link>
+          <Button asChild>
+            <Link to="/">Home</Link>
+          </Button>
         ) : (
-          <Link
-            className="rounded bg-gray-600 px-2 py-1 font-extrabold text-white uppercase dark:bg-gray-700"
-            onClick={(e) => {
-              e.preventDefault();
+          <Button
+            onClick={() => {
               window.history.back();
             }}
-            to="/"
+            type="button"
           >
-            Go Back
-          </Link>
+            Go back
+          </Button>
         )}
       </div>
     </div>

@@ -6,22 +6,28 @@ import {
   EyeOffIcon,
   FileIcon,
   Loader2,
+  XIcon as LucideXIcon,
+  MenuIcon,
   MoonIcon,
   SunIcon,
+  TerminalIcon,
 } from "lucide-react";
 import type { SVGProps } from "react";
 
 type IconProps = React.HTMLAttributes<SVGElement>;
 
-export const Moon = MoonIcon;
-export const Sun = SunIcon;
-export const EyeOn = EyeIcon;
-export const EyeOff = EyeOffIcon;
-export const Spinner = Loader2;
-export const ArrowUp = ArrowUpIcon;
 export const ArrowDown = ArrowDownIcon;
-export const File = FileIcon;
+export const ArrowUp = ArrowUpIcon;
 export const Dot = DotIcon;
+export const EyeOff = EyeOffIcon;
+export const EyeOn = EyeIcon;
+export const File = FileIcon;
+export const Menu = MenuIcon;
+export const Moon = MoonIcon;
+export const Spinner = Loader2;
+export const Sun = SunIcon;
+export const Terminal = TerminalIcon;
+export const X = LucideXIcon;
 
 export const Logo = (props: IconProps) => (
   <svg viewBox="107.599 192.599 284.802 284.802" xmlns="http://www.w3.org/2000/svg" {...props}>
