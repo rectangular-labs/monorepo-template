@@ -22,8 +22,6 @@
     "@changesets/cli": "^2.30.0",
     "@dotenvx/dotenvx": "^1.57.1",
     "@rectangular-labs/typescript": "workspace:*",
-    "@turbo/gen": "^2.8.20",
-    "turbo": "^2.8.20",
     "typescript": "catalog:",
     "vite-plus": "catalog:"
   },

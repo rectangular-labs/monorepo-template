@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "rectangular-labs-www",
+  "name": "monorepo-template-sample",
   "compatibility_date": "2026-03-18",
   "compatibility_flags": ["nodejs_compat"],
   "preview_urls": false,

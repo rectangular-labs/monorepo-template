@@ -72,9 +72,6 @@ lerna-debug.log*
 # typescript
 *.tsbuildinfo
 
-# turbo
-.turbo
-
 # react-email
 .react-email
 packages/email/public
