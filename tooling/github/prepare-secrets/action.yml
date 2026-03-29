@@ -43,43 +43,10 @@ runs:
       run: |
         ENV_FILE="${{ inputs.env_path }}"
         TMP_FILE=$(mktemp)
-        DECRYPT_ERR_FILE=$(mktemp)
-        echo "Preparing env export for: $ENV_FILE"
-        echo "Working directory: $(pwd)"
-        if [ -f "$ENV_FILE" ]; then
-          echo "Env file exists."
-          echo "Env file size (bytes): $(wc -c < "$ENV_FILE" | tr -d ' ')"
-        else
-          echo "::error::Env file is missing before decrypt step: $ENV_FILE"
-        fi
-        if command -v pnpm >/dev/null 2>&1; then
-          echo "pnpm binary: $(command -v pnpm)"
-        else
-          echo "::error::pnpm is not available in PATH"
-        fi
-        if pnpm --version >/dev/null 2>&1; then
-          echo "pnpm version: $(pnpm --version)"
-        else
-          echo "::warning::Unable to read pnpm version"
-        fi
-        if pnpm dotenvx --version >/dev/null 2>&1; then
-          echo "dotenvx is available via pnpm."
-        else
-          echo "::warning::dotenvx does not appear to be available via pnpm"
-        fi
         # Try to decrypt with dotenvx; if it fails (or not encrypted), fallback to the file as-is
-        echo "Running: pnpm dotenvx decrypt --stdout -f \"$ENV_FILE\""
-        if pnpm dotenvx decrypt --stdout -f "$ENV_FILE" > "$TMP_FILE" 2>"$DECRYPT_ERR_FILE"; then
+        if vp exec dotenvx decrypt --stdout -f "$ENV_FILE" > "$TMP_FILE" 2>/dev/null; then
           echo "Using decrypted content from dotenvx."
         else
-          DECRYPT_EXIT_CODE=$?
-          echo "::notice::dotenvx decrypt exit code: $DECRYPT_EXIT_CODE"
-          if [ -s "$DECRYPT_ERR_FILE" ]; then
-            echo "::notice::dotenvx stderr:"
-            sed 's/^/  /' "$DECRYPT_ERR_FILE"
-          else
-            echo "::notice::dotenvx produced no stderr output."
-          fi
           echo "::notice::dotenvx decrypt failed or not needed; using file as-is."
           cp "$ENV_FILE" "$TMP_FILE"
         fi
@@ -113,5 +80,4 @@ runs:
 
           echo "${key}=${value}" >> "$GITHUB_ENV"
         done < "$TMP_FILE"
-        rm -f "$TMP_FILE" "$DECRYPT_ERR_FILE"
         echo "Exported environment variables to GITHUB_ENV."
