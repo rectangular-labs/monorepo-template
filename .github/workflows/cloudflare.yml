@@ -107,7 +107,9 @@ jobs:
       - name: Build
         env:
           NODE_OPTIONS: "--max_old_space_size=8192"
-        run: vp run build:${{ steps.resolve.outputs.stage }} --last-details -- --mode ${{ steps.resolve.outputs.ENVIRONMENT }}
+        run: |
+          cat .env
+          vp run build:${{ steps.resolve.outputs.stage }} -- --mode ${{ steps.resolve.outputs.ENVIRONMENT }}
 
       # - name: Migrate Database
       #   run: vp run db:mp:${{ steps.resolve.outputs.stage }}
