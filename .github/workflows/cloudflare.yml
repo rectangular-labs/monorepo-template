@@ -129,7 +129,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v3
         with:
           message: |
-            Cloudflare Preview URL for WWW :balloon: : https://${{ steps.deploy_sample_www.outputs.deployment-url }}
+            Cloudflare Preview URL for WWW :balloon: : ${{ startsWith(steps.deploy_sample_www.outputs.deployment-url, 'https://') && steps.deploy_sample_www.outputs.deployment-url || format('https://{0}', steps.deploy_sample_www.outputs.deployment-url) }}
           comment-tag: execution
 
   cleanup:

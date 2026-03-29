@@ -124,6 +124,8 @@ To smoothly set up deployment, you must configure the following **Secrets** in y
 - `DOTENV_PRIVATE_KEY`: The decrypted dotenvx private key for your preview/development environment (`.env`).
 - `DOTENV_PRIVATE_KEY_PRODUCTION`: The decrypted dotenvx private key for your production environment (`.env.production`).
 
+> Make sure to have `CLOUDFLARE_ENV` in your preview `.env` file. This ensures that the we deploy to the right preview environments. (Done for you by default)
+
 **Opting Out:**
 If you do not want to use Cloudflare for deployment, simply delete the `.github/workflows/cloudflare.yml` file from the repository and the corresponding `wrangler.jsonc` files.
 
