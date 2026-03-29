@@ -1,10 +1,9 @@
+import { Toaster } from "@rectangular-labs/ui/components/core/sonner";
 import { ThemeProvider } from "@rectangular-labs/ui/components/theme-provider";
-import { Toaster } from "@rectangular-labs/ui/components/ui/sonner";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
-import { useEffect } from "react";
 import { seo } from "~/lib/seo";
 import appCss from "../styles.css?url";
 
@@ -69,10 +68,6 @@ export const Route = createRootRouteWithContext<{
 });
 
 function RootLayout() {
-  console.log("hello");
-  useEffect(() => {
-    console.log("hi");
-  }, []);
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

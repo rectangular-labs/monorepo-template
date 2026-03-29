@@ -1,5 +1,5 @@
 import { InteractiveGridPattern } from "@rectangular-labs/ui/components/background/interactive-grid-pattern";
-import { Button } from "@rectangular-labs/ui/components/ui/button";
+import { Button } from "@rectangular-labs/ui/components/core/button";
 import { Section } from "@rectangular-labs/ui/components/ui/section";
 import { lazy, Suspense } from "react";
 

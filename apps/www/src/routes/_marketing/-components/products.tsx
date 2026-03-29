@@ -1,4 +1,4 @@
-import { Button } from "@rectangular-labs/ui/components/ui/button";
+import { Button } from "@rectangular-labs/ui/components/core/button";
 import {
   Card,
   CardContent,
@@ -6,7 +6,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@rectangular-labs/ui/components/ui/card";
+} from "@rectangular-labs/ui/components/core/card";
 import { Section } from "@rectangular-labs/ui/components/ui/section";
 
 export function Products() {

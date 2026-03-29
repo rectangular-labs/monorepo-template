@@ -1,4 +1,4 @@
-import { Button } from "@rectangular-labs/ui/components/ui/button";
+import { Button } from "@rectangular-labs/ui/components/core/button";
 import { Section } from "@rectangular-labs/ui/components/ui/section";
 import { Link } from "@tanstack/react-router";
 
