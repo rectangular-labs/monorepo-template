@@ -1,22 +1,109 @@
 import { expo } from "@better-auth/expo";
-import { createDb } from "@rectangular-labs/db";
+import type { DB } from "@rectangular-labs/db";
+import { createEmailClient } from "@rectangular-labs/emails";
 import type { BetterAuthOptions } from "better-auth";
-import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { emailOTP, magicLink, oAuthProxy, twoFactor } from "better-auth/plugins";
+import { betterAuth } from "better-auth/minimal";
+import { emailOTP, magicLink, oAuthProxy, organization, twoFactor } from "better-auth/plugins";
 import { authEnv } from "./env";
 
-export function initAuthHandler() {
+type CredentialVerificationType = "code" | "token";
+
+export function getAuthOptionsFromEnv() {
   const env = authEnv();
+  return {
+    baseURL: env.AUTH_PRODUCTION_URL,
+    credentialVerificationType: env.AUTH_CREDENTIAL_VERIFICATION_TYPE,
+    encryptionKey: env.AUTH_ENCRYPTION_KEY,
+    fromEmail: env.AUTH_FROM_EMAIL,
+    discordClientId: env.AUTH_DISCORD_ID,
+    discordClientSecret: env.AUTH_DISCORD_SECRET,
+    githubClientId: env.AUTH_GITHUB_ID,
+    githubClientSecret: env.AUTH_GITHUB_SECRET,
+    googleClientId: env.AUTH_GOOGLE_ID,
+    googleClientSecret: env.AUTH_GOOGLE_SECRET,
+    redditClientId: env.AUTH_REDDIT_ID,
+    redditClientSecret: env.AUTH_REDDIT_SECRET,
+  } as const;
+}
 
-  const baseUrl = env.VITE_APP_URL;
-  const productionUrl = env.AUTH_PRODUCTION_URL;
+export function initAuthHandler({
+  baseURL,
+  db,
+  encryptionKey,
+  fromEmail,
+  credentialVerificationType,
+  discordClientId,
+  discordClientSecret,
+  githubClientId,
+  githubClientSecret,
+  redditClientId,
+  redditClientSecret,
+  googleClientId,
+  googleClientSecret,
+}: {
+  baseURL: string;
+  credentialVerificationType?: CredentialVerificationType | undefined;
+  db: DB;
+  encryptionKey: string;
+  fromEmail: string;
+  discordClientId?: string | undefined;
+  discordClientSecret?: string | undefined;
+  githubClientId?: string | undefined;
+  githubClientSecret?: string | undefined;
+  googleClientId?: string | undefined;
+  googleClientSecret?: string | undefined;
+  redditClientId?: string | undefined;
+  redditClientSecret?: string | undefined;
+}) {
+  const useDiscord = !!discordClientId && !!discordClientSecret;
+  const useGithub = !!githubClientId && !!githubClientSecret;
+  const useReddit = !!redditClientId && !!redditClientSecret;
+  const useGoogle = !!googleClientId && !!googleClientSecret;
 
-  const useDiscord = !!env.AUTH_DISCORD_ID && !!env.AUTH_DISCORD_SECRET;
-  const useGithub = !!env.AUTH_GITHUB_ID && !!env.AUTH_GITHUB_SECRET;
+  const domain = new URL(baseURL).hostname.split(".").slice(-2).join(".");
+  const isPreview = baseURL.startsWith("https://pr-") || baseURL.startsWith("https://preview.");
+
+  const redirectUrl = isPreview
+    ? `https://preview.${domain}` // preview.rectangularlabs.com
+    : baseURL; // prod / localhost domains
+
+  const emailDriver = createEmailClient();
 
   const config = {
-    database: drizzleAdapter(createDb(env.DATABASE_URL), {
+    baseURL,
+    secret: encryptionKey,
+    account: {
+      encryptOAuthTokens: false,
+      accountLinking: {
+        enabled: true,
+        allowDifferentEmails: true,
+      },
+    },
+    user: {
+      changeEmail: {
+        enabled: true,
+        sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
+          await emailDriver.send({
+            from: fromEmail,
+            to: user.email,
+            subject: "Approve email change",
+            text: `Click the link to approve the change to ${newEmail}: ${url}`,
+          });
+        },
+      },
+      additionalFields: {
+        source: {
+          type: "string",
+          required: false,
+        },
+        goal: {
+          type: "string",
+          required: false,
+        },
+      },
+    },
+    database: drizzleAdapter(db, {
       provider: "pg",
     }),
     telemetry: {
@@ -25,72 +112,171 @@ export function initAuthHandler() {
     onAPIError: {
       errorURL: "/login",
     },
-    baseURL: baseUrl,
-    secret: env.AUTH_ENCRYPTION_KEY,
-    logger: {
-      disabled: true,
-      log(level, message, ...args) {
-        console.log(level, message, ...args);
-      },
-    },
     emailAndPassword: {
-      enabled: true,
+      enabled: !!credentialVerificationType,
       requireEmailVerification: true,
       sendResetPassword: async (data) => {
-        await Promise.resolve();
-        console.log("sendResetPassword", JSON.stringify(data, null, 2));
+        if (credentialVerificationType === "code") {
+          throw new Error("Password reset should be done through the email OTP plugin");
+        }
+        await emailDriver.send({
+          from: fromEmail,
+          to: data.user.email,
+          subject: "Reset your password",
+          text: `Reset your password at ${data.url}`,
+        });
       },
     },
     emailVerification: {
-      sendVerificationEmail: async ({ user, url, token }) => {
-        await Promise.resolve();
-        console.log("sendVerificationEmail", JSON.stringify({ user, url, token }, null, 2));
+      ...(credentialVerificationType === "token" && {
+        sendVerificationEmail: async ({ user, url }) => {
+          await emailDriver.send({
+            from: fromEmail,
+            to: user.email,
+            subject: "Verify your email",
+            text: `Verify your email at ${url}`,
+          });
+        },
+      }),
+    },
+    databaseHooks: {
+      user: {
+        create: {
+          before: async (user, ctx) => {
+            const deriveNameFromEmail = (email: string) => {
+              if (!email) return "";
+              const localPart = email.split("@")[0]?.trim();
+              if (!localPart) return "";
+              return localPart.replace(/[._+-]+/g, " ").trim();
+            };
+            if (ctx?.path === "/sign-up/email") {
+              // Temporary fix for better-auth issue https://github.com/better-auth/better-auth/issues/424
+              if (user.name === user.email) {
+                const derivedName = deriveNameFromEmail(user.email);
+                return {
+                  data: {
+                    ...user,
+                    name: derivedName,
+                  },
+                };
+              }
+            }
+            return await Promise.resolve({ data: user });
+          },
+        },
       },
     },
     plugins: [
       oAuthProxy({
-        /**
-         * Auto-inference blocked by https://github.com/better-auth/better-auth/pull/2891
-         */
-        currentURL: baseUrl,
-        productionURL: productionUrl,
+        productionURL: isPreview
+          ? // this is so that the preview server will proxy request without state checks.
+            // under the hood better auth doesn't allow proxying if the baseUrl === productionUrl.
+            // https://github.com/better-auth/better-auth/commit/2d64fe38#diff-b1ff58ed51c13c92048fae09d3623dcdac496968932823c956661cd81f292cbb
+            // also technically the "production url" is the one below and not preview.{base_domain}
+            redirectUrl.replace("preview.", "")
+          : redirectUrl,
       }),
       emailOTP({
-        async sendVerificationOTP({ email, otp, type }) {
-          await Promise.resolve();
-          console.log(`[auth] Email OTP (${type}) for ${email}: ${otp}`);
+        overrideDefaultEmailVerification: credentialVerificationType === "code",
+        async sendVerificationOTP({ email, otp }) {
+          await emailDriver.send({
+            from: fromEmail,
+            to: email,
+            subject: `${otp} is your verification code`,
+            text: `Your one-time verification code is ${otp}`,
+          });
         },
       }),
       magicLink({
-        sendMagicLink: async ({ email, token, url }) => {
-          await Promise.resolve();
-          console.log(`[auth] Magic link for ${email}: ${token} ${url}`);
+        sendMagicLink: async ({ email, url }) => {
+          await emailDriver.send({
+            from: fromEmail,
+            to: email,
+            subject: "Your login link",
+            text: `Your login link is ${url}`,
+          });
         },
       }),
       twoFactor(),
+      organization({
+        sendInvitationEmail: async ({ email, id, organization, inviter }) => {
+          const inviteUrl = `${baseURL}/invite/${id}`;
+          const result = await emailDriver.send({
+            from: fromEmail,
+            to: email,
+            subject: `You have been invited to join ${organization.name} by ${inviter.user.name}`,
+            text: `You have been invited to join ${organization.name} by ${inviter.user.name}.\n\nClick the link below to accept the invitation:\n${inviteUrl}`,
+          });
+          if (!result.success) {
+            throw result.error;
+          }
+        },
+        organizationHooks: {
+          beforeCreateOrganization: ({ organization }) => {
+            if (organization.slug === "organization") {
+              throw new Error("Organization slug is already taken");
+            }
+            return Promise.resolve();
+          },
+          beforeUpdateOrganization: ({ organization }) => {
+            if (organization.slug === "organization") {
+              throw new Error("Organization slug is already taken");
+            }
+            return Promise.resolve();
+          },
+        },
+      }),
       expo(),
     ],
     socialProviders: {
       ...(useDiscord && {
         discord: {
-          clientId: env.AUTH_DISCORD_ID,
-          clientSecret: env.AUTH_DISCORD_SECRET,
-          redirectURI: `${productionUrl}/api/auth/callback/discord`,
+          clientId: discordClientId,
+          clientSecret: discordClientSecret,
+          redirectURI: `${redirectUrl}/api/auth/callback/discord`,
         },
       }),
       ...(useGithub && {
         github: {
-          clientId: env.AUTH_GITHUB_ID,
-          clientSecret: env.AUTH_GITHUB_SECRET,
-          redirectURI: `${productionUrl}/api/auth/callback/github`,
+          clientId: githubClientId,
+          clientSecret: githubClientSecret,
+          redirectURI: `${redirectUrl}/api/auth/callback/github`,
+        },
+      }),
+      ...(useReddit && {
+        reddit: {
+          clientId: redditClientId,
+          clientSecret: redditClientSecret,
+          redirectURI: `${redirectUrl}/api/auth/callback/reddit`,
+        },
+      }),
+      ...(useGoogle && {
+        google: {
+          clientId: googleClientId,
+          clientSecret: googleClientSecret,
+          redirectURI: `${redirectUrl}/api/auth/callback/google`,
+          accessType: "offline",
+          prompt: "select_account consent",
         },
       }),
     },
-    trustedOrigins: ["expo://"],
-  } satisfies BetterAuthOptions;
+    experimental: {
+      joins: true,
+    },
+    advanced: {
+      cookiePrefix: domain.split(".").at(0) ?? "",
+      useSecureCookies: true,
+      database: {
+        generateId: () => crypto.randomUUID(),
+      },
+    },
+    trustedOrigins: ["expo://", redirectUrl, baseURL],
+  } as const satisfies BetterAuthOptions;
 
-  return betterAuth(config);
+  return betterAuth(config) as ReturnType<typeof betterAuth<typeof config>>;
 }
 
 export type Auth = ReturnType<typeof initAuthHandler>;
 export type Session = Auth["$Infer"]["Session"];
+export type Organization = Auth["$Infer"]["Organization"];
+export type Member = Auth["$Infer"]["Member"];

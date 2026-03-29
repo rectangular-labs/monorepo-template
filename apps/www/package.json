@@ -23,6 +23,8 @@
   "dependencies": {
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.4.0",
+    "@rectangular-labs/api": "workspace:*",
+    "@rectangular-labs/auth": "workspace:*",
     "@rectangular-labs/ui": "workspace:*",
     "@t3-oss/env-core": "catalog:",
     "@tanstack/react-query": "^5.95.2",

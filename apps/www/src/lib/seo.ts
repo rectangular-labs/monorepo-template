@@ -13,11 +13,13 @@ export const seo = ({
     { title },
     { name: "description", content: description },
     { name: "keywords", content: keywords },
+    { name: "robots", content: "index,follow" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     { name: "twitter:creator", content: "@winston_yeo" },
     { name: "twitter:site", content: "@winston_yeo" },
     { name: "og:type", content: "website" },
+    { name: "og:site_name", content: "SEO" },
     { name: "og:title", content: title },
     { name: "og:description", content: description },
     ...(image
