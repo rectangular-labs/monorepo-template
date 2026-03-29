@@ -13,7 +13,7 @@
     "build:production": "pnpm with-env-production vp build",
     "serve:local": "pnpm with-env-local vp preview",
     "test": "vitest run",
-    "clean": "git clean -xdf .turbo node_modules dist .cache .wrangler",
+    "clean": "git clean -xdf node_modules dist .cache .wrangler",
     "with-env-local": "dotenvx run  -f ../../.env.local -f ../../.env -- ",
     "with-env-preview": "dotenvx run  -f ../../.env -- ",
     "with-env-production": "dotenvx run  -f ../../.env.production -- ",
