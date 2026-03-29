@@ -1,11 +1,11 @@
 import { defineConfig } from "vite-plus";
 
-const cacheEnv = ["DOTENV_PRIVATE_KEY"];
+const cacheEnv = ["DOTENV_PRIVATE_KEY", "DOTENV_PRIVATE_KEY_PRODUCTION"];
 const untrackedEnv = ["NODE_ENV", "npm_lifecycle_event"];
 const envFiles = ["**/.env", "**/.env.*"];
 const buildInputs = [{ auto: true }, ...envFiles, "!**/.cache/tsbuildinfo.json", "!**/dist/**"];
 
-const ignorePatterns = ["**/*.hbs", "**/*.gen.ts"];
+const ignorePatterns = ["**/*.hbs", "**/*.gen.ts", "**/worker-configuration.d.ts"];
 
 export default defineConfig({
   staged: {
@@ -62,5 +62,12 @@ export default defineConfig({
   },
   fmt: {
     ignorePatterns,
+    sortTailwindcss: {
+      stylesheet: "./packages/ui/src/styles.css",
+      functions: ["clsx", "cn", "cva", "tw"],
+      preserveDuplicates: false,
+      preserveWhitespace: false,
+    },
+    sortPackageJson: true,
   },
 });
