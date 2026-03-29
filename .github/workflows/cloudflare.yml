@@ -107,13 +107,13 @@ jobs:
       - name: Build
         env:
           NODE_OPTIONS: "--max_old_space_size=8192"
-        run: vp run build:${{ steps.resolve.outputs.stage }} -- --mode ${{ steps.resolve.outputs.ENVIRONMENT }}
+        run: vp run build:${{ steps.resolve.outputs.stage }} --last-details -- --mode ${{ steps.resolve.outputs.ENVIRONMENT }}
 
-      - name: Migrate Database
-        run: vp run db:mp:${{ steps.resolve.outputs.stage }}
+      # - name: Migrate Database
+      #   run: vp run db:mp:${{ steps.resolve.outputs.stage }}
 
-      - name: Deploy WWW
-        id: deploy_www
+      - name: Deploy Sample WWW
+        id: deploy_sample_www
         uses: cloudflare/wrangler-action@v3
         with:
           command: deploy --env=""
@@ -129,7 +129,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v3
         with:
           message: |
-            Cloudflare Preview URL for WWW :balloon: : https://${{ steps.deploy_www.outputs.deployment-url }}
+            Cloudflare Preview URL for WWW :balloon: : https://${{ steps.deploy_sample_www.outputs.deployment-url }}
           comment-tag: execution
 
   cleanup:
