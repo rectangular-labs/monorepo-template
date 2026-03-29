@@ -25,10 +25,10 @@
         },
       ],
     },
-    "{env.PULL_REQUEST}": {
+    "[env.PULL_REQUEST]": {
       "routes": [
         {
-          "pattern": "{env.PULL_REQUEST}.rectangularlabs.com",
+          "pattern": "[env.PULL_REQUEST].rectangularlabs.com",
           "custom_domain": true,
         },
       ],
