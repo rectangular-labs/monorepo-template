@@ -1,8 +1,8 @@
-import { Loader2 } from "lucide-react";
+import { SpinnerIcon } from "@phosphor-icons/react";
 import { useState } from "react";
-import { cn } from "../../utils/cn";
-import { Button } from "../ui/button";
-import { toast } from "../ui/sonner";
+import { cn } from "../../utils";
+import { Button } from "../core/button";
+import { toast } from "../core/sonner";
 import { useAuth } from "./auth-provider";
 import type { SocialProvider } from "./social-providers";
 
@@ -20,6 +20,7 @@ export function ProviderButton({
   setShouldDisable,
 }: ProviderButtonProps) {
   const { successCallbackURL, errorCallbackURL, newUserCallbackURL, authClient } = useAuth();
+  const auth = authClient as any;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const doSignInSocial = async () => {
@@ -33,12 +34,12 @@ export function ProviderButton({
     setShouldDisable(true);
     const response = await (() => {
       if (provider.method === "social") {
-        return authClient.signIn.social({
+        return auth.signIn.social({
           provider: provider.provider,
           ...callbackValues,
         });
       } else {
-        return authClient.signIn.oauth2({
+        return auth.signIn.oauth2({
           providerId: provider.provider,
           ...callbackValues,
         });
@@ -60,7 +61,7 @@ export function ProviderButton({
       onClick={void doSignInSocial}
       variant="outline"
     >
-      {isSubmitting && <Loader2 className="animate-spin" />}
+      {isSubmitting && <SpinnerIcon className="animate-spin" />}
       {provider.icon && !isSubmitting && <provider.icon />}
       {socialLayout === "grid" && provider.name}
       {socialLayout === "vertical" && `Sign in with ${provider.name}`}

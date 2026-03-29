@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "default",
+  "style": "base-lyra",
   "rsc": true,
   "tsx": true,
   "tailwind": {
@@ -10,12 +10,16 @@
     "cssVariables": true,
     "prefix": ""
   },
+  "iconLibrary": "phosphor",
+  "rtl": true,
   "aliases": {
     "components": "@rectangular-labs/ui/components",
-    "ui": "@rectangular-labs/ui/components/ui",
-    "utils": "@rectangular-labs/ui/utils/cn",
-    "lib": "@rectangular-labs/ui/utils",
+    "ui": "@rectangular-labs/ui/components/core",
+    "utils": "@rectangular-labs/ui/utils",
+    "lib": "@rectangular-labs/ui",
     "hooks": "@rectangular-labs/ui/hooks"
   },
-  "iconLibrary": "lucide"
+  "menuColor": "inverted",
+  "menuAccent": "subtle",
+  "registries": {}
 }

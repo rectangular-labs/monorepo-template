@@ -1,7 +1,7 @@
-import { FingerprintIcon, Loader2 } from "lucide-react";
+import { FingerprintSimpleIcon, SpinnerIcon } from "@phosphor-icons/react";
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { toast } from "../ui/sonner";
+import { Button } from "../core/button";
+import { toast } from "../core/sonner";
 import { useAuth } from "./auth-provider";
 
 interface PasskeyButtonProps {
@@ -11,12 +11,13 @@ interface PasskeyButtonProps {
 
 export function PasskeyButton({ shouldDisable, setShouldDisable }: PasskeyButtonProps) {
   const { authClient, successHandler } = useAuth();
+  const auth = authClient as any;
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const signInPassKey = async () => {
     setShouldDisable(true);
     setIsSubmitting(true);
-    const response = await authClient.signIn.passkey?.({
+    const response = await auth.signIn.passkey?.({
       autoFill: true,
     });
     setIsSubmitting(false);
@@ -43,7 +44,7 @@ export function PasskeyButton({ shouldDisable, setShouldDisable }: PasskeyButton
       value="true"
       variant="secondary"
     >
-      {isSubmitting ? <Loader2 className="animate-spin" /> : <FingerprintIcon />}
+      {isSubmitting ? <SpinnerIcon className="animate-spin" /> : <FingerprintSimpleIcon />}
       Sign in with passkey
     </Button>
   );

@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@rectangular-labs/ui/components/core/card";
 import { Section } from "@rectangular-labs/ui/components/ui/section";
+import { Link } from "@tanstack/react-router";
 
 export function Products() {
   return (
@@ -27,17 +28,21 @@ export function Products() {
             </p>
           </CardContent>
           <CardFooter className="gap-2">
-            <Button asChild size="sm">
-              <a href="/docs">Docs</a>
+            <Button render={<Link to="/" />} size="sm">
+              Docs
             </Button>
-            <Button asChild size="sm" variant="outline">
-              <a
-                href="https://www.npmjs.com/package/@rectangular-labs/result"
-                rel="noreferrer"
-                target="_blank"
-              >
-                NPM
-              </a>
+            <Button
+              render={
+                <a
+                  href="https://www.npmjs.com/package/@rectangular-labs/result"
+                  rel="noreferrer"
+                  target="_blank"
+                />
+              }
+              size="sm"
+              variant="outline"
+            >
+              NPM
             </Button>
           </CardFooter>
         </Card>
@@ -53,17 +58,21 @@ export function Products() {
             </p>
           </CardContent>
           <CardFooter className="gap-2">
-            <Button asChild size="sm">
-              <a href="/docs">Docs</a>
+            <Button render={<Link to="/" />} size="sm">
+              Docs
             </Button>
-            <Button asChild size="sm" variant="outline">
-              <a
-                href="https://www.npmjs.com/package/@rectangular-labs/emails"
-                rel="noreferrer"
-                target="_blank"
-              >
-                NPM
-              </a>
+            <Button
+              render={
+                <a
+                  href="https://www.npmjs.com/package/@rectangular-labs/emails"
+                  rel="noreferrer"
+                  target="_blank"
+                />
+              }
+              size="sm"
+              variant="outline"
+            >
+              NPM
             </Button>
           </CardFooter>
         </Card>
@@ -80,14 +89,18 @@ export function Products() {
             </p>
           </CardContent>
           <CardFooter className="gap-2">
-            <Button asChild size="sm" variant="default">
-              <a
-                href="https://github.com/rectangular-labs/monorepo-template"
-                rel="noreferrer"
-                target="_blank"
-              >
-                View Repo
-              </a>
+            <Button
+              render={
+                <a
+                  href="https://github.com/rectangular-labs/monorepo-template"
+                  rel="noreferrer"
+                  target="_blank"
+                />
+              }
+              size="sm"
+              variant="default"
+            >
+              View Repo
             </Button>
           </CardFooter>
         </Card>

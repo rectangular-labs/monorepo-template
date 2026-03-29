@@ -1,6 +1,7 @@
 import { InteractiveGridPattern } from "@rectangular-labs/ui/components/background/interactive-grid-pattern";
 import { Button } from "@rectangular-labs/ui/components/core/button";
 import { Section } from "@rectangular-labs/ui/components/ui/section";
+import { Link } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 
 const InteractiveRectangle = lazy(() =>
@@ -12,19 +13,19 @@ const InteractiveRectangle = lazy(() =>
 export function Hero() {
   return (
     <Section className="relative text-center">
-      <h1 className="text-4xl font-bold tracking-tight [text-wrap:balance] md:text-6xl">
+      <h1 className="text-4xl font-bold tracking-tight text-balance md:text-6xl">
         Bootstrapped, customer-obsessed software ventures
       </h1>
-      <p className="mx-auto mt-4 max-w-2xl text-lg [text-wrap:balance] text-muted-foreground md:text-xl">
+      <p className="mx-auto mt-4 max-w-2xl text-lg text-balance text-muted-foreground md:text-xl">
         We conceive, build, and operate high-craft products — shipped fast, built to last.
       </p>
 
       <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <Button asChild size="lg">
-          {/* <Link to="/docs">Read the Docs</Link> */}
+        <Button render={<Link to="/" />} size="lg">
+          Read the Docs
         </Button>
-        <Button asChild size="lg" variant="outline">
-          {/* <Link to="/blog">Read the Lab Notes</Link> */}
+        <Button render={<Link to="/" />} size="lg" variant="outline">
+          Read Lab Notes
         </Button>
       </div>
 

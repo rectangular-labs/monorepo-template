@@ -1,10 +1,10 @@
 "use client";
 
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
 import { type ComponentProps, useState } from "react";
-import { cn } from "../../utils/cn";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+import { cn } from "../../utils";
+import { Button } from "../core/button";
+import { Input } from "../core/input";
 
 export function PasswordInput({
   className,
@@ -37,7 +37,7 @@ export function PasswordInput({
             type="button"
             variant="ghost"
           >
-            {isVisible ? <EyeIcon /> : <EyeOffIcon />}
+            {isVisible ? <EyeIcon /> : <EyeSlashIcon />}
           </Button>
 
           <style>{`.hide-password-toggle::-ms-reveal,

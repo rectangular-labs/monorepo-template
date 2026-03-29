@@ -1,7 +1,7 @@
 "use client";
 
 import type { BaseAuthClient, CompleteAuthClient } from "@rectangular-labs/auth/client";
-import { LockIcon, MailIcon, PhoneIcon } from "lucide-react";
+import { EnvelopeIcon, LockIcon, PhoneIcon } from "@phosphor-icons/react";
 import type { PropsWithChildren } from "react";
 import { createContext, useCallback, useContext, useMemo, useRef } from "react";
 import type { SocialProvider } from "./social-providers";
@@ -158,14 +158,14 @@ export function AuthProvider({
       return {
         view: AuthViewPaths.MAGIC_LINK,
         text: "magic link",
-        icon: MailIcon,
+        icon: EnvelopeIcon,
       };
     }
     if (hasEmailOTP) {
       return {
         view: AuthViewPaths.EMAIL_OTP,
         text: "email code",
-        icon: MailIcon,
+        icon: EnvelopeIcon,
       };
     }
     if (hasPhoneOTP) {

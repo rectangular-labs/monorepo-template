@@ -1,17 +1,17 @@
 import {
   ArrowDownIcon,
   ArrowUpIcon,
+  XIcon as CloseIcon,
   DotIcon,
   EyeIcon,
-  EyeOffIcon,
+  EyeSlashIcon,
   FileIcon,
-  Loader2,
-  XIcon as LucideXIcon,
-  MenuIcon,
+  ListIcon,
   MoonIcon,
+  SpinnerIcon,
   SunIcon,
   TerminalIcon,
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import type { SVGProps } from "react";
 
 type IconProps = React.HTMLAttributes<SVGElement>;
@@ -19,15 +19,15 @@ type IconProps = React.HTMLAttributes<SVGElement>;
 export const ArrowDown = ArrowDownIcon;
 export const ArrowUp = ArrowUpIcon;
 export const Dot = DotIcon;
-export const EyeOff = EyeOffIcon;
+export const EyeOff = EyeSlashIcon;
 export const EyeOn = EyeIcon;
 export const File = FileIcon;
-export const Menu = MenuIcon;
+export const Menu = ListIcon;
 export const Moon = MoonIcon;
-export const Spinner = Loader2;
+export const Spinner = SpinnerIcon;
 export const Sun = SunIcon;
 export const Terminal = TerminalIcon;
-export const X = LucideXIcon;
+export const X = CloseIcon;
 
 export const Logo = (props: IconProps) => (
   <svg viewBox="107.599 192.599 284.802 284.802" xmlns="http://www.w3.org/2000/svg" {...props}>

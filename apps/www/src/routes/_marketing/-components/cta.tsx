@@ -1,6 +1,7 @@
 import { InteractiveGridPattern } from "@rectangular-labs/ui/components/background/interactive-grid-pattern";
 import { Button } from "@rectangular-labs/ui/components/core/button";
 import { Section } from "@rectangular-labs/ui/components/ui/section";
+import { Link } from "@tanstack/react-router";
 
 export function CTA() {
   return (
@@ -11,11 +12,11 @@ export function CTA() {
           We are actively building new products. Stay tuned.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          <Button asChild size="lg">
-            {/* <Link to="/docs">Read the Docs</Link> */}
+          <Button render={<Link to="/" />} size="lg">
+            Read the Docs
           </Button>
-          <Button asChild size="lg" variant="outline">
-            {/* <Link to="/blog">Read Lab Notes</Link> */}
+          <Button render={<Link to="/" />} size="lg" variant="outline">
+            Read Lab Notes
           </Button>
         </div>
         <InteractiveGridPattern

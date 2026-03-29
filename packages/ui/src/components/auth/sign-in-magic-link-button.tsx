@@ -1,5 +1,5 @@
-import { MailIcon } from "lucide-react";
-import { Button } from "../ui/button";
+import { EnvelopeIcon } from "@phosphor-icons/react";
+import { Button } from "../core/button";
 import { type AuthViewPath, useAuth } from "./auth-provider";
 
 export function SignInMagicLinkButton({
@@ -22,7 +22,7 @@ export function SignInMagicLinkButton({
       type="button"
       variant="secondary"
     >
-      {view === viewPaths.MAGIC_LINK ? <defaultFormView.icon /> : <MailIcon />}
+      {view === viewPaths.MAGIC_LINK ? <defaultFormView.icon /> : <EnvelopeIcon />}
       {view === viewPaths.MAGIC_LINK
         ? `Sign in with ${defaultFormView.text}`
         : "Sign in with magic link"}
