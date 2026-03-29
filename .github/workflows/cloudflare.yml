@@ -143,6 +143,12 @@ jobs:
       - name: Setup Dependencies
         uses: ./tooling/github/setup
 
+      - name: Update Environment in wrangler.jsonc for teardown
+        shell: bash
+        run: |
+          FILE_WWW="apps/www/wrangler.jsonc"
+          # Replace placeholder with computed slug
+          sed -i "s|{env.PULL_REQUEST}|$STAGE|g" "$FILE_WWW"
       - name: Destroy Preview Environment for WWW
         uses: cloudflare/wrangler-action@v3
         with:
