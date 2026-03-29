@@ -109,10 +109,10 @@ jobs:
           NODE_OPTIONS: "--max_old_space_size=8192"
         run: |
           cat .env
-          vp run build:${{ steps.resolve.outputs.stage }} -- --mode ${{ steps.resolve.outputs.ENVIRONMENT }}
+          vp run build:${{ steps.resolve.outputs.stage }} -- --mode ${{ steps.resolve.outputs.ENVIRONMENT }} || { vp run --last-details; exit 1; }
 
       # - name: Migrate Database
-      #   run: vp run db:mp:${{ steps.resolve.outputs.stage }}
+      #   run: vp run db#migrate-push:${{ steps.resolve.outputs.stage }}
 
       - name: Deploy Sample WWW
         id: deploy_sample_www
