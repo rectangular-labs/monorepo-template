@@ -200,159 +200,109 @@ export function SignUpForm({
       >
         {Object.hasOwn(additionalFields, "name") ? (
           <form.AppField name="name">
-            {(field) => {
-              const errors = toFieldErrors(field.state.meta.errors);
-              return (
-                <Field
-                  data-disabled={isSubmitting || shouldDisable ? true : undefined}
-                  data-invalid={errors.length > 0 ? true : undefined}
-                >
-                  <FieldLabel htmlFor={field.name}>Name</FieldLabel>
-                  <FieldContent>
-                    <Input
-                      disabled={isSubmitting || shouldDisable}
-                      id={field.name}
-                      name={field.name}
-                      onBlur={field.handleBlur}
-                      onChange={(event) => {
-                        field.handleChange(event.currentTarget.value as never);
-                        field.setErrorMap({ onSubmit: undefined });
-                      }}
-                      placeholder="Your name"
-                      value={typeof field.state.value === "string" ? field.state.value : ""}
-                    />
-                    <FieldError errors={errors} />
-                  </FieldContent>
-                </Field>
-              );
-            }}
+            {(field) => (
+              <field.FieldShell field={field} label="Name">
+                <Input
+                  disabled={isSubmitting || shouldDisable}
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    field.handleChange(event.currentTarget.value as never);
+                    field.setErrorMap({ onSubmit: undefined });
+                  }}
+                  placeholder="Your name"
+                  value={typeof field.state.value === "string" ? field.state.value : ""}
+                />
+              </field.FieldShell>
+            )}
           </form.AppField>
         ) : null}
 
         {usernameEnabled ? (
           <form.AppField name="username">
-            {(field) => {
-              const errors = toFieldErrors(field.state.meta.errors);
-              return (
-                <Field
-                  data-disabled={isSubmitting || shouldDisable ? true : undefined}
-                  data-invalid={errors.length > 0 ? true : undefined}
-                >
-                  <FieldLabel htmlFor={field.name}>Username</FieldLabel>
-                  <FieldContent>
-                    <Input
-                      autoComplete="username"
-                      disabled={isSubmitting || shouldDisable}
-                      id={field.name}
-                      name={field.name}
-                      onBlur={field.handleBlur}
-                      onChange={(event) => {
-                        field.handleChange(event.currentTarget.value as never);
-                        field.setErrorMap({ onSubmit: undefined });
-                      }}
-                      placeholder="Choose a username"
-                      value={typeof field.state.value === "string" ? field.state.value : ""}
-                    />
-                    <FieldError errors={errors} />
-                  </FieldContent>
-                </Field>
-              );
-            }}
+            {(field) => (
+              <field.FieldShell field={field} label="Username">
+                <Input
+                  autoComplete="username"
+                  disabled={isSubmitting || shouldDisable}
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    field.handleChange(event.currentTarget.value as never);
+                    field.setErrorMap({ onSubmit: undefined });
+                  }}
+                  placeholder="Choose a username"
+                  value={typeof field.state.value === "string" ? field.state.value : ""}
+                />
+              </field.FieldShell>
+            )}
           </form.AppField>
         ) : null}
 
         <form.AppField name="email">
-          {(field) => {
-            const errors = toFieldErrors(field.state.meta.errors);
-            return (
-              <Field
-                data-disabled={isSubmitting || shouldDisable ? true : undefined}
-                data-invalid={errors.length > 0 ? true : undefined}
-              >
-                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                <FieldContent>
-                  <Input
-                    autoComplete="email"
-                    disabled={isSubmitting || shouldDisable}
-                    id={field.name}
-                    name={field.name}
-                    onBlur={field.handleBlur}
-                    onChange={(event) => {
-                      field.handleChange(event.currentTarget.value as never);
-                      field.setErrorMap({ onSubmit: undefined });
-                    }}
-                    placeholder="you@example.com"
-                    type="email"
-                    value={typeof field.state.value === "string" ? field.state.value : ""}
-                  />
-                  <FieldError errors={errors} />
-                </FieldContent>
-              </Field>
-            );
-          }}
+          {(field) => (
+            <field.FieldShell field={field} label="Email">
+              <Input
+                autoComplete="email"
+                disabled={isSubmitting || shouldDisable}
+                id={field.name}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(event) => {
+                  field.handleChange(event.currentTarget.value as never);
+                  field.setErrorMap({ onSubmit: undefined });
+                }}
+                placeholder="you@example.com"
+                type="email"
+                value={typeof field.state.value === "string" ? field.state.value : ""}
+              />
+            </field.FieldShell>
+          )}
         </form.AppField>
 
         <form.AppField name="password">
-          {(field) => {
-            const errors = toFieldErrors(field.state.meta.errors);
-            return (
-              <Field
-                data-disabled={isSubmitting || shouldDisable ? true : undefined}
-                data-invalid={errors.length > 0 ? true : undefined}
-              >
-                <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                <FieldContent>
-                  <PasswordInput
-                    autoComplete="new-password"
-                    disabled={isSubmitting || shouldDisable}
-                    enableToggle
-                    id={field.name}
-                    name={field.name}
-                    onBlur={field.handleBlur}
-                    onChange={(event) => {
-                      field.handleChange(event.currentTarget.value as never);
-                      field.setErrorMap({ onSubmit: undefined });
-                    }}
-                    placeholder="Password"
-                    value={typeof field.state.value === "string" ? field.state.value : ""}
-                  />
-                  <FieldError errors={errors} />
-                </FieldContent>
-              </Field>
-            );
-          }}
+          {(field) => (
+            <field.FieldShell field={field} label="Password">
+              <PasswordInput
+                autoComplete="new-password"
+                disabled={isSubmitting || shouldDisable}
+                enableToggle
+                id={field.name}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(event) => {
+                  field.handleChange(event.currentTarget.value as never);
+                  field.setErrorMap({ onSubmit: undefined });
+                }}
+                placeholder="Password"
+                value={typeof field.state.value === "string" ? field.state.value : ""}
+              />
+            </field.FieldShell>
+          )}
         </form.AppField>
 
         {confirmPasswordEnabled ? (
           <form.AppField name="confirmPassword">
-            {(field) => {
-              const errors = toFieldErrors(field.state.meta.errors);
-              return (
-                <Field
-                  data-disabled={isSubmitting || shouldDisable ? true : undefined}
-                  data-invalid={errors.length > 0 ? true : undefined}
-                >
-                  <FieldLabel htmlFor={field.name}>Confirm password</FieldLabel>
-                  <FieldContent>
-                    <PasswordInput
-                      autoComplete="new-password"
-                      disabled={isSubmitting || shouldDisable}
-                      enableToggle
-                      id={field.name}
-                      name={field.name}
-                      onBlur={field.handleBlur}
-                      onChange={(event) => {
-                        field.handleChange(event.currentTarget.value as never);
-                        field.setErrorMap({ onSubmit: undefined });
-                      }}
-                      placeholder="Confirm password"
-                      value={typeof field.state.value === "string" ? field.state.value : ""}
-                    />
-                    <FieldError errors={errors} />
-                  </FieldContent>
-                </Field>
-              );
-            }}
+            {(field) => (
+              <field.FieldShell field={field} label="Confirm password">
+                <PasswordInput
+                  autoComplete="new-password"
+                  disabled={isSubmitting || shouldDisable}
+                  enableToggle
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    field.handleChange(event.currentTarget.value as never);
+                    field.setErrorMap({ onSubmit: undefined });
+                  }}
+                  placeholder="Confirm password"
+                  value={typeof field.state.value === "string" ? field.state.value : ""}
+                />
+              </field.FieldShell>
+            )}
           </form.AppField>
         ) : null}
 

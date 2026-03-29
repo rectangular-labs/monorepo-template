@@ -2,6 +2,7 @@
 
 import { type } from "arktype";
 import { useState } from "react";
+import { Input } from "../../core/input";
 import { clearFormError, setFieldError, useAppForm } from "../../ui/tanstack-form";
 import { useAuth } from "../auth-provider";
 
@@ -52,13 +53,21 @@ export function RecoverAccountForm() {
       >
         <form.AppField name="code">
           {(field) => (
-            <field.TextField
-              autoComplete="off"
-              disabled={isSubmitting}
-              field={field}
-              label="Backup code"
-              placeholder="Your backup code"
-            />
+            <field.FieldShell field={field} label="Backup code">
+              <Input
+                autoComplete="off"
+                disabled={isSubmitting}
+                id={field.name}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(event) => {
+                  field.handleChange(event.currentTarget.value as never);
+                  field.setErrorMap({ onSubmit: undefined });
+                }}
+                placeholder="Your backup code"
+                value={field.state.value}
+              />
+            </field.FieldShell>
           )}
         </form.AppField>
 

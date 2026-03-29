@@ -4,6 +4,7 @@ import { type } from "arktype";
 import { useState } from "react";
 import { Button } from "../../core/button";
 import { FieldError } from "../../core/field";
+import { InputOTP } from "../../core/input-otp";
 import { toast } from "../../core/sonner";
 import { clearFormError, setFormError, toFieldErrors, useAppForm } from "../../ui/tanstack-form";
 import { type AuthViewPath, useAuth } from "../auth-provider";
@@ -94,6 +95,9 @@ export function VerificationForm({
           case "password-reset-phone-code":
             return;
           case "password-reset-email-code":
+            // ! Better Auth 1.5 removed the deprecated email-OTP forget-password verification flow.
+            // ! Replace this with token-based authClient.requestPasswordReset() and authClient.resetPassword().
+            // ! More info: https://better-auth.com/blog/1-5
             return auth.emailOtp.checkVerificationOtp({
               email: identifier,
               otp: value.code,
@@ -169,6 +173,9 @@ export function VerificationForm({
             phoneNumber: identifier,
           });
         case "password-reset-email-code":
+          // ! Better Auth 1.5 removed the deprecated email-OTP forget-password resend flow.
+          // ! Replace this with token-based authClient.requestPasswordReset().
+          // ! More info: https://better-auth.com/blog/1-5
           return auth.emailOtp.sendVerificationOtp({
             email: identifier,
             type: "forget-password",
@@ -220,16 +227,25 @@ export function VerificationForm({
           >
             <form.AppField name="code">
               {(field) => (
-                <field.OtpField
-                  disabled={isSubmitting || isDisabled}
-                  field={field}
-                  label="One-time code"
-                  onComplete={() => {
-                    void form.handleSubmit();
-                  }}
-                >
-                  <OTPInputGroup otpSeparators={1} />
-                </field.OtpField>
+                <field.FieldShell field={field} label="One-time code">
+                  <InputOTP
+                    disabled={isSubmitting || isDisabled}
+                    id={field.name}
+                    maxLength={6}
+                    name={field.name}
+                    onBlur={field.handleBlur}
+                    onChange={(value) => {
+                      field.handleChange(value as never);
+                      field.setErrorMap({ onSubmit: undefined });
+                      if (value.length === 6) {
+                        void form.handleSubmit();
+                      }
+                    }}
+                    value={field.state.value}
+                  >
+                    <OTPInputGroup otpSeparators={1} />
+                  </InputOTP>
+                </field.FieldShell>
               )}
             </form.AppField>
 

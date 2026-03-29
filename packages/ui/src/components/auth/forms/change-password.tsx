@@ -70,6 +70,9 @@ export function ChangePasswordForm(props: ChangePasswordProps) {
             token: props.token,
           });
         }
+        // ! Better Auth 1.5 removed the deprecated email-OTP forget-password reset endpoint.
+        // ! Replace this with the token-based authClient.requestPasswordReset() + authClient.resetPassword() flow.
+        // ! More info: https://better-auth.com/blog/1-5
         return auth.emailOtp.resetPassword({
           email: props.email,
           otp: props.code,
@@ -109,45 +112,66 @@ export function ChangePasswordForm(props: ChangePasswordProps) {
         {props.mode === "update" ? (
           <form.AppField name="oldPassword">
             {(field) => (
-              <field.TextField
-                autoComplete="current-password"
-                disabled={isSubmitting}
-                field={field}
-                enableToggle
-                inputComponent={PasswordInput}
-                label="Current password"
-                placeholder="Your current password"
-              />
+              <field.FieldShell field={field} label="Current password">
+                <PasswordInput
+                  autoComplete="current-password"
+                  disabled={isSubmitting}
+                  enableToggle
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    field.handleChange(event.currentTarget.value as never);
+                    field.setErrorMap({ onSubmit: undefined });
+                  }}
+                  placeholder="Your current password"
+                  value={field.state.value ?? ""}
+                />
+              </field.FieldShell>
             )}
           </form.AppField>
         ) : null}
 
         <form.AppField name="newPassword">
           {(field) => (
-            <field.TextField
-              autoComplete="new-password"
-              disabled={isSubmitting}
-              field={field}
-              enableToggle
-              inputComponent={PasswordInput}
-              label="New password"
-              placeholder="At least 8 characters"
-            />
+            <field.FieldShell field={field} label="New password">
+              <PasswordInput
+                autoComplete="new-password"
+                disabled={isSubmitting}
+                enableToggle
+                id={field.name}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(event) => {
+                  field.handleChange(event.currentTarget.value as never);
+                  field.setErrorMap({ onSubmit: undefined });
+                }}
+                placeholder="At least 8 characters"
+                value={field.state.value ?? ""}
+              />
+            </field.FieldShell>
           )}
         </form.AppField>
 
         {confirmPasswordEnabled ? (
           <form.AppField name="confirmPassword">
             {(field) => (
-              <field.TextField
-                autoComplete="new-password"
-                disabled={isSubmitting}
-                field={field}
-                enableToggle
-                inputComponent={PasswordInput}
-                label="Confirm password"
-                placeholder="Repeat new password"
-              />
+              <field.FieldShell field={field} label="Confirm password">
+                <PasswordInput
+                  autoComplete="new-password"
+                  disabled={isSubmitting}
+                  enableToggle
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onChange={(event) => {
+                    field.handleChange(event.currentTarget.value as never);
+                    field.setErrorMap({ onSubmit: undefined });
+                  }}
+                  placeholder="Repeat new password"
+                  value={field.state.value ?? ""}
+                />
+              </field.FieldShell>
             )}
           </form.AppField>
         ) : null}

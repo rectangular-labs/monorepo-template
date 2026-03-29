@@ -5,7 +5,8 @@ import { type } from "arktype";
 import type * as React from "react";
 import { useState } from "react";
 import { Button } from "../../core/button";
-import { Field, FieldContent, FieldError, FieldLabel } from "../../core/field";
+import { FieldError } from "../../core/field";
+import { Input } from "../../core/input";
 import { clearFormError, setFormError, toFieldErrors, useAppForm } from "../../ui/tanstack-form";
 import { PhoneInput } from "../../ui/phone-input";
 import type { AuthViewPath } from "../auth-provider";
@@ -123,6 +124,9 @@ function EmailForm({
               type: "sign-in",
             });
           case "forget-password-email":
+            // ! Better Auth 1.5 removed the deprecated email-OTP forget-password flow.
+            // ! Replace the code branch below with token-based authClient.requestPasswordReset().
+            // ! More info: https://better-auth.com/blog/1-5
             return isCode
               ? auth.emailOtp.sendVerificationOtp({
                   email: value.email,
@@ -193,14 +197,22 @@ function EmailForm({
       >
         <form.AppField name="email">
           {(field) => (
-            <field.TextField
-              autoComplete="email webauthn"
-              disabled={isSubmitting || shouldDisable}
-              field={field}
-              label="Email"
-              placeholder="you@example.com"
-              type="email"
-            />
+            <field.FieldShell field={field} label="Email">
+              <Input
+                autoComplete="email webauthn"
+                disabled={isSubmitting || shouldDisable}
+                id={field.name}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(event) => {
+                  field.handleChange(event.currentTarget.value as never);
+                  field.setErrorMap({ onSubmit: undefined });
+                }}
+                placeholder="you@example.com"
+                type="email"
+                value={field.state.value}
+              />
+            </field.FieldShell>
           )}
         </form.AppField>
 
@@ -313,31 +325,21 @@ function PhoneForm({
         }}
       >
         <form.AppField name="phone">
-          {(field) => {
-            const errors = toFieldErrors(field.state.meta.errors);
-            return (
-              <Field
-                data-disabled={isSubmitting || shouldDisable ? true : undefined}
-                data-invalid={errors.length > 0 ? true : undefined}
-              >
-                <FieldLabel htmlFor={field.name}>Phone number</FieldLabel>
-                <FieldContent>
-                  <PhoneInput
-                    defaultCountry="US"
-                    disabled={Boolean(isSubmitting || shouldDisable)}
-                    onBlur={field.handleBlur}
-                    onChange={(value) => {
-                      field.handleChange((value ?? "") as never);
-                      field.setErrorMap({ onSubmit: undefined });
-                    }}
-                    placeholder="(555) 123-4567"
-                    value={(field.state.value as string | undefined) ?? ""}
-                  />
-                  <FieldError errors={errors} />
-                </FieldContent>
-              </Field>
-            );
-          }}
+          {(field) => (
+            <field.FieldShell field={field} label="Phone number">
+              <PhoneInput
+                defaultCountry="US"
+                disabled={Boolean(isSubmitting || shouldDisable)}
+                onBlur={field.handleBlur}
+                onChange={(value) => {
+                  field.handleChange((value ?? "") as never);
+                  field.setErrorMap({ onSubmit: undefined });
+                }}
+                placeholder="(555) 123-4567"
+                value={(field.state.value as string | undefined) ?? ""}
+              />
+            </field.FieldShell>
+          )}
         </form.AppField>
 
         <form.Subscribe selector={(state) => state.errorMap.onSubmit}>

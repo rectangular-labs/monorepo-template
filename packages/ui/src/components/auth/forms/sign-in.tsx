@@ -3,7 +3,9 @@
 import { type } from "arktype";
 import { useState } from "react";
 import { Button } from "../../core/button";
+import { Checkbox } from "../../core/checkbox";
 import { FieldError } from "../../core/field";
+import { Input } from "../../core/input";
 import { clearFormError, setFormError, toFieldErrors, useAppForm } from "../../ui/tanstack-form";
 import { type AuthViewPath, useAuth } from "../auth-provider";
 import { PasswordInput } from "../password-input";
@@ -121,24 +123,29 @@ export function SignInForm({
       >
         <form.AppField name="email">
           {(field) => (
-            <field.TextField
-              autoComplete={usernameEnabled ? "username webauthn" : "email webauthn"}
-              disabled={isSubmitting || shouldDisable}
-              field={field}
-              label={usernameEnabled ? "Username" : "Email"}
-              placeholder={usernameEnabled ? "Enter your username" : "Enter your email"}
-              type={usernameEnabled ? "text" : "email"}
-            />
+            <field.FieldShell field={field} label={usernameEnabled ? "Username" : "Email"}>
+              <Input
+                autoComplete={usernameEnabled ? "username webauthn" : "email webauthn"}
+                disabled={isSubmitting || shouldDisable}
+                id={field.name}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(event) => {
+                  field.handleChange(event.currentTarget.value as never);
+                  field.setErrorMap({ onSubmit: undefined });
+                }}
+                placeholder={usernameEnabled ? "Enter your username" : "Enter your email"}
+                type={usernameEnabled ? "text" : "email"}
+                value={field.state.value}
+              />
+            </field.FieldShell>
           )}
         </form.AppField>
 
         <form.AppField name="password">
           {(field) => (
-            <field.TextField
-              autoComplete="current-password webauthn"
-              disabled={isSubmitting || shouldDisable}
+            <field.FieldShell
               field={field}
-              inputComponent={PasswordInput}
               label={
                 <div className="flex items-center justify-between">
                   <span>Password</span>
@@ -154,19 +161,40 @@ export function SignInForm({
                   ) : null}
                 </div>
               }
-              placeholder="Your password"
-            />
+            >
+              <PasswordInput
+                autoComplete="current-password webauthn"
+                disabled={isSubmitting || shouldDisable}
+                id={field.name}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(event) => {
+                  field.handleChange(event.currentTarget.value as never);
+                  field.setErrorMap({ onSubmit: undefined });
+                }}
+                placeholder="Your password"
+                value={field.state.value}
+              />
+            </field.FieldShell>
           )}
         </form.AppField>
 
         {rememberMeEnabled ? (
           <form.AppField name="rememberMe">
             {(field) => (
-              <field.CheckboxField
-                disabled={isSubmitting || shouldDisable}
-                field={field}
-                label="Remember me"
-              />
+              <field.FieldShell field={field} label="Remember me" orientation="horizontal-start">
+                <Checkbox
+                  checked={Boolean(field.state.value)}
+                  disabled={isSubmitting || shouldDisable}
+                  id={field.name}
+                  name={field.name}
+                  onBlur={field.handleBlur}
+                  onCheckedChange={(checked) => {
+                    field.handleChange(Boolean(checked) as never);
+                    field.setErrorMap({ onSubmit: undefined });
+                  }}
+                />
+              </field.FieldShell>
             )}
           </form.AppField>
         ) : null}

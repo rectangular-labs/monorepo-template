@@ -3,6 +3,8 @@
 import { type } from "arktype";
 import { PaperPlaneTiltIcon, SpinnerIcon } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Checkbox } from "../../core/checkbox";
+import { InputOTP } from "../../core/input-otp";
 import { clearFormError, setFieldError, useAppForm } from "../../ui/tanstack-form";
 import { Button } from "../../core/button";
 import { toast } from "../../core/sonner";
@@ -135,21 +137,47 @@ export function TwoFactorForm({ setView }: { setView: (view: AuthViewPath) => vo
 
         <form.AppField name="code">
           {(field) => (
-            <field.OtpField
-              disabled={isSubmitting}
-              field={field}
-              onComplete={() => {
-                void form.handleSubmit();
-              }}
-            >
-              <OTPInputGroup otpSeparators={2} />
-            </field.OtpField>
+            <field.FieldShell field={field} label="One-time password">
+              <InputOTP
+                disabled={isSubmitting}
+                id={field.name}
+                maxLength={6}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(value) => {
+                  field.handleChange(value as never);
+                  field.setErrorMap({ onSubmit: undefined });
+                  if (value.length === 6) {
+                    void form.handleSubmit();
+                  }
+                }}
+                value={field.state.value}
+              >
+                <OTPInputGroup otpSeparators={2} />
+              </InputOTP>
+            </field.FieldShell>
           )}
         </form.AppField>
 
         <form.AppField name="trustDevice">
           {(field) => (
-            <field.CheckboxField disabled={isSubmitting} field={field} label="Trust this device" />
+            <field.FieldShell
+              field={field}
+              label="Trust this device"
+              orientation="horizontal-start"
+            >
+              <Checkbox
+                checked={Boolean(field.state.value)}
+                disabled={isSubmitting}
+                id={field.name}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onCheckedChange={(checked) => {
+                  field.handleChange(Boolean(checked) as never);
+                  field.setErrorMap({ onSubmit: undefined });
+                }}
+              />
+            </field.FieldShell>
           )}
         </form.AppField>
 
