@@ -107,6 +107,28 @@ vp run www#build:preview
 vp run www#build:production
 ```
 
+## Deployment
+
+This repository includes a [GitHub Action](.github/workflows/cloudflare.yml) for automated deployments to Cloudflare. The workflow will provides:
+
+- Automatic deployment to preview env on Pull Requests.
+- Automatic deployment to production env on pushes to `main`.
+- Manual workflow trigger to both preview and production envs via GitHub Actions UI.
+
+To smoothly set up deployment, you must configure the following **Secrets** in your GitHub repository:
+
+- `CLOUDFLARE_ACCOUNT_ID`: Your Cloudflare account ID.
+- `CLOUDFLARE_API_TOKEN`: A Cloudflare API token with permissions to edit Workers/Pages.
+- `DOTENV_PRIVATE_KEY`: The decrypted dotenvx private key for your preview/development environment (`.env`).
+- `DOTENV_PRIVATE_KEY_PRODUCTION`: The decrypted dotenvx private key for your production environment (`.env.production`).
+
+When adding new builds, add a deploy and teardown step to the [GitHub Action](.github/workflows/cloudflare.yml). Also update the steps for preview env vars and comments to include the new build.
+
+> Make sure to have `CLOUDFLARE_ENV` in your preview `.env` file. This ensures that the we deploy to the right preview environments. (Done for you by default)
+
+**Opting Out:**
+Delete the `.github/workflows/cloudflare.yml` file and the corresponding `wrangler.jsonc` files.
+
 ## Credits
 
 This repository was originally inspired by [create t3 turbo](https://github.com/t3-oss/create-t3-turbo).

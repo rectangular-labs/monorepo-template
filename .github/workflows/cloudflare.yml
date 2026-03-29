@@ -1,0 +1,152 @@
+name: Cloudflare
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - closed
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Choose environment: preview (default), or prod"
+        required: true
+        default: "preview"
+        type: choice
+        options:
+          - preview
+          - production
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    if: ${{ github.event.action != 'closed' }}
+    permissions:
+      pull-requests: write
+    env:
+      DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+      DOTENV_PRIVATE_KEY_PRODUCTION: ${{ secrets.DOTENV_PRIVATE_KEY_PRODUCTION }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Dependencies
+        uses: ./tooling/github/setup
+
+      - name: Resolve deployment context
+        id: resolve
+        shell: bash
+        run: |
+          EVENT="${{ github.event_name }}"
+          REF="${{ github.ref }}"
+          INPUT_ENV="${{ github.event.inputs.environment || '' }}"
+
+          STAGE="preview"
+          ENVIRONMENT="preview"
+          ENV_PATH=".env"
+          DOTENV_KEY_NAME="DOTENV_PRIVATE_KEY"
+
+          if [[ "$EVENT" == "push" && "$REF" == "refs/heads/main" ]]; then
+            STAGE="production"
+            ENVIRONMENT="production"
+            ENV_PATH=".env.production"
+            DOTENV_KEY_NAME="DOTENV_PRIVATE_KEY_PRODUCTION"
+          elif [[ "$EVENT" == "pull_request" ]]; then
+            ENVIRONMENT="pr-${{ github.event.number }}"
+          elif [[ "$EVENT" == "workflow_dispatch" ]]; then
+            case "$INPUT_ENV" in
+              preview)
+                ;; # default to preview env and stage
+              production)
+                ENV_PATH=".env.production"
+                DOTENV_KEY_NAME="DOTENV_PRIVATE_KEY_PRODUCTION"
+                STAGE="production"
+                ENVIRONMENT="production"
+                ;;
+              *)
+                echo "Unknown manual environment: $INPUT_ENV" >&2
+                exit 1
+                ;;
+            esac
+          else
+            echo "Unsupported trigger: $EVENT" >&2
+            exit 1
+          fi
+
+          echo "stage=$STAGE" >> "$GITHUB_OUTPUT"
+          echo "environment=$ENVIRONMENT" >> "$GITHUB_OUTPUT"
+          echo "env_path=$ENV_PATH" >> "$GITHUB_OUTPUT"
+          echo "dotenv_key_name=$DOTENV_KEY_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Update Environment Variables for Preview
+        if: ${{ steps.resolve.outputs.stage == 'preview' }}
+        shell: bash
+        env:
+          ENVIRONMENT: ${{ steps.resolve.outputs.environment }}
+          ENV_PATH: ${{ steps.resolve.outputs.env_path }}
+        run: |
+          FILE_WWW="apps/www/wrangler.jsonc"
+          # Replace placeholder with computed slug
+          sed -i "s|{env.PULL_REQUEST}|$ENVIRONMENT|g" "$FILE_WWW"
+          sed -i "s|{env.PULL_REQUEST}|$ENVIRONMENT|g" "$ENV_PATH"
+
+      - name: Prepare secrets
+        id: prepare_secrets
+        uses: ./tooling/github/prepare-secrets
+        with:
+          env_path: ${{ steps.resolve.outputs.env_path }}
+
+      - name: Build
+        env:
+          NODE_OPTIONS: "--max_old_space_size=8192"
+        run: |
+          vp run build:${{ steps.resolve.outputs.stage }} -- --mode ${{ steps.resolve.outputs.ENVIRONMENT }}
+
+      # - name: Migrate Database
+      #   run: vp run db#migrate-push:${{ steps.resolve.outputs.stage }}
+
+      - name: Deploy Sample WWW
+        id: deploy_sample_www
+        uses: cloudflare/wrangler-action@v3
+        with:
+          command: deploy --env=""
+          workingDirectory: apps/www
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          environment: ${{ steps.resolve.outputs.environment }}
+          secrets: ${{ steps.prepare_secrets.outputs.secret_names }}
+
+      - name: Comment for deployment details
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: thollander/actions-comment-pull-request@v3
+        with:
+          message: |
+            Cloudflare Preview URL for Sample WWW :balloon: : ${{ startsWith(steps.deploy_sample_www.outputs.deployment-url, 'https://') && steps.deploy_sample_www.outputs.deployment-url || format('https://{0}', steps.deploy_sample_www.outputs.deployment-url) }}
+          comment-tag: execution
+
+  cleanup:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && github.event.action == 'closed' }}
+    env:
+      STAGE: pr-${{ github.event.number }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Dependencies
+        uses: ./tooling/github/setup
+
+      - name: Destroy Preview Environment for WWW
+        uses: cloudflare/wrangler-action@v3
+        with:
+          workingDirectory: apps/www
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: delete --env ${{ env.STAGE }}

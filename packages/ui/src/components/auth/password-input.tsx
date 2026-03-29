@@ -30,7 +30,7 @@ export function PasswordInput({
       {enableToggle && (
         <>
           <Button
-            className="!bg-transparent absolute top-0 right-0"
+            className="absolute top-0 right-0 !bg-transparent"
             disabled={disabled}
             onClick={() => setIsVisible(!isVisible)}
             size="icon"

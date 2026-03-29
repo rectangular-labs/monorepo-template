@@ -4,6 +4,7 @@ import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { useEffect } from "react";
 import { seo } from "~/lib/seo";
 import appCss from "../styles.css?url";
 
@@ -17,12 +18,27 @@ export const Route = createRootRouteWithContext<{
         name: "viewport",
         content: "width=device-width, initial-scale=1",
       },
+      {
+        name: "apple-mobile-web-app-title",
+        content: "Rectangular Labs",
+      },
+      {
+        name: "application-name",
+        content: "Rectangular Labs",
+      },
       ...seo({
-        title: "Elastic Bottle Monorepo template",
-        description: "Simple typescript monorepo template for end to end application development",
+        title: "Rectangular Labs — Bootstrapped, customer-obsessed technology studio",
+        description:
+          "We build and launch high-craft products: Result, Emails, and a production-ready monorepo starter.",
       }),
     ],
     links: [
+      {
+        rel: "alternate",
+        type: "application/rss+xml",
+        href: "/blog/rss.xml",
+        title: "Blog RSS",
+      },
       { rel: "stylesheet", href: appCss },
       {
         rel: "apple-touch-icon",
@@ -32,30 +48,38 @@ export const Route = createRootRouteWithContext<{
       {
         rel: "icon",
         type: "image/png",
-        sizes: "32x32",
-        href: "/favicon-32x32.png",
+        sizes: "96x96",
+        href: "/favicon-96x96.png",
       },
       {
         rel: "icon",
-        type: "image/png",
-        sizes: "16x16",
-        href: "/favicon-16x16.png",
+        type: "image/svg+xml",
+        sizes: "any",
+        href: "/favicon.svg",
+      },
+      {
+        rel: "icon",
+        type: "image/x-icon",
+        href: "/favicon.ico",
       },
       { rel: "manifest", href: "/site.webmanifest", color: "#fffff" },
-      { rel: "icon", href: "/favicon.ico" },
     ],
   }),
   component: RootLayout,
 });
 
 function RootLayout() {
+  console.log("hello");
+  useEffect(() => {
+    console.log("hi");
+  }, []);
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" enableSystem>
           <Outlet />
           <Toaster />
         </ThemeProvider>

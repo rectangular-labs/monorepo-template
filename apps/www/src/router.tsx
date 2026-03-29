@@ -1,33 +1,38 @@
 import { QueryClient } from "@tanstack/react-query";
-import { createRouter as createTanStackRouter } from "@tanstack/react-router";
-import { routerWithQueryClient } from "@tanstack/react-router-with-query";
+import { createRouter } from "@tanstack/react-router";
+import { setupRouterSsrQueryIntegration } from "@tanstack/react-router-ssr-query";
 import { DefaultCatchBoundary } from "./components/error-boundary";
 import { NotFound } from "./components/not-found";
 import { routeTree } from "./routeTree.gen";
 
-// NOTE: Most of the integration code found here is experimental and will
-// definitely end up in a more streamlined API in the future. This is just
-// to show what's possible with the current APIs.
+export function getRouter() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: 1000 * 15, // 15 seconds
+      },
+    },
+  });
 
-export function createRouter() {
-  const queryClient = new QueryClient();
-
-  return routerWithQueryClient(
-    createTanStackRouter({
-      routeTree,
-      context: { queryClient },
-      defaultPreload: "intent",
-      defaultErrorComponent: DefaultCatchBoundary,
-      defaultNotFoundComponent: () => <NotFound />,
-      scrollRestoration: true,
-      defaultStructuralSharing: true,
-    }),
+  const router = createRouter({
+    routeTree,
+    context: { queryClient },
+    defaultPreload: "intent",
+    defaultErrorComponent: DefaultCatchBoundary,
+    defaultNotFoundComponent: () => <NotFound />,
+    scrollRestoration: true,
+    defaultStructuralSharing: true,
+  });
+  setupRouterSsrQueryIntegration({
+    router,
     queryClient,
-  );
+  });
+
+  return router;
 }
 
 declare module "@tanstack/react-router" {
   interface Register {
-    router: ReturnType<typeof createRouter>;
+    router: ReturnType<typeof getRouter>;
   }
 }

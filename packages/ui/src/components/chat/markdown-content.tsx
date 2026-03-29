@@ -106,35 +106,35 @@ CodeBlock.displayName = "CodeBlock";
 
 const components: Partial<Components> = {
   h1: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h1 className="mt-2 scroll-m-20 font-bold text-4xl" {...props}>
+    <h1 className="mt-2 scroll-m-20 text-4xl font-bold" {...props}>
       {children}
     </h1>
   ),
   h2: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h2
-      className="mt-8 scroll-m-20 border-b pb-2 font-semibold text-2xl tracking-tight first:mt-0"
+      className="mt-8 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0"
       {...props}
     >
       {children}
     </h2>
   ),
   h3: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h3 className="mt-4 scroll-m-20 font-semibold text-xl tracking-tight" {...props}>
+    <h3 className="mt-4 scroll-m-20 text-xl font-semibold tracking-tight" {...props}>
       {children}
     </h3>
   ),
   h4: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h4 className="mt-4 scroll-m-20 font-semibold text-lg tracking-tight" {...props}>
+    <h4 className="mt-4 scroll-m-20 text-lg font-semibold tracking-tight" {...props}>
       {children}
     </h4>
   ),
   h5: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h5 className="mt-4 scroll-m-20 font-semibold text-lg tracking-tight" {...props}>
+    <h5 className="mt-4 scroll-m-20 text-lg font-semibold tracking-tight" {...props}>
       {children}
     </h5>
   ),
   h6: ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h6 className="mt-4 scroll-m-20 font-semibold text-base tracking-tight" {...props}>
+    <h6 className="mt-4 scroll-m-20 text-base font-semibold tracking-tight" {...props}>
       {children}
     </h6>
   ),
@@ -187,7 +187,7 @@ const components: Partial<Components> = {
     </div>
   ),
   tr: ({ children, ...props }: React.HTMLAttributes<HTMLTableRowElement>) => (
-    <tr className="m-0 border-b last:border-b-none" {...props}>
+    <tr className="last:border-b-none m-0 border-b" {...props}>
       {children}
     </tr>
   ),
