@@ -118,7 +118,6 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           command: deploy --env=""
-          packageManager: vp
           workingDirectory: apps/www
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
