@@ -109,13 +109,11 @@ vp run www#build:production
 
 ## Deployment
 
-This repository includes a GitHub Actions workflow (`.github/workflows/cloudflare.yml`) for automated deployments to Cloudflare.
+This repository includes a [GitHub Action](.github/workflows/cloudflare.yml) for automated deployments to Cloudflare. The workflow will provides:
 
-The workflow will provides:
-
-- Automatic deployment to preview environments on Pull Requests.
-- Automatic deployment to production on pushes to the `main` branch.
-- Manual workflow trigger to both preview and production environments via GitHub Actions UI.
+- Automatic deployment to preview env on Pull Requests.
+- Automatic deployment to production env on pushes to `main`.
+- Manual workflow trigger to both preview and production envs via GitHub Actions UI.
 
 To smoothly set up deployment, you must configure the following **Secrets** in your GitHub repository:
 
@@ -124,10 +122,12 @@ To smoothly set up deployment, you must configure the following **Secrets** in y
 - `DOTENV_PRIVATE_KEY`: The decrypted dotenvx private key for your preview/development environment (`.env`).
 - `DOTENV_PRIVATE_KEY_PRODUCTION`: The decrypted dotenvx private key for your production environment (`.env.production`).
 
+When adding new builds, add a deploy and teardown step to the [GitHub Action](.github/workflows/cloudflare.yml). Also update the steps for preview env vars and comments to include the new build.
+
 > Make sure to have `CLOUDFLARE_ENV` in your preview `.env` file. This ensures that the we deploy to the right preview environments. (Done for you by default)
 
 **Opting Out:**
-If you do not want to use Cloudflare for deployment, simply delete the `.github/workflows/cloudflare.yml` file from the repository and the corresponding `wrangler.jsonc` files.
+Delete the `.github/workflows/cloudflare.yml` file and the corresponding `wrangler.jsonc` files.
 
 ## Credits
 
