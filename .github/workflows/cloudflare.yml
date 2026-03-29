@@ -108,8 +108,7 @@ jobs:
         env:
           NODE_OPTIONS: "--max_old_space_size=8192"
         run: |
-          cat .env
-          vp run build:${{ steps.resolve.outputs.stage }} -- --mode ${{ steps.resolve.outputs.ENVIRONMENT }} || { vp run --last-details; exit 1; }
+          vp run build:${{ steps.resolve.outputs.stage }} -- --mode ${{ steps.resolve.outputs.ENVIRONMENT }}
 
       # - name: Migrate Database
       #   run: vp run db#migrate-push:${{ steps.resolve.outputs.stage }}
@@ -119,7 +118,7 @@ jobs:
         uses: cloudflare/wrangler-action@v3
         with:
           command: deploy --env=""
-          packageManager: pnpm
+          packageManager: vp
           workingDirectory: apps/www
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
