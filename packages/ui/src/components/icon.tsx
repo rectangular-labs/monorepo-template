@@ -10,6 +10,7 @@ import {
   MoonIcon,
   SunIcon,
   TerminalIcon,
+  WarningCircleIcon,
 } from "@phosphor-icons/react";
 import type { SVGProps } from "react";
 
@@ -25,6 +26,7 @@ export const Menu = ListIcon;
 export const Moon = MoonIcon;
 export const Sun = SunIcon;
 export const Terminal = TerminalIcon;
+export const WarningCircle = WarningCircleIcon;
 export const X = CloseIcon;
 
 export const Logo = (props: IconProps) => (

@@ -1,44 +1,54 @@
 "use client";
 
 import { type } from "arktype";
-import { useState } from "react";
+import { Checkbox } from "../../core/checkbox";
+import { FieldError } from "../../core/field";
 import { Input } from "../../core/input";
-import { clearFormError, setFieldError, useAppForm } from "../../ui/tanstack-form";
-import { useAuth } from "../auth-provider";
+import {
+  clearFormError,
+  setFieldError,
+  setFormError,
+  toFieldErrors,
+  useAppForm,
+} from "../../ui/tanstack-form";
+import type { AuthResult } from "@rectangular-labs/auth/adapter/types";
 
-export function RecoverAccountForm() {
-  const { authClient, onSuccess } = useAuth();
-  const auth = authClient as any;
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const schema = type({ code: "string > 0" });
+// ─── Props ───────────────────────────────────────────────────────────────────
 
+export type RecoverAccountFormProps = {
+  onSubmit: (values: { code: string; trustDevice?: boolean | undefined }) => Promise<AuthResult>;
+};
+
+// ─── Component ───────────────────────────────────────────────────────────────
+
+const backupCodeSchema = type({ code: "string > 0", trustDevice: "boolean?" });
+
+export function RecoverAccountForm({ onSubmit }: RecoverAccountFormProps) {
   const form = useAppForm({
-    defaultValues: { code: "" },
+    defaultValues: { code: "", trustDevice: false },
     listeners: {
       onChange: ({ formApi }) => clearFormError(formApi),
     },
     onSubmit: async ({ formApi, value }) => {
-      setIsSubmitting(true);
-      const response = await auth.twoFactor.verifyBackupCode({
+      const result = await onSubmit({
         code: value.code,
+        trustDevice: value.trustDevice || undefined,
       });
-      setIsSubmitting(false);
 
-      if (response.error) {
-        setFieldError<typeof schema.infer>(
-          formApi,
-          "code",
-          response.error.message ?? "Failed to verify backup code",
-        );
+      if (result.type === "error") {
+        if (result.field) {
+          setFieldError<typeof value>(formApi, result.field as keyof typeof value, result.message);
+        } else {
+          setFormError(formApi, result.message);
+        }
         formApi.resetField("code");
-        return;
       }
 
-      void onSuccess?.();
+      return result;
     },
     validators: {
-      onChange: schema,
-      onSubmit: schema,
+      onChange: backupCodeSchema,
+      onSubmit: backupCodeSchema,
     },
   });
 
@@ -53,16 +63,14 @@ export function RecoverAccountForm() {
       >
         <form.AppField name="code">
           {(field) => (
-            <field.FieldShell field={field} label="Backup code">
+            <field.FieldShell label="Backup code">
               <Input
                 autoComplete="off"
-                disabled={isSubmitting}
                 id={field.name}
                 name={field.name}
                 onBlur={field.handleBlur}
                 onChange={(event) => {
                   field.handleChange(event.currentTarget.value as never);
-                  field.setErrorMap({ onSubmit: undefined });
                 }}
                 placeholder="Your backup code"
                 value={field.state.value}
@@ -70,6 +78,26 @@ export function RecoverAccountForm() {
             </field.FieldShell>
           )}
         </form.AppField>
+
+        <form.AppField name="trustDevice">
+          {(field) => (
+            <field.FieldShell label="Trust this device" orientation="horizontal-start">
+              <Checkbox
+                checked={Boolean(field.state.value)}
+                id={field.name}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onCheckedChange={(checked) => {
+                  field.handleChange(Boolean(checked) as never);
+                }}
+              />
+            </field.FieldShell>
+          )}
+        </form.AppField>
+
+        <form.Subscribe selector={(state) => state.errorMap.onSubmit}>
+          {(error) => <FieldError errors={toFieldErrors(error)} />}
+        </form.Subscribe>
 
         <form.SubmitButton>Recover account</form.SubmitButton>
       </form>

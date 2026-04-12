@@ -2,24 +2,33 @@
 
 import { type } from "arktype";
 import { PaperPlaneTiltIcon, SpinnerIcon } from "@phosphor-icons/react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Checkbox } from "../../core/checkbox";
-import { InputOTP } from "../../core/input-otp";
-import { clearFormError, setFieldError, useAppForm } from "../../ui/tanstack-form";
+import { FieldError } from "../../core/field";
+import {
+  clearFormError,
+  setFieldError,
+  setFormError,
+  toFieldErrors,
+  useAppForm,
+} from "../../ui/tanstack-form";
 import { Button } from "../../core/button";
-import { toast } from "../../core/sonner";
-import { type AuthViewPath, useAuth } from "../auth-provider";
-import { OTPInputGroup } from "../otp-input-group";
+import { OTPCodeFieldGroup } from "../field-groups/otp-code";
+import type { AuthResult } from "@rectangular-labs/auth/adapter/types";
 
-export function TwoFactorForm({ setView }: { setView: (view: AuthViewPath) => void }) {
-  const { authClient, successHandler, viewPaths } = useAuth();
-  const auth = authClient as any;
-  const { data: session, isPending: isLoadingSession } = authClient.useSession();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+// ─── Props ───────────────────────────────────────────────────────────────────
+
+export type TwoFactorFormProps = {
+  onSubmit: (values: { code: string; trustDevice?: boolean | undefined }) => Promise<AuthResult>;
+  onSendOtp?: ((values: { trustDevice?: boolean | undefined }) => Promise<void>) | undefined;
+  onRecoverAccount?: (() => void) | undefined;
+};
+
+// ─── Component ───────────────────────────────────────────────────────────────
+
+export function TwoFactorForm({ onSubmit, onSendOtp, onRecoverAccount }: TwoFactorFormProps) {
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [coolDownSeconds, setCoolDownSeconds] = useState(0);
-  const [method] = useState<"totp" | "otp" | null>(null);
-  const initialSendRef = useRef(false);
 
   const schema = type({
     code: "string.numeric",
@@ -40,36 +49,21 @@ export function TwoFactorForm({ setView }: { setView: (view: AuthViewPath) => vo
       onChange: ({ formApi }) => clearFormError(formApi),
     },
     onSubmit: async ({ formApi, value }) => {
-      if (isLoadingSession) {
-        return;
-      }
-
-      if ((session?.user as { twoFactorEnabled?: boolean } | undefined)?.twoFactorEnabled) {
-        toast.error("User already has two-factor enabled.");
-        return;
-      }
-
-      setIsSubmitting(true);
-      const verifyMethod = method === "otp" ? auth.twoFactor.verifyOtp : auth.twoFactor.verifyTotp;
-
-      const response = await verifyMethod({
+      const result = await onSubmit({
         code: value.code,
-        trustDevice: value.trustDevice,
+        trustDevice: value.trustDevice || undefined,
       });
-      setIsSubmitting(false);
 
-      if (response.error) {
-        setFieldError<typeof schema.infer>(
-          formApi,
-          "code",
-          response.error.message ?? "Invalid code. Try again.",
-        );
+      if (result.type === "error") {
+        if (result.field) {
+          setFieldError<typeof value>(formApi, result.field as keyof typeof value, result.message);
+        } else {
+          setFormError(formApi, result.message);
+        }
         formApi.resetField("code");
-        return;
       }
 
-      toast.success("Two-factor authentication enabled successfully");
-      void successHandler();
+      return result;
     },
     validators: {
       onChange: schema,
@@ -84,35 +78,18 @@ export function TwoFactorForm({ setView }: { setView: (view: AuthViewPath) => vo
   }, [coolDownSeconds]);
 
   const sendOtp = useCallback(async () => {
-    if (isSendingOtp) return;
-    if (coolDownSeconds > 0) {
-      toast.info(`Please wait ${coolDownSeconds} seconds before requesting the code again`);
-      return;
-    }
+    if (!onSendOtp || isSendingOtp || coolDownSeconds > 0) return;
 
     setIsSendingOtp(true);
-    const response = await auth.twoFactor.sendOtp();
-    setIsSendingOtp(false);
-
-    if (response.error) {
-      setFieldError<{ code: string }>(
-        form,
-        "code",
-        response.error.message ?? "Failed to send code",
-      );
-      return;
+    try {
+      await onSendOtp({
+        trustDevice: form.getFieldValue("trustDevice") || undefined,
+      });
+      setCoolDownSeconds(60);
+    } finally {
+      setIsSendingOtp(false);
     }
-
-    setCoolDownSeconds(60);
-    initialSendRef.current = false;
-  }, [auth, coolDownSeconds, form, isSendingOtp]);
-
-  useEffect(() => {
-    if (method === "otp" && coolDownSeconds <= 0 && !initialSendRef.current) {
-      initialSendRef.current = true;
-      void sendOtp();
-    }
-  }, [coolDownSeconds, method, sendOtp]);
+  }, [onSendOtp, coolDownSeconds, form, isSendingOtp]);
 
   return (
     <form.AppForm>
@@ -125,76 +102,59 @@ export function TwoFactorForm({ setView }: { setView: (view: AuthViewPath) => vo
       >
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium">One-time password</span>
-          <Button
-            className="px-0"
-            onClick={() => setView(viewPaths.RECOVER_ACCOUNT)}
-            type="button"
-            variant="link"
-          >
-            Forgot authenticator?
-          </Button>
+          {onRecoverAccount ? (
+            <Button className="px-0" onClick={onRecoverAccount} type="button" variant="link">
+              Forgot authenticator?
+            </Button>
+          ) : null}
         </div>
 
-        <form.AppField name="code">
-          {(field) => (
-            <field.FieldShell field={field} label="One-time password">
-              <InputOTP
-                disabled={isSubmitting}
-                id={field.name}
-                maxLength={6}
-                name={field.name}
-                onBlur={field.handleBlur}
-                onChange={(value) => {
-                  field.handleChange(value as never);
-                  field.setErrorMap({ onSubmit: undefined });
-                  if (value.length === 6) {
-                    void form.handleSubmit();
-                  }
-                }}
-                value={field.state.value}
-              >
-                <OTPInputGroup otpSeparators={2} />
-              </InputOTP>
-            </field.FieldShell>
-          )}
-        </form.AppField>
+        <OTPCodeFieldGroup
+          fields={{ code: "code" }}
+          form={form}
+          label="One-time password"
+          maxLength={6}
+          onComplete={() => {
+            void form.handleSubmit();
+          }}
+        />
 
         <form.AppField name="trustDevice">
           {(field) => (
-            <field.FieldShell
-              field={field}
-              label="Trust this device"
-              orientation="horizontal-start"
-            >
+            <field.FieldShell label="Trust this device" orientation="horizontal-start">
               <Checkbox
                 checked={Boolean(field.state.value)}
-                disabled={isSubmitting}
                 id={field.name}
                 name={field.name}
                 onBlur={field.handleBlur}
                 onCheckedChange={(checked) => {
                   field.handleChange(Boolean(checked) as never);
-                  field.setErrorMap({ onSubmit: undefined });
                 }}
               />
             </field.FieldShell>
           )}
         </form.AppField>
 
+        <form.Subscribe selector={(state) => state.errorMap.onSubmit}>
+          {(error) => <FieldError errors={toFieldErrors(error)} />}
+        </form.Subscribe>
+
         <div className="grid gap-4">
           <form.SubmitButton>Verify</form.SubmitButton>
 
-          <Button
-            disabled={coolDownSeconds > 0 || isSendingOtp || isSubmitting}
-            onClick={() => {
-              void sendOtp();
-            }}
-            type="button"
-            variant="outline"
-          >
-            {isSendingOtp ? <SpinnerIcon className="animate-spin" /> : <PaperPlaneTiltIcon />}
-            Resend code{coolDownSeconds > 0 ? ` (${coolDownSeconds})` : ""}
-          </Button>
+          {onSendOtp ? (
+            <Button
+              disabled={coolDownSeconds > 0 || isSendingOtp}
+              onClick={() => {
+                void sendOtp();
+              }}
+              type="button"
+              variant="outline"
+            >
+              {isSendingOtp ? <SpinnerIcon className="animate-spin" /> : <PaperPlaneTiltIcon />}
+              Resend code{coolDownSeconds > 0 ? ` (${coolDownSeconds})` : ""}
+            </Button>
+          ) : null}
         </div>
       </form>
     </form.AppForm>

@@ -5,57 +5,19 @@ import {
   createFormHookContexts,
   type AnyFormApi,
   type DeepKeys,
-  type FieldApi,
 } from "@tanstack/react-form";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 
 import { Button } from "../core/button";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-  FieldSet,
-} from "../core/field";
+import { Field, FieldContent, FieldDescription, FieldError, FieldLabel } from "../core/field";
 
 type ErrorLike = {
   message?: string;
   summary?: string;
 };
 
-type TypedFieldApi<TValue> = FieldApi<
-  any,
-  any,
-  TValue,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any
->;
-
-type FormFieldProps<TValue, TProps extends Record<string, unknown> = {}> = TProps & {
-  field: TypedFieldApi<TValue>;
-};
-
-const { fieldContext, formContext, useFormContext } = createFormHookContexts();
+const { fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts();
 
 const fieldShellVariants = cva("", {
   variants: {
@@ -71,7 +33,7 @@ const fieldShellVariants = cva("", {
   },
 });
 
-const fieldLabelVariants = cva("", {
+const fieldLabelVariants = cva("w-full", {
   variants: {
     size: {
       xs: "text-xs",
@@ -123,15 +85,12 @@ type FieldShellOrientation =
   | "horizontal-start"
   | "horizontal-end";
 
-type FieldShellProps<TValue> = FormFieldProps<
-  TValue,
-  {
-    children: React.ReactNode;
-    description?: React.ReactNode | undefined;
-    label?: React.ReactNode | undefined;
-    orientation?: FieldShellOrientation | undefined;
-  } & FieldShellVariantProps
->;
+export type FieldShellProps = {
+  label?: React.ReactNode | undefined;
+  description?: React.ReactNode | undefined;
+  orientation?: FieldShellOrientation | undefined;
+  children: React.ReactNode;
+} & FieldShellVariantProps;
 
 function collectErrorMessages(error: unknown, messages: Set<string>) {
   if (!error) return;
@@ -159,14 +118,14 @@ function collectErrorMessages(error: unknown, messages: Set<string>) {
   }
 }
 
-function FieldShell<TValue>({
+function FieldShell({
   children,
   description,
-  field,
   label,
   orientation = "responsive",
   size = "default",
-}: FieldShellProps<TValue>) {
+}: FieldShellProps) {
+  const field = useFieldContext();
   const fieldOrientation =
     orientation === "horizontal-start" || orientation === "horizontal-end"
       ? "horizontal"
@@ -182,7 +141,11 @@ function FieldShell<TValue>({
     >
       {orientation === "horizontal-end" ? children : null}
       <FieldContent>
-        {label ? <FieldLabel className={fieldLabelVariants({ size })}>{label}</FieldLabel> : null}
+        {label ? (
+          <FieldLabel htmlFor={field.name} className={fieldLabelVariants({ size })}>
+            {label}
+          </FieldLabel>
+        ) : null}
         {fieldOrientation === "vertical" ? children : null}
         {description ? (
           <FieldDescription className={fieldDescriptionVariants({ size })}>
@@ -214,12 +177,9 @@ function SubmitButton({
       {(state) => (
         <Button
           {...props}
-          disabled={disabled || !state.canSubmit}
+          disabled={!!disabled || !state.canSubmit}
           isLoading={state.isSubmitting}
-          onClick={() => {
-            void form.handleSubmit();
-          }}
-          type="button"
+          type="submit"
         />
       )}
     </form.Subscribe>
@@ -288,7 +248,7 @@ export function setFieldError<TFormData>(
   );
 }
 
-export const { useAppForm } = createFormHook({
+export const { useAppForm, withFieldGroup } = createFormHook({
   fieldComponents: {
     FieldShell,
   },
@@ -300,4 +260,4 @@ export const { useAppForm } = createFormHook({
   formContext,
 });
 
-export { FieldError, FieldSet, useFormContext };
+export { useFieldContext, useFormContext };
