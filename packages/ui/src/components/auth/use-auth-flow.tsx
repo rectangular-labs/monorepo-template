@@ -160,6 +160,16 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
           break;
 
         case "needs-verification":
+          if (result.mode.startsWith("password-reset")) {
+            transitionTo(
+              {
+                step: "reset-password",
+                identifier: result.identifier,
+              },
+              true,
+            );
+            break;
+          }
           transitionTo(
             {
               step: "verification",
@@ -225,22 +235,7 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
         const fn = assertMethod("verifyCode");
         const [values] = args;
         const result = await fn(values);
-        if (
-          result.type === "success" &&
-          ["password-reset-email-code", "password-reset-phone-code"].includes(values.mode)
-        ) {
-          // Stay on reset password since the user hasn't provided a new password yet
-          transitionTo(
-            {
-              step: "reset-password",
-              code: values.code,
-              identifier: values.identifier,
-            },
-            true,
-          );
-        } else {
-          handleResult(result);
-        }
+        handleResult(result);
         return result;
       },
 
@@ -274,7 +269,7 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
         };
       },
     });
-  }, [adapter, callbackURLs, handleResult, transitionTo]);
+  }, [adapter, callbackURLs, handleResult]);
 
   return {
     state,

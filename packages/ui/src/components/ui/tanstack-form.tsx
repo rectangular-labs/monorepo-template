@@ -17,6 +17,24 @@ type ErrorLike = {
   summary?: string;
 };
 
+type ResultErrorLike = {
+  type: string;
+  field?: string | undefined;
+  message?: string | undefined;
+};
+
+export type HandleFormResultErrorOptions<TFormData> = {
+  focusInvalidField?: boolean | undefined;
+  password?:
+    | {
+        enabled?: boolean | undefined;
+        confirmField?: DeepKeys<TFormData> | undefined;
+        field?: DeepKeys<TFormData> | undefined;
+      }
+    | undefined;
+  resetFields?: DeepKeys<TFormData>[] | undefined;
+};
+
 const { fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts();
 
 const fieldShellVariants = cva("", {
@@ -223,17 +241,13 @@ export function clearFormError(form: AnyFormApi) {
   });
 }
 
-export function setFormError(form: AnyFormApi, message: string) {
+function setFormError(form: AnyFormApi, message: string) {
   form.setErrorMap({
     onSubmit: message,
   });
 }
 
-export function setFieldError<TFormData>(
-  form: AnyFormApi,
-  name: DeepKeys<TFormData>,
-  message: string,
-) {
+function setFieldError<TFormData>(form: AnyFormApi, name: DeepKeys<TFormData>, message: string) {
   form.setFieldMeta(
     name as never,
     (prev: Record<string, unknown> = {} as Record<string, unknown>) =>
@@ -246,6 +260,47 @@ export function setFieldError<TFormData>(
         },
       }) as never,
   );
+}
+
+export function handleFormResultError<TFormData>(
+  form: AnyFormApi,
+  result: ResultErrorLike,
+  options?: HandleFormResultErrorOptions<TFormData>,
+) {
+  if (result.type !== "error" || !result.message) {
+    return false;
+  }
+
+  const { focusInvalidField = false, password, resetFields = [] } = options ?? {};
+
+  const passwordField = password?.field ?? ("password" as DeepKeys<TFormData>);
+
+  if (result.field) {
+    if (password?.enabled && result.field === passwordField) {
+      form.resetField(passwordField as never);
+
+      if (password.confirmField) {
+        form.resetField(password.confirmField as never);
+      }
+    }
+
+    setFieldError<TFormData>(form, result.field as DeepKeys<TFormData>, result.message);
+  } else {
+    setFormError(form, result.message);
+  }
+
+  for (const fieldName of resetFields) {
+    form.resetField(fieldName as never);
+  }
+
+  if (focusInvalidField) {
+    requestAnimationFrame(() => {
+      const invalidInput = document.querySelector('[aria-invalid="true"]') as HTMLElement | null;
+      invalidInput?.focus();
+    });
+  }
+
+  return true;
 }
 
 export const { useAppForm, withFieldGroup } = createFormHook({

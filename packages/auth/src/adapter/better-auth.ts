@@ -106,7 +106,6 @@ export function createBetterAuthActions(
       name: name ?? "",
       ...rest,
     });
-    console.log("response", response);
 
     if (response.data && !response.data.token) {
       return {
@@ -121,30 +120,35 @@ export function createBetterAuthActions(
   const resetPassword: AuthAdapter["resetPassword"] = async (values) => {
     switch (values.type) {
       case "email-code":
-        return toResult(
+        return toResultWithField(
           await auth.emailOtp.resetPassword({
             email: values.email,
             otp: values.code,
             password: values.newPassword,
           }),
+          "password",
+          "PASSWORD_COMPROMISED",
         );
 
       case "phone-code":
-        return toResult(
+        return toResultWithField(
           await auth.phoneNumber.resetPassword({
             otp: values.code,
             phoneNumber: values.phoneNumber,
             newPassword: values.newPassword,
           }),
-          "phoneNumber",
+          "password",
+          "PASSWORD_COMPROMISED",
         );
 
       case "email-token":
-        return toResult(
+        return toResultWithField(
           await client.resetPassword({
             newPassword: values.newPassword,
             token: values.token,
           }),
+          "password",
+          "PASSWORD_COMPROMISED",
         );
 
       default: {
@@ -164,7 +168,7 @@ export function createBetterAuthActions(
       revokeOtherSessions: true,
     });
 
-    return toResult(response);
+    return toResultWithField(response, "password", "PASSWORD_COMPROMISED");
   };
 
   const signInWithSocial: AuthAdapter["signInWithSocial"] = async (provider, options) => {
@@ -341,15 +345,6 @@ export function createBetterAuthActions(
         return toResult(response, "twoFactor");
       }
 
-      case "password-reset-email-code": {
-        const response = await auth.emailOtp.checkVerificationOtp({
-          email: values.identifier,
-          otp: values.code,
-          type: "forget-password",
-        });
-        return toResult(response, "emailOTP");
-      }
-
       case "verification-email-code": {
         const response = await auth.emailOtp.verifyEmail({
           email: values.identifier,
@@ -358,16 +353,23 @@ export function createBetterAuthActions(
         return toResult(response, "emailOTP");
       }
 
-      // TODO: check if this actually works since I believe there isn't a way to check it without resetting the password along it
-      case "password-reset-phone-code": {
-        const response = await auth.phoneNumber.verify({
-          phoneNumber: values.identifier,
-          code: values.code,
-          disableSession: false,
+      case "password-reset-email-code": {
+        const response = await auth.emailOtp.checkVerificationOtp({
+          email: values.identifier,
+          otp: values.code,
+          type: "forget-password",
         });
-        return toResult(response);
+        return response.error
+          ? toResult(response, "emailOTP")
+          : {
+              type: "needs-verification",
+              mode: "password-reset-email-code",
+              identifier: values.identifier,
+            };
       }
+
       case "login-email-token":
+      case "password-reset-phone-code":
       case "password-reset-email-token":
       case "verification-email-token":
         return {

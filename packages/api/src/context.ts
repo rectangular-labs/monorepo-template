@@ -14,8 +14,8 @@ export const createApiContext = (args: Omit<InitialContext, "db" | "auth">) => {
   return {
     db,
     auth: initAuthHandler({
-      baseURL: env.AUTH_PRODUCTION_URL,
-      credentialVerificationType: env.AUTH_CREDENTIAL_VERIFICATION_TYPE,
+      baseURL: args.url.origin,
+      credentialVerificationType: args.credentialVerificationType,
       db,
       encryptionKey: env.AUTH_ENCRYPTION_KEY,
       fromEmail: env.AUTH_FROM_EMAIL,

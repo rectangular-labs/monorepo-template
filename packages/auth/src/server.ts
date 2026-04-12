@@ -168,7 +168,15 @@ export function initAuthHandler({
             redirectUrl.replace("preview.", "")
           : redirectUrl,
       }),
-      haveIBeenPwned(),
+      haveIBeenPwned({
+        paths: [
+          "/sign-up/email",
+          "/change-password",
+          "/reset-password",
+          "/email-otp/reset-password",
+          "/phone-number/reset-password",
+        ],
+      }),
       emailOTP({
         overrideDefaultEmailVerification: credentialVerificationType === "code",
         async sendVerificationOTP({ email, otp }) {

@@ -6,8 +6,7 @@ import { FieldError } from "../../core/field";
 import { Input } from "../../core/input";
 import {
   clearFormError,
-  setFieldError,
-  setFormError,
+  handleFormResultError,
   toFieldErrors,
   useAppForm,
 } from "../../ui/tanstack-form";
@@ -35,14 +34,9 @@ export function RecoverAccountForm({ onSubmit }: RecoverAccountFormProps) {
         trustDevice: value.trustDevice || undefined,
       });
 
-      if (result.type === "error") {
-        if (result.field) {
-          setFieldError<typeof value>(formApi, result.field as keyof typeof value, result.message);
-        } else {
-          setFormError(formApi, result.message);
-        }
-        formApi.resetField("code");
-      }
+      handleFormResultError<typeof value>(formApi, result, {
+        resetFields: ["code"],
+      });
 
       return result;
     },

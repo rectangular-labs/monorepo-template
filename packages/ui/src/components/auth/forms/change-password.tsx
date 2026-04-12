@@ -9,57 +9,42 @@ import {
   toFieldErrors,
   useAppForm,
 } from "../../ui/tanstack-form";
-import { ResendVerification } from "../core/resend-verification";
-import { OTPCodeFieldGroup } from "../field-groups/otp-code";
+import { PasswordInput } from "../core/password-input";
 import { PasswordFieldGroup } from "../field-groups/password";
-import { CodeSchema } from "../schema/code";
 import { PasswordSchema } from "../schema/password";
 
-export type ResetPasswordFormProps = {
-  showConfirmPassword?: boolean;
-} & (
-  | {
-      verificationType: "token";
-      onSubmit: (values: { newPassword: string }) => Promise<AuthResult>;
-      onResend?: never;
-    }
-  | {
-      verificationType: "code";
-      onSubmit: (values: { code: string; newPassword: string }) => Promise<AuthResult>;
-      onResend?: () => Promise<AuthResult>;
-    }
-);
+export type ChangePasswordFormProps = {
+  onSubmit: (values: { newPassword: string; oldPassword: string }) => Promise<AuthResult>;
+  options?: {
+    showConfirmPassword?: boolean | undefined;
+  };
+};
 
-export function ResetPasswordForm(props: ResetPasswordFormProps) {
-  const requiresCode = props.verificationType === "code";
-  const { showConfirmPassword = true } = props;
+export function ChangePasswordForm({ onSubmit, options }: ChangePasswordFormProps) {
+  const showConfirmPassword = options?.showConfirmPassword ?? false;
+
   const schema = type({
-    code: requiresCode ? CodeSchema : type("string"),
+    oldPassword: PasswordSchema,
     password: PasswordSchema,
-    confirmPassword: PasswordSchema,
+    confirmPassword: showConfirmPassword ? PasswordSchema : type("undefined"),
   });
 
   const form = useAppForm({
     defaultValues: {
-      code: "",
-      confirmPassword: "",
+      oldPassword: "",
       password: "",
+      confirmPassword: showConfirmPassword ? "" : undefined,
     },
     listeners: {
       onChange: ({ formApi }) => clearFormError(formApi),
     },
     onSubmit: async ({ formApi, value }) => {
-      const result = await (requiresCode
-        ? props.onSubmit({
-            code: value.code,
-            newPassword: value.password,
-          })
-        : props.onSubmit({
-            newPassword: value.password,
-          }));
+      const result = await onSubmit({
+        newPassword: value.password,
+        oldPassword: value.oldPassword,
+      });
 
       handleFormResultError<typeof value>(formApi, result, {
-        focusInvalidField: true,
         password: {
           enabled: true,
           confirmField: showConfirmPassword ? "confirmPassword" : undefined,
@@ -83,14 +68,24 @@ export function ResetPasswordForm(props: ResetPasswordFormProps) {
           void form.handleSubmit();
         }}
       >
-        {requiresCode ? (
-          <OTPCodeFieldGroup
-            fields={{ code: "code" }}
-            form={form}
-            label="Verification code"
-            maxLength={6}
-          />
-        ) : null}
+        <form.AppField name="oldPassword">
+          {(field) => (
+            <field.FieldShell label="Current password">
+              <PasswordInput
+                autoComplete="current-password"
+                enableToggle
+                id={field.name}
+                name={field.name}
+                onBlur={field.handleBlur}
+                onChange={(event) => {
+                  field.handleChange(event.currentTarget.value as never);
+                }}
+                placeholder="Your current password"
+                value={field.state.value ?? ""}
+              />
+            </field.FieldShell>
+          )}
+        </form.AppField>
 
         <PasswordFieldGroup
           fields={{
@@ -100,17 +95,14 @@ export function ResetPasswordForm(props: ResetPasswordFormProps) {
           form={form}
           label="New password"
           placeholder="At least 8 characters"
-          showConfirmPassword
+          showConfirmPassword={showConfirmPassword}
         />
 
         <form.Subscribe selector={(state) => state.errorMap.onSubmit}>
           {(error) => <FieldError errors={toFieldErrors(error)} />}
         </form.Subscribe>
 
-        <div className="space-y-1">
-          <form.SubmitButton className="w-full">Reset password</form.SubmitButton>
-          {props.onResend ? <ResendVerification item="code" onResend={props.onResend} /> : null}
-        </div>
+        <form.SubmitButton className="w-full">Update password</form.SubmitButton>
       </form>
     </form.AppForm>
   );

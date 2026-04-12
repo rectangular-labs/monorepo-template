@@ -7,8 +7,7 @@ import { Checkbox } from "../../core/checkbox";
 import { FieldError } from "../../core/field";
 import {
   clearFormError,
-  setFieldError,
-  setFormError,
+  handleFormResultError,
   toFieldErrors,
   useAppForm,
 } from "../../ui/tanstack-form";
@@ -54,14 +53,9 @@ export function TwoFactorForm({ onSubmit, onSendOtp, onRecoverAccount }: TwoFact
         trustDevice: value.trustDevice || undefined,
       });
 
-      if (result.type === "error") {
-        if (result.field) {
-          setFieldError<typeof value>(formApi, result.field as keyof typeof value, result.message);
-        } else {
-          setFormError(formApi, result.message);
-        }
-        formApi.resetField("code");
-      }
+      handleFormResultError<typeof value>(formApi, result, {
+        resetFields: ["code"],
+      });
 
       return result;
     },

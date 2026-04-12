@@ -7,8 +7,7 @@ import { FieldError } from "../../core/field";
 import { Input } from "../../core/input";
 import {
   clearFormError,
-  setFieldError,
-  setFormError,
+  handleFormResultError,
   toFieldErrors,
   useAppForm,
 } from "../../ui/tanstack-form";
@@ -63,40 +62,13 @@ export function PasswordSignUpForm({ onSubmit, options }: PasswordSignUpFormProp
         username: value.username,
       });
 
-      if (result.type === "error") {
-        console.log("result", result);
-        if (result.field) {
-          type SignUpFormValues = {
-            email: string;
-            password: string;
-            name: string | undefined;
-            username: string | undefined;
-            confirmPassword: string | undefined;
-          };
-
-          // Reset password fields on password-related errors
-          if (result.field === "password") {
-            formApi.resetField("password");
-            if (showConfirmPassword) {
-              formApi.resetField("confirmPassword");
-            }
-          }
-          setFieldError<SignUpFormValues>(
-            formApi,
-            result.field as keyof SignUpFormValues,
-            result.message,
-          );
-          // refocus the first invalid field
-          requestAnimationFrame(() => {
-            const InvalidInput = document.querySelector(
-              '[aria-invalid="true"]',
-            ) as HTMLInputElement;
-            InvalidInput?.focus();
-          });
-        } else {
-          setFormError(formApi, result.message);
-        }
-      }
+      handleFormResultError<typeof value>(formApi, result, {
+        focusInvalidField: true,
+        password: {
+          enabled: true,
+          confirmField: showConfirmPassword ? "confirmPassword" : undefined,
+        },
+      });
 
       return result;
     },

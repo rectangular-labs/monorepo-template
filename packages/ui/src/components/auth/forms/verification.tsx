@@ -2,16 +2,15 @@
 
 import type { AuthResult, VerificationInfo } from "@rectangular-labs/auth/adapter/types";
 import { type } from "arktype";
-import { useState } from "react";
 import { Button } from "../../core/button";
 import { FieldError } from "../../core/field";
 import {
   clearFormError,
-  setFieldError,
-  setFormError,
+  handleFormResultError,
   toFieldErrors,
   useAppForm,
 } from "../../ui/tanstack-form";
+import { ResendVerification } from "../core/resend-verification";
 import { OTPCodeFieldGroup } from "../field-groups/otp-code";
 import { CodeSchema } from "../schema/code";
 
@@ -22,8 +21,6 @@ export type VerificationFormProps = {
 };
 
 export function VerificationForm({ info, onSubmit, onResend }: VerificationFormProps) {
-  const [isResending, setIsResending] = useState(false);
-  const [resendCodeError, setResendCodeError] = useState<string | undefined>(undefined);
   const needsCode = info.mode.endsWith("code");
   const isPhone = info.mode.includes("phone");
   const isEmail = !isPhone;
@@ -47,13 +44,7 @@ export function VerificationForm({ info, onSubmit, onResend }: VerificationFormP
 
       const result = await onSubmit({ code: value.code });
 
-      if (result.type === "error") {
-        if (result.field) {
-          setFieldError<typeof value>(formApi, result.field as keyof typeof value, result.message);
-        } else {
-          setFormError(formApi, result.message);
-        }
-      }
+      handleFormResultError<typeof value>(formApi, result);
 
       return result;
     },
@@ -65,20 +56,6 @@ export function VerificationForm({ info, onSubmit, onResend }: VerificationFormP
   const openEmail = () => {
     window.open("mailto:", "_self");
   };
-
-  async function handleResend() {
-    setIsResending(true);
-    try {
-      const result = await onResend();
-      if (result.type === "error") {
-        setResendCodeError(result.message);
-      } else {
-        setResendCodeError(undefined);
-      }
-    } finally {
-      setIsResending(false);
-    }
-  }
 
   return (
     <div className="grid w-full">
@@ -111,26 +88,12 @@ export function VerificationForm({ info, onSubmit, onResend }: VerificationFormP
       ) : null}
 
       {isEmail && !needsCode ? (
-        <Button className="w-full" disabled={isResending} onClick={openEmail} type="button">
+        <Button className="w-full" onClick={openEmail} type="button">
           Open Email
         </Button>
       ) : null}
 
-      <div className="flex items-center gap-2 text-sm">
-        Didn&apos;t receive a {verificationType}?{" "}
-        <Button
-          className="px-0"
-          disabled={isResending}
-          onClick={() => {
-            void handleResend();
-          }}
-          type="button"
-          variant="link"
-        >
-          Resend {verificationType}
-        </Button>
-      </div>
-      {resendCodeError ? <FieldError>{resendCodeError}</FieldError> : null}
+      <ResendVerification item={verificationType} onResend={onResend} />
     </div>
   );
 }

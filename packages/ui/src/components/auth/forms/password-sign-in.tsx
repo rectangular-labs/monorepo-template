@@ -8,8 +8,7 @@ import { FieldError } from "../../core/field";
 import { Input } from "../../core/input";
 import {
   clearFormError,
-  setFieldError,
-  setFormError,
+  handleFormResultError,
   toFieldErrors,
   useAppForm,
 } from "../../ui/tanstack-form";
@@ -61,13 +60,7 @@ export function PasswordSignInForm({
         rememberMe: value.rememberMe,
       });
 
-      if (result.type === "error") {
-        if (result.field) {
-          setFieldError<typeof value>(formApi, result.field as keyof typeof value, result.message);
-        } else {
-          setFormError(formApi, result.message);
-        }
-      }
+      handleFormResultError<typeof value>(formApi, result);
 
       return result;
     },

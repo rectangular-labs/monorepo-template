@@ -5,8 +5,7 @@ import * as React from "react";
 import { FieldError } from "../../core/field";
 import {
   clearFormError,
-  setFieldError,
-  setFormError,
+  handleFormResultError,
   toFieldErrors,
   useAppForm,
 } from "../../ui/tanstack-form";
@@ -36,13 +35,7 @@ export function PhoneIdentifierForm({
     onSubmit: async ({ formApi, value }) => {
       const result = await onSubmit({ phone: value.phone });
 
-      if (result.type === "error") {
-        if (result.field) {
-          setFieldError<typeof value>(formApi, result.field as keyof typeof value, result.message);
-        } else {
-          setFormError(formApi, result.message);
-        }
-      }
+      handleFormResultError<typeof value>(formApi, result);
 
       return result;
     },
