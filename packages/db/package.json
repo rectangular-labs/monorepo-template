@@ -23,12 +23,12 @@
     }
   },
   "scripts": {
-    "migrate-generate": "pnpm with-env drizzle-kit generate",
+    "migrate-generate": "pnpm with-env-local drizzle-kit generate",
     "migrate-push:local": "pnpm with-env-local drizzle-kit migrate",
     "migrate-push:preview": "pnpm with-env-preview drizzle-kit migrate",
     "migrate-push:production": "pnpm with-env-production drizzle-kit migrate",
-    "push": "pnpm with-env drizzle-kit push",
-    "studio": "pnpm with-env drizzle-kit studio",
+    "push": "pnpm with-env-local drizzle-kit push",
+    "studio": "pnpm with-env-local drizzle-kit studio",
     "build": "vp pack",
     "dev": "vp pack --watch",
     "clean": "git clean -xdf node_modules dist .cache",
