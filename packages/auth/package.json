@@ -5,6 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./src/server.ts",
+    "./adapter/better-auth": "./src/adapter/better-auth.ts",
+    "./adapter/types": "./src/adapter/types.ts",
     "./client": "./src/client.ts",
     "./env": "./src/env.ts",
     "./package.json": "./package.json"
@@ -12,6 +14,8 @@
   "publishConfig": {
     "exports": {
       ".": "./dist/index.mjs",
+      "./adapter/better-auth": "./dist/adapter/better-auth.mjs",
+      "./adapter/types": "./dist/adapter/types.mjs",
       "./client": "./dist/client.mjs",
       "./env": "./dist/env.mjs",
       "./package.json": "./package.json"
@@ -20,17 +24,18 @@
   "scripts": {
     "build": "vp pack",
     "dev": "vp pack --watch",
-    "generate": "pnpm with-env pnpx auth generate --config ./src/generate.ts --output ../db/src/schema/auth-schema.ts --yes",
+    "generate": "vp run with-env vpx auth generate --config ./src/generate.ts --output ../db/src/schema/auth-schema.ts --yes",
     "clean": "git clean -xdf node_modules dist .cache",
     "with-env": "dotenvx run -f ../../.env.local  -f ../../.env -- "
   },
   "dependencies": {
     "@better-auth/expo": "^1.5.6",
-    "@rectangular-labs/db": "workspace:*",
-    "@rectangular-labs/emails": "0.0.1",
+    "@better-auth/passkey": "^1.5.6",
+    "@rectangular-labs/emails": "^0.1.0",
     "@t3-oss/env-core": "catalog:",
     "arktype": "catalog:",
-    "better-auth": "^1.5.6"
+    "better-auth": "^1.5.6",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",

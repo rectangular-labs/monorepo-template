@@ -1,10 +1,9 @@
 {
   "extends": "@rectangular-labs/typescript/tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
+    "types": ["node"],
     "lib": ["ES2024", "DOM", "DOM.Iterable"],
     "exactOptionalPropertyTypes": false
   },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": ["src"]
 }

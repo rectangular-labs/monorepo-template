@@ -1,31 +1,19 @@
 import { expo } from "@better-auth/expo";
-import type { DB } from "@rectangular-labs/db";
+import { passkey } from "@better-auth/passkey";
 import { createEmailClient } from "@rectangular-labs/emails";
 import type { BetterAuthOptions } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { DB, drizzleAdapter } from "better-auth/adapters/drizzle";
 import { betterAuth } from "better-auth/minimal";
-import { emailOTP, magicLink, oAuthProxy, organization, twoFactor } from "better-auth/plugins";
-import { authEnv } from "./env";
-
-type CredentialVerificationType = "code" | "token";
-
-export function getAuthOptionsFromEnv() {
-  const env = authEnv();
-  return {
-    baseURL: env.AUTH_PRODUCTION_URL,
-    credentialVerificationType: env.AUTH_CREDENTIAL_VERIFICATION_TYPE,
-    encryptionKey: env.AUTH_ENCRYPTION_KEY,
-    fromEmail: env.AUTH_FROM_EMAIL,
-    discordClientId: env.AUTH_DISCORD_ID,
-    discordClientSecret: env.AUTH_DISCORD_SECRET,
-    githubClientId: env.AUTH_GITHUB_ID,
-    githubClientSecret: env.AUTH_GITHUB_SECRET,
-    googleClientId: env.AUTH_GOOGLE_ID,
-    googleClientSecret: env.AUTH_GOOGLE_SECRET,
-    redditClientId: env.AUTH_REDDIT_ID,
-    redditClientSecret: env.AUTH_REDDIT_SECRET,
-  } as const;
-}
+import {
+  emailOTP,
+  haveIBeenPwned,
+  magicLink,
+  oAuthProxy,
+  organization,
+  twoFactor,
+} from "better-auth/plugins";
+import { v7 as uuidv7 } from "uuid";
+import { CredentialVerificationType } from "./client";
 
 export function initAuthHandler({
   baseURL,
@@ -115,6 +103,7 @@ export function initAuthHandler({
     emailAndPassword: {
       enabled: !!credentialVerificationType,
       requireEmailVerification: true,
+      autoSignIn: true,
       sendResetPassword: async (data) => {
         if (credentialVerificationType === "code") {
           throw new Error("Password reset should be done through the email OTP plugin");
@@ -138,6 +127,9 @@ export function initAuthHandler({
           });
         },
       }),
+      sendOnSignIn: true,
+      autoSignInAfterVerification: true,
+      expiresIn: 3600,
     },
     databaseHooks: {
       user: {
@@ -176,6 +168,7 @@ export function initAuthHandler({
             redirectUrl.replace("preview.", "")
           : redirectUrl,
       }),
+      haveIBeenPwned(),
       emailOTP({
         overrideDefaultEmailVerification: credentialVerificationType === "code",
         async sendVerificationOTP({ email, otp }) {
@@ -197,6 +190,7 @@ export function initAuthHandler({
           });
         },
       }),
+      passkey(),
       twoFactor(),
       organization({
         sendInvitationEmail: async ({ email, id, organization, inviter }) => {
@@ -267,7 +261,7 @@ export function initAuthHandler({
       cookiePrefix: domain.split(".").at(0) ?? "",
       useSecureCookies: true,
       database: {
-        generateId: () => crypto.randomUUID(),
+        generateId: () => uuidv7(),
       },
     },
     trustedOrigins: ["expo://", redirectUrl, baseURL],
@@ -277,6 +271,3 @@ export function initAuthHandler({
 }
 
 export type Auth = ReturnType<typeof initAuthHandler>;
-export type Session = Auth["$Infer"]["Session"];
-export type Organization = Auth["$Infer"]["Organization"];
-export type Member = Auth["$Infer"]["Member"];
