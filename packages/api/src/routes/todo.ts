@@ -5,11 +5,26 @@ export const todoSchema = type({
   id: "number",
   name: "string",
 });
+const todoListOutputSchema = todoSchema.array();
+const todoWithDescriptionSchema = todoSchema.merge(
+  type({
+    description: "string",
+  }),
+);
 
-const todos = [
-  { id: 1, name: "Get groceries" },
-  { id: 2, name: "Buy a new phone" },
-  { id: 3, name: "Finish the project" },
+type Todo = {
+  id: number;
+  name: string;
+};
+
+type TodoWithDescription = Todo & {
+  description: string;
+};
+
+const todos: TodoWithDescription[] = [
+  { id: 1, name: "Get groceries", description: "Pick up ingredients for dinner" },
+  { id: 2, name: "Buy a new phone", description: "Replace the current device this week" },
+  { id: 3, name: "Finish the project", description: "Wrap up the remaining implementation work" },
 ];
 const list = protectedBase
   .route({
@@ -22,8 +37,8 @@ const list = protectedBase
       cursor: "number",
     }),
   )
-  .output(todoSchema.array())
-  .handler(({ input, context }) => {
+  .output(todoListOutputSchema)
+  .handler(({ input, context }): Todo[] => {
     // Example: Access context properties (DB, headers, cookies)
     console.log("User-Agent:", context.reqHeaders?.get("user-agent"));
     console.log("Database available:", !!context.db);
@@ -41,7 +56,7 @@ const find = protectedBase
     }),
   )
   .output(todoSchema)
-  .handler(({ input, context }) => {
+  .handler(({ input, context }): Todo => {
     // Example: Access database and other context
     const todo = todos.find((t) => t.id === input.id);
     if (!todo) {
@@ -64,14 +79,8 @@ const create = protectedBase
       description: "string",
     }),
   )
-  .output(
-    todoSchema.merge(
-      type({
-        description: "string",
-      }),
-    ),
-  )
-  .handler(({ input, context }) => {
+  .output(todoWithDescriptionSchema)
+  .handler(({ input, context }): TodoWithDescription => {
     const newTodo = { id: todos.length + 1, ...input };
     todos.push(newTodo);
 

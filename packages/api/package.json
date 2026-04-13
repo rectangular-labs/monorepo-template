@@ -7,7 +7,6 @@
     "./client": "./src/client.ts",
     "./context": "./src/context.ts",
     "./env": "./src/env.ts",
-    "./schema/passkey": "./src/schema/passkey.ts",
     "./server": "./src/server.ts",
     "./types": "./src/types.ts",
     "./package.json": "./package.json"
@@ -17,7 +16,6 @@
       "./client": "./dist/client.mjs",
       "./context": "./dist/context.mjs",
       "./env": "./dist/env.mjs",
-      "./schema/passkey": "./dist/schema/passkey.mjs",
       "./server": "./dist/server.mjs",
       "./types": "./dist/types.mjs",
       "./package.json": "./package.json"
@@ -30,14 +28,14 @@
     "clean": "git clean -xdf node_modules dist .cache"
   },
   "dependencies": {
-    "@orpc/arktype": "^1.13.9",
-    "@orpc/client": "^1.13.9",
-    "@orpc/contract": "^1.13.9",
-    "@orpc/json-schema": "^1.13.9",
-    "@orpc/openapi": "^1.13.9",
-    "@orpc/openapi-client": "^1.13.9",
-    "@orpc/server": "^1.13.9",
-    "@orpc/tanstack-query": "^1.13.9",
+    "@orpc/arktype": "^1.13.14",
+    "@orpc/client": "^1.13.14",
+    "@orpc/contract": "^1.13.14",
+    "@orpc/json-schema": "^1.13.14",
+    "@orpc/openapi": "^1.13.14",
+    "@orpc/openapi-client": "^1.13.14",
+    "@orpc/server": "^1.13.14",
+    "@orpc/tanstack-query": "^1.13.14",
     "@rectangular-labs/auth": "workspace:*",
     "@rectangular-labs/db": "workspace:*",
     "@t3-oss/env-core": "catalog:",

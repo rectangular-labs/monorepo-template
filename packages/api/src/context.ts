@@ -9,7 +9,7 @@ import type { InitialContext } from "./types";
 
 export const createApiContext = (args: Omit<InitialContext, "db" | "auth">) => {
   const env = apiEnv();
-  const db = createDb(env.DATABASE_URL);
+  const db = createDb();
 
   return {
     db,
@@ -43,8 +43,8 @@ export const base = os
   .use(authMiddleware);
 
 export const protectedBase = base.use(({ context, next }) => {
-  const session = context.session;
-  if (!session) {
+  const { session, user } = context;
+  if (!session || !user) {
     throw new ORPCError("UNAUTHORIZED");
   }
   return next();

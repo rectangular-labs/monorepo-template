@@ -10,9 +10,6 @@ export const authMiddleware = os
     });
 
     return await next({
-      context: {
-        ...context,
-        session,
-      },
+      context: session ? { session: session.session, user: session.user } : {},
     });
   });

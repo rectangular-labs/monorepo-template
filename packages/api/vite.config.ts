@@ -15,7 +15,6 @@ export default defineConfig(({ command }) => ({
       "./src/context.ts",
       "./src/env.ts",
       "./src/types.ts",
-      "./src/schema/*.ts",
     ],
     format: ["esm" as const],
     sourcemap: "hidden",
