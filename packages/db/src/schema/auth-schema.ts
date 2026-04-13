@@ -1,3 +1,4 @@
+import { createSelectSchema } from "drizzle-arktype";
 import { relations } from "drizzle-orm";
 import {
   boolean,
@@ -250,3 +251,6 @@ export const invitationRelations = relations(invitation, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+export const userSelectSchema = createSelectSchema(user);
+export const sessionSelectSchema = createSelectSchema(session);
