@@ -11,8 +11,9 @@ import {
 import { createFileRoute } from "@tanstack/react-router";
 
 import { type } from "arktype";
+import { authAdapter, createLoginCallbackURLs } from "~/lib/auth";
 import { clientEnv } from "~/lib/env";
-import { AuthErrorPanel, AuthPageFrame, authAdapter, createLoginCallbackURLs } from "./-shared";
+import { AuthErrorPanel, AuthPageFrame } from "./-shared";
 
 export const Route = createFileRoute("/login/reset-password")({
   validateSearch: type({

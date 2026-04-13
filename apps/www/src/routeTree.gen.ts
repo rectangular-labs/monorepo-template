@@ -10,10 +10,26 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as MarketingRouteRouteImport } from './routes/_marketing/route'
+import { Route as AuthedRouteRouteImport } from './routes/_authed/route'
+import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
+import { Route as LoginResetPasswordRouteImport } from './routes/login/reset-password'
+import { Route as LoginCallbackRouteImport } from './routes/login/callback'
+import { Route as ApiSplatRouteImport } from './routes/api/$'
+import { Route as AuthedDashboardRouteImport } from './routes/_authed/dashboard'
+import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 
 const MarketingRouteRoute = MarketingRouteRouteImport.update({
   id: '/_marketing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthedRouteRoute = AuthedRouteRouteImport.update({
+  id: '/_authed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginIndexRoute = LoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketingIndexRoute = MarketingIndexRouteImport.update({
@@ -21,28 +37,102 @@ const MarketingIndexRoute = MarketingIndexRouteImport.update({
   path: '/',
   getParentRoute: () => MarketingRouteRoute,
 } as any)
+const LoginResetPasswordRoute = LoginResetPasswordRouteImport.update({
+  id: '/login/reset-password',
+  path: '/login/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginCallbackRoute = LoginCallbackRouteImport.update({
+  id: '/login/callback',
+  path: '/login/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSplatRoute = ApiSplatRouteImport.update({
+  id: '/api/$',
+  path: '/api/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthedDashboardRoute = AuthedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthedRouteRoute,
+} as any)
+const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
+  id: '/api/rpc/$',
+  path: '/api/rpc/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
+  '/dashboard': typeof AuthedDashboardRoute
+  '/api/$': typeof ApiSplatRoute
+  '/login/callback': typeof LoginCallbackRoute
+  '/login/reset-password': typeof LoginResetPasswordRoute
+  '/login/': typeof LoginIndexRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
+  '/dashboard': typeof AuthedDashboardRoute
+  '/api/$': typeof ApiSplatRoute
+  '/login/callback': typeof LoginCallbackRoute
+  '/login/reset-password': typeof LoginResetPasswordRoute
+  '/login': typeof LoginIndexRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/_authed': typeof AuthedRouteRouteWithChildren
   '/_marketing': typeof MarketingRouteRouteWithChildren
+  '/_authed/dashboard': typeof AuthedDashboardRoute
+  '/api/$': typeof ApiSplatRoute
+  '/login/callback': typeof LoginCallbackRoute
+  '/login/reset-password': typeof LoginResetPasswordRoute
   '/_marketing/': typeof MarketingIndexRoute
+  '/login/': typeof LoginIndexRoute
+  '/api/rpc/$': typeof ApiRpcSplatRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/api/$'
+    | '/login/callback'
+    | '/login/reset-password'
+    | '/login/'
+    | '/api/rpc/$'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/_marketing' | '/_marketing/'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/api/$'
+    | '/login/callback'
+    | '/login/reset-password'
+    | '/login'
+    | '/api/rpc/$'
+  id:
+    | '__root__'
+    | '/_authed'
+    | '/_marketing'
+    | '/_authed/dashboard'
+    | '/api/$'
+    | '/login/callback'
+    | '/login/reset-password'
+    | '/_marketing/'
+    | '/login/'
+    | '/api/rpc/$'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  AuthedRouteRoute: typeof AuthedRouteRouteWithChildren
   MarketingRouteRoute: typeof MarketingRouteRouteWithChildren
+  ApiSplatRoute: typeof ApiSplatRoute
+  LoginCallbackRoute: typeof LoginCallbackRoute
+  LoginResetPasswordRoute: typeof LoginResetPasswordRoute
+  LoginIndexRoute: typeof LoginIndexRoute
+  ApiRpcSplatRoute: typeof ApiRpcSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -54,6 +144,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authed': {
+      id: '/_authed'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/': {
+      id: '/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof LoginIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_marketing/': {
       id: '/_marketing/'
       path: '/'
@@ -61,8 +165,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingIndexRouteImport
       parentRoute: typeof MarketingRouteRoute
     }
+    '/login/reset-password': {
+      id: '/login/reset-password'
+      path: '/login/reset-password'
+      fullPath: '/login/reset-password'
+      preLoaderRoute: typeof LoginResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login/callback': {
+      id: '/login/callback'
+      path: '/login/callback'
+      fullPath: '/login/callback'
+      preLoaderRoute: typeof LoginCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/$': {
+      id: '/api/$'
+      path: '/api/$'
+      fullPath: '/api/$'
+      preLoaderRoute: typeof ApiSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authed/dashboard': {
+      id: '/_authed/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthedDashboardRouteImport
+      parentRoute: typeof AuthedRouteRoute
+    }
+    '/api/rpc/$': {
+      id: '/api/rpc/$'
+      path: '/api/rpc/$'
+      fullPath: '/api/rpc/$'
+      preLoaderRoute: typeof ApiRpcSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
+
+interface AuthedRouteRouteChildren {
+  AuthedDashboardRoute: typeof AuthedDashboardRoute
+}
+
+const AuthedRouteRouteChildren: AuthedRouteRouteChildren = {
+  AuthedDashboardRoute: AuthedDashboardRoute,
+}
+
+const AuthedRouteRouteWithChildren = AuthedRouteRoute._addFileChildren(
+  AuthedRouteRouteChildren,
+)
 
 interface MarketingRouteRouteChildren {
   MarketingIndexRoute: typeof MarketingIndexRoute
@@ -77,7 +228,13 @@ const MarketingRouteRouteWithChildren = MarketingRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
+  AuthedRouteRoute: AuthedRouteRouteWithChildren,
   MarketingRouteRoute: MarketingRouteRouteWithChildren,
+  ApiSplatRoute: ApiSplatRoute,
+  LoginCallbackRoute: LoginCallbackRoute,
+  LoginResetPasswordRoute: LoginResetPasswordRoute,
+  LoginIndexRoute: LoginIndexRoute,
+  ApiRpcSplatRoute: ApiRpcSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

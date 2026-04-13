@@ -6,13 +6,7 @@ import { NotFound } from "./components/not-found";
 import { routeTree } from "./routeTree.gen";
 
 export function getRouter() {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: 1000 * 15, // 15 seconds
-      },
-    },
-  });
+  const queryClient = new QueryClient();
 
   const router = createRouter({
     routeTree,
