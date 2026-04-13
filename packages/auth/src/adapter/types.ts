@@ -27,6 +27,7 @@ export type VerificationInfo = {
 export type AuthResult =
   | { type: "success"; data?: unknown }
   | { type: "error"; message: string; code?: string | undefined; field?: string | undefined }
+  | { type: "pending-redirect"; url: string }
   | { type: "needs-verification"; mode: VerificationMode; identifier: string }
   | { type: "needs-2fa"; method?: "totp" | "otp" | undefined };
 

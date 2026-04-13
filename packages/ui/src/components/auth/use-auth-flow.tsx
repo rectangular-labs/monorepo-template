@@ -159,6 +159,10 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
           onError?.({ message: result.message, code: result.code });
           break;
 
+        case "pending-redirect":
+          void navigate(result.url);
+          break;
+
         case "needs-verification":
           if (result.mode.startsWith("password-reset")) {
             transitionTo(
@@ -184,7 +188,7 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
           break;
       }
     },
-    [onError, onSuccess, transitionTo],
+    [navigate, onError, onSuccess, transitionTo],
   );
 
   const goTo = useCallback(

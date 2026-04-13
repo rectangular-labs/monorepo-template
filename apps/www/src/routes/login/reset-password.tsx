@@ -29,8 +29,6 @@ function ResetPasswordPage() {
   const navigate = Route.useNavigate();
   const verificationType = clientEnv().VITE_AUTH_EMAIL_VERIFICATION_TYPE;
 
-  const backHref = `/login${search.next ? `?next=${encodeURIComponent(search.next)}` : ""}`;
-
   const hasResetContext =
     verificationType === "code"
       ? Boolean(search.identifier)
@@ -60,7 +58,6 @@ function ResetPasswordPage() {
         if (!hasResetContext) {
           return (
             <AuthErrorPanel
-              backHref={backHref}
               error={
                 verificationType === "code"
                   ? "This password reset page is missing the required identifier."

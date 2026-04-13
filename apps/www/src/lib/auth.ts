@@ -11,12 +11,12 @@ export const authAdapter = createBetterAuthActions(
 );
 
 export function createLoginCallbackURLs(next?: string): CallbackURLs {
-  const destination = next || "/dashboard";
+  const destination = encodeURIComponent(next || "/dashboard");
 
   return {
-    success: destination,
-    newUser: destination,
-    error: `/login/callback?next=${encodeURIComponent(destination)}`,
-    resetPassword: `/login/reset-password?next=${encodeURIComponent(destination)}`,
+    success: `/login/callback?next=${destination}`,
+    newUser: `/login/callback?next=${destination}`,
+    error: `/login/callback?next=${destination}`,
+    resetPassword: `/login/reset-password?next=${destination}`,
   };
 }

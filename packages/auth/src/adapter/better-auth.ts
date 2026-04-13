@@ -178,21 +178,28 @@ export function createBetterAuthActions(
       newUserCallbackURL: options?.callbackUrls?.newUser,
       ...options,
     };
+    const successResponse = (url: string): AuthResult => ({
+      type: "pending-redirect",
+      url,
+    });
     if (options?.method === "generic") {
-      return toResult(
-        await auth.signIn.oauth2({
-          providerId: provider,
-          ...sharedParams,
-        }),
-        "Generic OAuth",
-      );
-    }
-    return toResult(
-      await auth.signIn.social({
-        provider,
+      const response = await auth.signIn.oauth2({
+        providerId: provider,
         ...sharedParams,
-      }),
-    );
+      });
+      return response.error
+        ? toResult(response, "Generic OAuth")
+        : successResponse(response.data.url);
+    }
+
+    const response = await auth.signIn.social({
+      provider,
+      ...sharedParams,
+    });
+    if (response.data?.url) {
+      return successResponse(response.data.url);
+    }
+    return toResult(response);
   };
 
   const signInWithPasskey: AuthAdapter["signInWithPasskey"] = async () => {
