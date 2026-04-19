@@ -19,8 +19,8 @@
     "prepare": "vp config"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.30.0",
-    "@dotenvx/dotenvx": "^1.57.1",
+    "@changesets/cli": "^2.31.0",
+    "@dotenvx/dotenvx": "^1.61.1",
     "@rectangular-labs/typescript": "workspace:*",
     "typescript": "catalog:",
     "vite-plus": "catalog:"
