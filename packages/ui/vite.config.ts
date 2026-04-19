@@ -32,6 +32,7 @@ export default defineConfig(({ command }) => {
         "./src/animation/*",
         "./src/hooks/*",
         "./src/utils/index.ts",
+        "./src/base-styles.css",
         {
           "background/*": "./src/components/background/*",
           "core/*": "./src/components/core/*",

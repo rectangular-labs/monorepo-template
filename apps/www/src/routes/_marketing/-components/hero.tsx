@@ -1,4 +1,4 @@
-import { InteractiveGridPattern } from "@rectangular-labs/ui/components/background/interactive-grid-pattern";
+import { InteractiveGridPattern } from "@rectangular-labs/ui/background/interactive-grid-pattern";
 import { Section } from "@rectangular-labs/ui/components/section";
 import { Button } from "@rectangular-labs/ui/core/button";
 import { Link } from "@tanstack/react-router";

@@ -1,4 +1,4 @@
-import { Terminal } from "@rectangular-labs/ui/components/icon";
+import { Terminal } from "@rectangular-labs/ui/components/icons";
 import { Alert, AlertDescription, AlertTitle } from "@rectangular-labs/ui/core/alert";
 import { Button } from "@rectangular-labs/ui/core/button";
 import type { ErrorComponentProps } from "@tanstack/react-router";

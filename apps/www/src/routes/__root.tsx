@@ -1,4 +1,4 @@
-import { ThemeProvider } from "@rectangular-labs/ui/components/theme-provider";
+import { ThemeProvider } from "@rectangular-labs/ui/components/theme";
 import { Toaster } from "@rectangular-labs/ui/core/sonner";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";

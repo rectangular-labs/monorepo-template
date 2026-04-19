@@ -1,4 +1,4 @@
-import { WarningCircle } from "@rectangular-labs/ui/components/icon";
+import { WarningCircle } from "@rectangular-labs/ui/components/icons";
 import { Alert, AlertDescription, AlertTitle } from "@rectangular-labs/ui/core/alert";
 import { buttonVariants } from "@rectangular-labs/ui/core/button";
 import { Link } from "@tanstack/react-router";

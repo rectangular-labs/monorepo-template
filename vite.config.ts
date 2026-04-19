@@ -69,7 +69,7 @@ export default defineConfig({
   fmt: {
     ignorePatterns,
     sortTailwindcss: {
-      stylesheet: "./packages/ui/src/styles.css",
+      stylesheet: "./apps/www/src/styles.css",
       functions: ["clsx", "cn", "cva", "tw"],
       preserveDuplicates: false,
       preserveWhitespace: false,

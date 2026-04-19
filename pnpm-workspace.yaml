@@ -43,5 +43,6 @@ peerDependencyRules:
     - vite
     - vitest
   allowedVersions:
+    better-sqlite3: "*"
     vite: "*"
     vitest: "*"

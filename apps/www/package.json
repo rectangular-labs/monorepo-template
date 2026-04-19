@@ -21,6 +21,8 @@
     "cf-typegen": "wrangler types --env-interface Env"
   },
   "dependencies": {
+    "@fontsource-variable/manrope": "^5.2.8",
+    "@fontsource-variable/raleway": "^5.2.8",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.4.0",
     "@rectangular-labs/api": "workspace:*",
@@ -52,9 +54,10 @@
     "@vitejs/plugin-react": "^6.0.1",
     "jiti": "^2.5.1",
     "jsdom": "^29.0.1",
+    "tailwindcss": "^4.2.2",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-mkcert": "^1.17.9",
+    "vite-plugin-mkcert": "^2.0.0",
     "vite-plus": "catalog:",
     "vitest": "catalog:",
     "web-vitals": "^5.1.0",

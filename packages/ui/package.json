@@ -3,8 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "files": [
-    "dist",
-    "src/styles.css"
+    "dist"
   ],
   "type": "module",
   "sideEffects": false,
@@ -42,10 +41,9 @@
     "./core/switch": "./src/components/core/switch.tsx",
     "./core/textarea": "./src/components/core/textarea.tsx",
     "./hooks/use-mobile": "./src/hooks/use-mobile.ts",
-    "./hooks/use-scroll-to-bottom": "./src/hooks/use-scroll-to-bottom.ts",
-    "./hooks/use-textarea-resize": "./src/hooks/use-textarea-resize.ts",
     "./utils": "./src/utils/index.ts",
-    "./package.json": "./package.json"
+    "./package.json": "./package.json",
+    "./style.css": "./dist/style.css"
   },
   "publishConfig": {
     "exports": {
@@ -82,10 +80,9 @@
       "./core/switch": "./dist/core/switch.js",
       "./core/textarea": "./dist/core/textarea.js",
       "./hooks/use-mobile": "./dist/hooks/use-mobile.js",
-      "./hooks/use-scroll-to-bottom": "./dist/hooks/use-scroll-to-bottom.js",
-      "./hooks/use-textarea-resize": "./dist/hooks/use-textarea-resize.js",
       "./utils": "./dist/utils/index.js",
-      "./package.json": "./package.json"
+      "./package.json": "./package.json",
+      "./style.css": "./dist/style.css"
     }
   },
   "scripts": {
@@ -96,8 +93,6 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
-    "@fontsource-variable/manrope": "^5.2.8",
-    "@fontsource-variable/raleway": "^5.2.8",
     "@phosphor-icons/react": "^2.1.10",
     "@tanstack/react-form": "^1.29.0",
     "arktype": "catalog:",
@@ -114,13 +109,13 @@
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
     "@rollup/plugin-babel": "catalog:",
+    "@tsdown/css": "0.21.8",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "@typescript/native-preview": "catalog:",
     "babel-plugin-react-compiler": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
-    "tailwindcss": "^4.2.2",
     "typescript": "catalog:",
     "vite-plus": "catalog:"
   },
