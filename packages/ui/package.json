@@ -3,17 +3,94 @@
   "version": "0.1.0",
   "private": true,
   "files": [
-    "styles.css"
+    "src/styles.css"
   ],
+  "type": "module",
   "sideEffects": false,
   "exports": {
-    "./auth/*": "./src/components/auth/*.tsx",
-    "./*": "./src/*.tsx",
-    "./styles.css": "./src/styles.css",
-    "./utils": "./src/utils/index.ts"
+    "./animation/blur-fade": "./src/animation/blur-fade.tsx",
+    "./background/crowd": "./src/components/background/crowd.tsx",
+    "./background/interactive-grid-pattern": "./src/components/background/interactive-grid-pattern.tsx",
+    "./components/file-preview": "./src/components/ui/file-preview.tsx",
+    "./components/icons": "./src/components/icon.tsx",
+    "./components/section": "./src/components/ui/section.tsx",
+    "./components/tanstack-form": "./src/components/ui/tanstack-form.tsx",
+    "./components/theme": "./src/components/theme-provider.tsx",
+    "./components/typing-indicator": "./src/components/ui/typing-indicator.tsx",
+    "./core/alert": "./src/components/core/alert.tsx",
+    "./core/avatar": "./src/components/core/avatar.tsx",
+    "./core/button": "./src/components/core/button.tsx",
+    "./core/card": "./src/components/core/card.tsx",
+    "./core/checkbox": "./src/components/core/checkbox.tsx",
+    "./core/command": "./src/components/core/command.tsx",
+    "./core/dialog": "./src/components/core/dialog.tsx",
+    "./core/field": "./src/components/core/field.tsx",
+    "./core/input": "./src/components/core/input.tsx",
+    "./core/input-group": "./src/components/core/input-group.tsx",
+    "./core/input-otp": "./src/components/core/input-otp.tsx",
+    "./core/label": "./src/components/core/label.tsx",
+    "./core/popover": "./src/components/core/popover.tsx",
+    "./core/radio-group": "./src/components/core/radio-group.tsx",
+    "./core/scroll-area": "./src/components/core/scroll-area.tsx",
+    "./core/select": "./src/components/core/select.tsx",
+    "./core/separator": "./src/components/core/separator.tsx",
+    "./core/skeleton": "./src/components/core/skeleton.tsx",
+    "./core/slider": "./src/components/core/slider.tsx",
+    "./core/sonner": "./src/components/core/sonner.tsx",
+    "./core/spinner": "./src/components/core/spinner.tsx",
+    "./core/switch": "./src/components/core/switch.tsx",
+    "./core/textarea": "./src/components/core/textarea.tsx",
+    "./hooks/use-mobile": "./src/hooks/use-mobile.ts",
+    "./hooks/use-scroll-to-bottom": "./src/hooks/use-scroll-to-bottom.ts",
+    "./hooks/use-textarea-resize": "./src/hooks/use-textarea-resize.ts",
+    "./utils": "./src/utils/index.ts",
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "exports": {
+      "./animation/blur-fade": "./dist/animation/blur-fade.js",
+      "./background/crowd": "./dist/background/crowd.js",
+      "./background/interactive-grid-pattern": "./dist/background/interactive-grid-pattern.js",
+      "./components/file-preview": "./dist/components/file-preview.js",
+      "./components/icons": "./dist/components/icons.js",
+      "./components/section": "./dist/components/section.js",
+      "./components/tanstack-form": "./dist/components/tanstack-form.js",
+      "./components/theme": "./dist/components/theme.js",
+      "./components/typing-indicator": "./dist/components/typing-indicator.js",
+      "./core/alert": "./dist/core/alert.js",
+      "./core/avatar": "./dist/core/avatar.js",
+      "./core/button": "./dist/core/button.js",
+      "./core/card": "./dist/core/card.js",
+      "./core/checkbox": "./dist/core/checkbox.js",
+      "./core/command": "./dist/core/command.js",
+      "./core/dialog": "./dist/core/dialog.js",
+      "./core/field": "./dist/core/field.js",
+      "./core/input": "./dist/core/input.js",
+      "./core/input-group": "./dist/core/input-group.js",
+      "./core/input-otp": "./dist/core/input-otp.js",
+      "./core/label": "./dist/core/label.js",
+      "./core/popover": "./dist/core/popover.js",
+      "./core/radio-group": "./dist/core/radio-group.js",
+      "./core/scroll-area": "./dist/core/scroll-area.js",
+      "./core/select": "./dist/core/select.js",
+      "./core/separator": "./dist/core/separator.js",
+      "./core/skeleton": "./dist/core/skeleton.js",
+      "./core/slider": "./dist/core/slider.js",
+      "./core/sonner": "./dist/core/sonner.js",
+      "./core/spinner": "./dist/core/spinner.js",
+      "./core/switch": "./dist/core/switch.js",
+      "./core/textarea": "./dist/core/textarea.js",
+      "./hooks/use-mobile": "./dist/hooks/use-mobile.js",
+      "./hooks/use-scroll-to-bottom": "./dist/hooks/use-scroll-to-bottom.js",
+      "./hooks/use-textarea-resize": "./dist/hooks/use-textarea-resize.js",
+      "./utils": "./dist/utils/index.js",
+      "./package.json": "./package.json"
+    }
   },
   "scripts": {
-    "clean": "git clean -xdf node_modules",
+    "build": "vp pack",
+    "dev": "vp pack --watch",
+    "clean": "git clean -xdf node_modules dist .cache",
     "ui-add": "pnpx shadcn@latest add && vp check --fix"
   },
   "dependencies": {
@@ -35,20 +112,20 @@
     "tw-animate-css": "^1.4.0"
   },
   "devDependencies": {
-    "@rectangular-labs/auth": "workspace:*",
     "@rectangular-labs/typescript": "workspace:*",
+    "@rollup/plugin-babel": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "babel-plugin-react-compiler": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "tailwindcss": "^4.2.1",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
   },
   "peerDependencies": {
     "react": "catalog:",
     "react-dom": "catalog:"
-  },
-  "optionalDependencies": {
-    "@rectangular-labs/auth": "workspace:*"
   }
 }
