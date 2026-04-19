@@ -15,7 +15,7 @@
     "new:package": "vp create @rectangular-labs/create-package && find apps packages tooling -type d -name .vscode -prune -exec rm -rf '{}' +",
     "changeset": "changeset",
     "changeset:release": "vp run build && changeset publish",
-    "postinstall": "pnpx sherif@latest",
+    "postinstall": "vpx sherif@latest -f --select highest",
     "prepare": "vp config"
   },
   "devDependencies": {

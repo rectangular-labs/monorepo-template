@@ -1,8 +1,8 @@
 {
   "extends": "@rectangular-labs/typescript/tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["ES2024", "dom", "dom.iterable"],
     "jsx": "react-jsx",
+    "lib": ["ES2024", "dom", "dom.iterable"],
     "paths": {
       "@rectangular-labs/ui/*": ["./src/*"]
     }

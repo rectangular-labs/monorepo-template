@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "files": [
+    "dist",
     "src/styles.css"
   ],
   "type": "module",

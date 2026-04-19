@@ -18,6 +18,12 @@ export default defineConfig({
       scripts: false,
     },
     tasks: {
+      install: {
+        command: "vp i",
+      },
+      fmt: {
+        command: "vp fmt",
+      },
       build: {
         command: "vp run -r build",
         env: cacheEnv,
