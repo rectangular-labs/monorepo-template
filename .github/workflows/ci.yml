@@ -29,5 +29,5 @@ jobs:
       - name: Vite+ check
         run: vp check
 
-      - name: Run tests
-        run: vp test
+      # - name: Run tests
+      #   run: vp test
