@@ -3,7 +3,12 @@ import type { AuthAdapter, AuthResult } from "./types";
 
 type BetterAuthResponse<T = Record<string, unknown>> = {
   data?: T | null;
-  error?: { message?: unknown; status?: number; statusText?: string; code?: string } | null;
+  error?: {
+    message?: unknown;
+    status?: number;
+    statusText?: string;
+    code?: string | undefined;
+  } | null;
 };
 
 function getErrorMessage(error: BetterAuthResponse["error"]): string {
