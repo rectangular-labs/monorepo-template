@@ -1,17 +1,17 @@
 "use client";
 
 import type { AuthResult } from "@rectangular-labs/auth/adapter/types";
-import { type } from "arktype";
-import { FieldError } from "../../core/field";
 import {
   clearFormError,
   handleFormResultError,
   toFieldErrors,
   useAppForm,
-} from "../../ui/tanstack-form";
+} from "@rectangular-labs/ui/components/tanstack-form";
+import { FieldError } from "@rectangular-labs/ui/core/field";
+import { type } from "arktype";
+import { PasswordSchema } from "../../schema/password";
 import { PasswordInput } from "../core/password-input";
 import { PasswordFieldGroup } from "../field-groups/password";
-import { PasswordSchema } from "../schema/password";
 
 export type ChangePasswordFormProps = {
   onSubmit: (values: { newPassword: string; oldPassword: string }) => Promise<AuthResult>;

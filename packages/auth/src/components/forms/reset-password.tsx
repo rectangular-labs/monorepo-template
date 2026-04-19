@@ -1,19 +1,19 @@
 "use client";
 
 import type { AuthResult } from "@rectangular-labs/auth/adapter/types";
-import { type } from "arktype";
-import { FieldError } from "../../core/field";
 import {
   clearFormError,
   handleFormResultError,
   toFieldErrors,
   useAppForm,
-} from "../../ui/tanstack-form";
+} from "@rectangular-labs/ui/components/tanstack-form";
+import { FieldError } from "@rectangular-labs/ui/core/field";
+import { type } from "arktype";
+import { CodeSchema } from "../../schema/code";
+import { PasswordSchema } from "../../schema/password";
 import { ResendVerification } from "../core/resend-verification";
 import { OTPCodeFieldGroup } from "../field-groups/otp-code";
 import { PasswordFieldGroup } from "../field-groups/password";
-import { CodeSchema } from "../schema/code";
-import { PasswordSchema } from "../schema/password";
 
 export type ResetPasswordFormProps = {
   showConfirmPassword?: boolean;

@@ -1,9 +1,9 @@
 "use client";
 
 import type { AuthResult } from "@rectangular-labs/auth/adapter/types";
+import { Button } from "@rectangular-labs/ui/core/button";
+import { toast } from "@rectangular-labs/ui/core/sonner";
 import { useState } from "react";
-import { Button } from "../../core/button";
-import { toast } from "../../core/sonner";
 
 export type ResendVerificationProps = {
   item: "code" | "link";

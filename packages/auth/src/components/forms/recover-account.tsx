@@ -1,16 +1,16 @@
 "use client";
 
-import { type } from "arktype";
-import { Checkbox } from "../../core/checkbox";
-import { FieldError } from "../../core/field";
-import { Input } from "../../core/input";
+import type { AuthResult } from "@rectangular-labs/auth/adapter/types";
 import {
   clearFormError,
   handleFormResultError,
   toFieldErrors,
   useAppForm,
-} from "../../ui/tanstack-form";
-import type { AuthResult } from "@rectangular-labs/auth/adapter/types";
+} from "@rectangular-labs/ui/components/tanstack-form";
+import { Checkbox } from "@rectangular-labs/ui/core/checkbox";
+import { FieldError } from "@rectangular-labs/ui/core/field";
+import { Input } from "@rectangular-labs/ui/core/input";
+import { type } from "arktype";
 
 // ─── Props ───────────────────────────────────────────────────────────────────
 

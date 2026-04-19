@@ -1,25 +1,21 @@
 "use client";
 
-import { type } from "arktype";
-import * as React from "react";
-import { FieldError } from "../../core/field";
+import type { AuthResult } from "@rectangular-labs/auth/adapter/types";
 import {
   clearFormError,
   handleFormResultError,
   toFieldErrors,
   useAppForm,
-} from "../../ui/tanstack-form";
+} from "@rectangular-labs/ui/components/tanstack-form";
+import { FieldError } from "@rectangular-labs/ui/core/field";
+import { type } from "arktype";
+import * as React from "react";
 import { EmailFieldGroup } from "../field-groups/email";
-import type { AuthResult } from "@rectangular-labs/auth/adapter/types";
-
-// ─── Props ───────────────────────────────────────────────────────────────────
 
 export type EmailIdentifierFormProps = {
   onSubmit: (values: { email: string }) => Promise<AuthResult>;
   submitText?: React.ReactNode | undefined;
 };
-
-// ─── Component ───────────────────────────────────────────────────────────────
 
 const emailSchema = type({ email: "string.email >= 1" });
 

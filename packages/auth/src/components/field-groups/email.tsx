@@ -1,9 +1,11 @@
 "use client";
 
+import {
+  type FieldShellProps,
+  withFieldGroup,
+} from "@rectangular-labs/ui/components/tanstack-form";
+import { Input } from "@rectangular-labs/ui/core/input";
 import { type ComponentProps } from "react";
-
-import { Input } from "../../core/input";
-import { type FieldShellProps, withFieldGroup } from "../../ui/tanstack-form";
 
 type EmailInputProps = Omit<
   ComponentProps<typeof Input>,

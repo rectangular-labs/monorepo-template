@@ -1,14 +1,13 @@
 "use client";
 
-import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react";
-import { type ComponentProps, useState } from "react";
-
+import { EyeOff, EyeOn } from "@rectangular-labs/ui/components/icons";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "../../core/input-group";
+} from "@rectangular-labs/ui/core/input-group";
+import { type ComponentProps, useState } from "react";
 
 export type PasswordInputProps = Omit<ComponentProps<typeof InputGroupInput>, "type"> & {
   enableToggle?: boolean | undefined;
@@ -33,7 +32,7 @@ export function PasswordInput({ className, enableToggle = true, ...props }: Pass
             size="icon-xs"
             variant="ghost"
           >
-            {isVisible ? <EyeIcon /> : <EyeSlashIcon />}
+            {isVisible ? <EyeOn /> : <EyeOff />}
           </InputGroupButton>
         </InputGroupAddon>
       ) : null}

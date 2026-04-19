@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "../../../utils";
-import { Skeleton } from "../../core/skeleton";
+import { Skeleton } from "@rectangular-labs/ui/core/skeleton";
+import { cn } from "@rectangular-labs/ui/utils";
 import { OrganizationLogo, type OrganizationLogoProps } from "./organization-logo";
 
 export function OrganizationCellView({ isPending, size, organization }: OrganizationLogoProps) {

@@ -1,6 +1,9 @@
 "use client";
 
-import { type FieldShellProps, withFieldGroup } from "../../ui/tanstack-form";
+import {
+  type FieldShellProps,
+  withFieldGroup,
+} from "@rectangular-labs/ui/components/tanstack-form";
 import { PasswordInput, PasswordInputProps } from "../core/password-input";
 
 type PasswordFieldGroupValues = {

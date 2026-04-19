@@ -1,6 +1,6 @@
-import { Alert, AlertDescription, AlertTitle } from "@rectangular-labs/ui/components/core/alert";
-import { Button } from "@rectangular-labs/ui/components/core/button";
 import { Terminal } from "@rectangular-labs/ui/components/icon";
+import { Alert, AlertDescription, AlertTitle } from "@rectangular-labs/ui/core/alert";
+import { Button } from "@rectangular-labs/ui/core/button";
 import type { ErrorComponentProps } from "@tanstack/react-router";
 import { Link, rootRouteId, useMatch, useRouter } from "@tanstack/react-router";
 

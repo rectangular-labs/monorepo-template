@@ -1,5 +1,5 @@
-import { Toaster } from "@rectangular-labs/ui/components/core/sonner";
 import { ThemeProvider } from "@rectangular-labs/ui/components/theme-provider";
+import { Toaster } from "@rectangular-labs/ui/core/sonner";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";

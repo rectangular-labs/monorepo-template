@@ -21,7 +21,8 @@ import {
   VKIcon,
   XIcon,
   ZoomIcon,
-} from "../icon";
+} from "@rectangular-labs/ui/components/icons";
+import type { ComponentType } from "react";
 
 export const socialProviders: SocialProvider[] = [
   {
@@ -161,6 +162,6 @@ export const socialProviders: SocialProvider[] = [
 export type SocialProvider = {
   provider: string;
   name: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
   method: "social" | "generic";
 };

@@ -1,11 +1,11 @@
 "use client";
 
 import { cva, type VariantProps } from "class-variance-authority";
-import * as React from "react";
+import React from "react";
 
-import { Button } from "@rectangular-labs/ui/components/core/button";
-import { Input } from "@rectangular-labs/ui/components/core/input";
-import { Textarea } from "@rectangular-labs/ui/components/core/textarea";
+import { Button } from "@rectangular-labs/ui/core/button";
+import { Input } from "@rectangular-labs/ui/core/input";
+import { Textarea } from "@rectangular-labs/ui/core/textarea";
 import { cn } from "@rectangular-labs/ui/utils";
 
 function InputGroup({ className, ...props }: React.ComponentProps<"div">) {

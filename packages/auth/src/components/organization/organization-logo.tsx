@@ -1,10 +1,10 @@
 "use client";
 
-import { BuildingsIcon } from "@phosphor-icons/react";
+import { Avatar, AvatarFallback, AvatarImage } from "@rectangular-labs/ui/core/avatar";
+import { Buildings } from "@rectangular-labs/ui/components/icons";
+import { Skeleton } from "@rectangular-labs/ui/core/skeleton";
+import { cn } from "@rectangular-labs/ui/utils";
 import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "../../../utils";
-import { Avatar, AvatarFallback, AvatarImage } from "../../core/avatar";
-import { Skeleton } from "../../core/skeleton";
 
 const organizationLogoSize = cva("", {
   variants: {
@@ -67,7 +67,7 @@ export function OrganizationLogo({
     <Avatar className={cn("bg-muted", organizationLogoSize({ size: normalizedSize }), className)}>
       <AvatarImage alt={name || "Organization"} src={src || undefined} />
       <AvatarFallback className={"text-foreground"} delay={src ? 600 : 0}>
-        <BuildingsIcon className={"size-[50%]"} />
+        <Buildings className={"size-[50%]"} />
       </AvatarFallback>
     </Avatar>
   );

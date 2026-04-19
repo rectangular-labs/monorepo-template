@@ -1,13 +1,13 @@
 "use client";
 
-import { FingerprintSimpleIcon } from "@phosphor-icons/react";
-import { useState } from "react";
-import { Button } from "../../core/button";
-import { Spinner } from "../../core/spinner";
+import { Button } from "@rectangular-labs/ui/core/button";
+import { Fingerprint } from "@rectangular-labs/ui/components/icons";
+import { Spinner } from "@rectangular-labs/ui/core/spinner";
+import { useState, type ComponentProps } from "react";
 import { SocialProvider } from "../social-providers";
 
 // ─── Props
-type ButtonBaseProps = Omit<React.ComponentProps<typeof Button>, "onClick" | "type"> & {
+type ButtonBaseProps = Omit<ComponentProps<typeof Button>, "onClick" | "type"> & {
   layout?: "full" | "icon-only" | undefined;
 };
 
@@ -76,7 +76,7 @@ export function AuthButton<T extends SocialProvider>(
       type="button"
       variant={variant}
     >
-      {isSubmitting ? <Spinner /> : <FingerprintSimpleIcon />}
+      {isSubmitting ? <Spinner /> : <Fingerprint />}
       {layout === "full" ? "Sign in with passkey" : null}
     </Button>
   );

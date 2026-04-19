@@ -1,18 +1,18 @@
 "use client";
 
 import type { AuthResult, VerificationInfo } from "@rectangular-labs/auth/adapter/types";
-import { type } from "arktype";
-import { Button } from "../../core/button";
-import { FieldError } from "../../core/field";
 import {
   clearFormError,
   handleFormResultError,
   toFieldErrors,
   useAppForm,
-} from "../../ui/tanstack-form";
+} from "@rectangular-labs/ui/components/tanstack-form";
+import { Button } from "@rectangular-labs/ui/core/button";
+import { FieldError } from "@rectangular-labs/ui/core/field";
+import { type } from "arktype";
+import { CodeSchema } from "../../schema/code";
 import { ResendVerification } from "../core/resend-verification";
 import { OTPCodeFieldGroup } from "../field-groups/otp-code";
-import { CodeSchema } from "../schema/code";
 
 export type VerificationFormProps = {
   info: VerificationInfo;

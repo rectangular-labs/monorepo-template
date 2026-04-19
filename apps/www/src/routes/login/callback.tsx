@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
-import { Spinner } from "@rectangular-labs/ui/components/core/spinner";
+import { Spinner } from "@rectangular-labs/ui/core/spinner";
 import { type } from "arktype";
 import { apiRQ } from "~/lib/api";
 import { AuthErrorPanel, AuthPageFrame } from "./-shared";

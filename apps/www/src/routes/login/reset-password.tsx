@@ -1,13 +1,13 @@
-import { ResetPasswordForm } from "@rectangular-labs/ui/auth/forms/reset-password";
-import { VerificationForm } from "@rectangular-labs/ui/auth/forms/verification";
-import { useAuthFlow } from "@rectangular-labs/ui/auth/use-auth-flow";
+import { ResetPasswordForm } from "@rectangular-labs/auth/components/forms/reset-password";
+import { VerificationForm } from "@rectangular-labs/auth/components/forms/verification";
+import { useAuthFlow } from "@rectangular-labs/auth/components/use-auth-flow";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@rectangular-labs/ui/components/core/card";
+} from "@rectangular-labs/ui/core/card";
 import { createFileRoute } from "@tanstack/react-router";
 
 import { type } from "arktype";

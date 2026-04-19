@@ -1,11 +1,5 @@
 "use client";
 
-import { CaretUpDownIcon, CheckIcon } from "@phosphor-icons/react";
-import { ComponentRef, useRef, useState, type ComponentPropsWithRef, type Ref } from "react";
-import * as RPNInput from "react-phone-number-input";
-import flags from "react-phone-number-input/flags";
-
-import { cn } from "../../../utils";
 import {
   Command,
   CommandEmpty,
@@ -13,15 +7,21 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "../../core/command";
+} from "@rectangular-labs/ui/core/command";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupInput,
-} from "../../core/input-group";
-import { Popover, PopoverContent, PopoverTrigger } from "../../core/popover";
-import { ScrollArea } from "../../core/scroll-area";
+} from "@rectangular-labs/ui/core/input-group";
+import { CaretUpDown, Check } from "@rectangular-labs/ui/components/icons";
+import { Popover, PopoverContent, PopoverTrigger } from "@rectangular-labs/ui/core/popover";
+import { ScrollArea } from "@rectangular-labs/ui/core/scroll-area";
+import { ComponentRef, useRef, useState, type ComponentPropsWithRef, type Ref } from "react";
+import * as RPNInput from "react-phone-number-input";
+import flags from "react-phone-number-input/flags";
+
+import { cn } from "@rectangular-labs/ui/utils";
 
 type PhoneInputProps = Omit<ComponentPropsWithRef<"input">, "onChange" | "value"> &
   Omit<RPNInput.Props<typeof RPNInput.default>, "onChange" | "inputComponent"> & {
@@ -105,9 +105,7 @@ function CountrySelect({
               variant="ghost"
             >
               <FlagComponent country={selectedCountry} countryName={selectedCountry} />
-              <CaretUpDownIcon
-                className={cn("-mr-1 size-4", disabled ? "opacity-30" : "opacity-60")}
-              />
+              <CaretUpDown className={cn("-mr-1 size-4", disabled ? "opacity-30" : "opacity-60")} />
             </InputGroupButton>
           </InputGroupAddon>
         }
@@ -179,7 +177,7 @@ function CountrySelectOption({
       <FlagComponent country={country} countryName={countryName} />
       <span className="flex-1 text-sm">{countryName}</span>
       <span className="text-sm text-foreground/50">{`+${RPNInput.getCountryCallingCode(country)}`}</span>
-      <CheckIcon
+      <Check
         className={cn("ml-auto size-4", country === selectedCountry ? "opacity-100" : "opacity-0")}
       />
     </CommandItem>

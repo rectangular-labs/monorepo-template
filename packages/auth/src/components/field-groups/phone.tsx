@@ -1,8 +1,10 @@
 "use client";
 
+import {
+  type FieldShellProps,
+  withFieldGroup,
+} from "@rectangular-labs/ui/components/tanstack-form";
 import { type ComponentProps } from "react";
-
-import { type FieldShellProps, withFieldGroup } from "../../ui/tanstack-form";
 import { PhoneInput } from "../core/phone-input";
 
 type PhoneControlProps = Omit<

@@ -1,21 +1,21 @@
 "use client";
 
 import type { AuthResult } from "@rectangular-labs/auth/adapter/types";
-import { type } from "arktype";
-import { Button } from "../../core/button";
-import { Checkbox } from "../../core/checkbox";
-import { FieldError } from "../../core/field";
-import { Input } from "../../core/input";
 import {
   clearFormError,
   handleFormResultError,
   toFieldErrors,
   useAppForm,
-} from "../../ui/tanstack-form";
+} from "@rectangular-labs/ui/components/tanstack-form";
+import { Button } from "@rectangular-labs/ui/core/button";
+import { Checkbox } from "@rectangular-labs/ui/core/checkbox";
+import { FieldError } from "@rectangular-labs/ui/core/field";
+import { Input } from "@rectangular-labs/ui/core/input";
+import { type } from "arktype";
+import { EmailSchema } from "../../schema/email";
+import { PasswordSchema } from "../../schema/password";
 import { EmailFieldGroup } from "../field-groups/email";
 import { PasswordFieldGroup } from "../field-groups/password";
-import { EmailSchema } from "../schema/email";
-import { PasswordSchema } from "../schema/password";
 
 type PasswordSignInFormProps = {
   onSubmit: (values: {

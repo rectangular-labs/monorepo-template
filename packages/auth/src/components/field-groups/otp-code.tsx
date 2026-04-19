@@ -1,9 +1,11 @@
 "use client";
 
+import {
+  withFieldGroup,
+  type FieldShellProps,
+} from "@rectangular-labs/ui/components/tanstack-form";
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@rectangular-labs/ui/core/input-otp";
 import { type ComponentProps } from "react";
-
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "../../core/input-otp";
-import { withFieldGroup, type FieldShellProps } from "../../ui/tanstack-form";
 
 type OTPInputProps = Omit<
   ComponentProps<typeof InputOTP>,

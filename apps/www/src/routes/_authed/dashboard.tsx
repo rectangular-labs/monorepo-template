@@ -1,4 +1,4 @@
-import { Button } from "@rectangular-labs/ui/components/core/button";
+import { Button } from "@rectangular-labs/ui/core/button";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { apiRQ } from "~/lib/api";

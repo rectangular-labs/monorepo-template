@@ -1,4 +1,5 @@
-import { Button } from "@rectangular-labs/ui/components/core/button";
+import { Section } from "@rectangular-labs/ui/components/section";
+import { Button } from "@rectangular-labs/ui/core/button";
 import {
   Card,
   CardContent,
@@ -6,8 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@rectangular-labs/ui/components/core/card";
-import { Section } from "@rectangular-labs/ui/components/ui/section";
+} from "@rectangular-labs/ui/core/card";
 import { Link } from "@tanstack/react-router";
 
 export function Products() {

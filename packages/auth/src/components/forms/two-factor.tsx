@@ -1,29 +1,25 @@
 "use client";
 
-import { type } from "arktype";
-import { PaperPlaneTiltIcon, SpinnerIcon } from "@phosphor-icons/react";
-import { useCallback, useEffect, useState } from "react";
-import { Checkbox } from "../../core/checkbox";
-import { FieldError } from "../../core/field";
+import type { AuthResult } from "@rectangular-labs/auth/adapter/types";
 import {
   clearFormError,
   handleFormResultError,
   toFieldErrors,
   useAppForm,
-} from "../../ui/tanstack-form";
-import { Button } from "../../core/button";
+} from "@rectangular-labs/ui/components/tanstack-form";
+import { Button } from "@rectangular-labs/ui/core/button";
+import { Checkbox } from "@rectangular-labs/ui/core/checkbox";
+import { FieldError } from "@rectangular-labs/ui/core/field";
+import { PaperPlaneTilt, Spinner as SpinnerIcon } from "@rectangular-labs/ui/components/icons";
+import { type } from "arktype";
+import { useCallback, useEffect, useState } from "react";
 import { OTPCodeFieldGroup } from "../field-groups/otp-code";
-import type { AuthResult } from "@rectangular-labs/auth/adapter/types";
-
-// ─── Props ───────────────────────────────────────────────────────────────────
 
 export type TwoFactorFormProps = {
   onSubmit: (values: { code: string; trustDevice?: boolean | undefined }) => Promise<AuthResult>;
   onSendOtp?: ((values: { trustDevice?: boolean | undefined }) => Promise<void>) | undefined;
   onRecoverAccount?: (() => void) | undefined;
 };
-
-// ─── Component ───────────────────────────────────────────────────────────────
 
 export function TwoFactorForm({ onSubmit, onSendOtp, onRecoverAccount }: TwoFactorFormProps) {
   const [isSendingOtp, setIsSendingOtp] = useState(false);
@@ -145,7 +141,7 @@ export function TwoFactorForm({ onSubmit, onSendOtp, onRecoverAccount }: TwoFact
               type="button"
               variant="outline"
             >
-              {isSendingOtp ? <SpinnerIcon className="animate-spin" /> : <PaperPlaneTiltIcon />}
+              {isSendingOtp ? <SpinnerIcon className="animate-spin" /> : <PaperPlaneTilt />}
               Resend code{coolDownSeconds > 0 ? ` (${coolDownSeconds})` : ""}
             </Button>
           ) : null}
