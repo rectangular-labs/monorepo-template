@@ -82,7 +82,7 @@ export type UseAuthFlowOptions = {
   /**
    * Called for non-field auth errors after the adapter result is normalized.
    */
-  onError?: (error: { message: string; code?: string | undefined }) => void;
+  onError?: (error: { message: string; code?: string | undefined }) => void | Promise<void>;
 };
 
 /**
@@ -106,10 +106,12 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
     navigate = (url: string) => {
       window.location.href = url;
     },
-    onSuccess: onSuccessOption,
+    onSuccess,
     onError,
   } = options;
 
+  const onSuccessRef = useRef(onSuccess);
+  const onErrorRef = useRef(onError);
   const [state, setState] = useState<AuthFlowState>(initialState);
   const historyRef = useRef<AuthFlowState[]>([]);
 
@@ -137,26 +139,15 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
     [onTransition],
   );
 
-  const onSuccess = useCallback(() => {
-    if (onSuccessOption) {
-      return Promise.resolve(onSuccessOption());
-    }
-
-    if (callbackURLs?.success) {
-      return Promise.resolve(navigate(callbackURLs.success));
-    }
-    return;
-  }, [callbackURLs?.success, navigate, onSuccessOption]);
-
   const handleResult = useCallback(
     (result: AuthResult) => {
       switch (result.type) {
         case "success":
-          void onSuccess();
+          void onSuccessRef.current?.();
           break;
 
         case "error":
-          onError?.({ message: result.message, code: result.code });
+          void onErrorRef.current?.({ message: result.message, code: result.code });
           break;
 
         case "pending-redirect":
@@ -188,7 +179,7 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
           break;
       }
     },
-    [navigate, onError, onSuccess, transitionTo],
+    [navigate, transitionTo],
   );
 
   const goTo = useCallback(
@@ -224,6 +215,28 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
     }
 
     const specialCases: Partial<{ [K in keyof AuthAdapter]: AuthAdapter[K] }> = {
+      signInWithPassword: async (...args: Parameters<AuthAdapter["signInWithPassword"]>) => {
+        const fn = assertMethod("signInWithPassword");
+        const [values] = args;
+        const mergedValues = {
+          ...values,
+          successCallbackUrl: values.successCallbackUrl ?? urls?.success,
+        };
+        const result = await fn(mergedValues);
+        handleResult(result);
+        return result;
+      },
+      signUpWithPassword: async (...args: Parameters<AuthAdapter["signUpWithPassword"]>) => {
+        const fn = assertMethod("signUpWithPassword");
+        const [values] = args;
+        const mergedValues = {
+          ...values,
+          newUserCallbackUrl: values.newUserCallbackUrl ?? urls?.newUser ?? urls?.success,
+        };
+        const result = await fn(mergedValues);
+        handleResult(result);
+        return result;
+      },
       sendCode: async (...args: Parameters<AuthAdapter["sendCode"]>) => {
         const fn = assertMethod("sendCode");
         const [info, callbackURLs] = args;
@@ -234,15 +247,6 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
         handleResult(result);
         return result;
       },
-
-      verifyCode: async (...args: Parameters<AuthAdapter["verifyCode"]>) => {
-        const fn = assertMethod("verifyCode");
-        const [values] = args;
-        const result = await fn(values);
-        handleResult(result);
-        return result;
-      },
-
       signInWithSocial: async (...args: Parameters<AuthAdapter["signInWithSocial"]>) => {
         const fn = assertMethod("signInWithSocial");
         const [provider, options] = args;

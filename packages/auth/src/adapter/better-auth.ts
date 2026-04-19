@@ -78,12 +78,14 @@ export function createBetterAuthActions(
           username: values.username,
           password: values.password,
           rememberMe: values.rememberMe,
+          callbackURL: values.successCallbackUrl,
         });
       }
       return client.signIn.email({
         email: values.email,
         password: values.password,
         rememberMe: values.rememberMe,
+        callbackURL: values.successCallbackUrl,
       });
     })();
 
@@ -109,6 +111,7 @@ export function createBetterAuthActions(
       email,
       password,
       name: name ?? "",
+      callbackURL: values.newUserCallbackURL,
       ...rest,
     });
 
@@ -208,7 +211,7 @@ export function createBetterAuthActions(
   };
 
   const signInWithPasskey: AuthAdapter["signInWithPasskey"] = async () => {
-    const response = await auth.signIn.passkey?.({ autoFill: true });
+    const response = await auth.signIn.passkey({ autoFill: true });
     return toResult(response);
   };
 
@@ -298,7 +301,7 @@ export function createBetterAuthActions(
       case "verification-email-token": {
         const response = await client.sendVerificationEmail({
           email: info.identifier,
-          callbackURL: callbackURLs?.newUser ?? callbackURLs?.success ?? "/",
+          callbackURL: callbackURLs?.newUser ?? callbackURLs?.success,
         });
         return response.error ? toResult(response) : successResult;
       }

@@ -69,13 +69,18 @@ export interface AuthAdapter {
           type: "username";
           username: string;
         }
-    ) & { password: string; rememberMe?: boolean | undefined },
+    ) & {
+      password: string;
+      rememberMe?: boolean | undefined;
+      successCallbackUrl?: string | undefined;
+    },
   ) => Promise<AuthResult>;
   signUpWithPassword: (values: {
     email: string;
     password: string;
     name?: string | undefined;
     username?: string | undefined;
+    newUserCallbackURL?: string | undefined;
     [key: string]: unknown;
   }) => Promise<AuthResult>;
   resetPassword: (
@@ -97,16 +102,3 @@ export interface AuthAdapter {
     values: { type: "totp"; password: string } | { type: "backup-codes"; password: string },
   ) => Promise<AuthResult>;
 }
-
-export type AdditionalField = {
-  /** @default "string" */
-  type: "string" | "number" | "boolean";
-  required?: boolean;
-  /** Should match the type of the field. */
-  default?: string | number | boolean;
-  /** @default false */
-  multiline?: boolean;
-  label?: string;
-  placeholder?: string;
-  validate?: (value: string) => Promise<boolean> | boolean;
-};
