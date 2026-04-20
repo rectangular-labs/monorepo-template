@@ -93,7 +93,7 @@ function LoginPage() {
       description={
         <>
           After authentication you&apos;ll be redirected back to{" "}
-          <span className="text-foreground font-medium">{next || "/dashboard"}</span>.
+          <span className="font-medium text-foreground">{next || "/dashboard"}</span>.
         </>
       }
       title={title}
@@ -125,7 +125,7 @@ function SignInStep({ flow }: { flow: UseAuthFlowReturn }) {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background text-muted-foreground px-2">Or continue with</span>
+          <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
         </div>
       </div>
 
@@ -146,10 +146,10 @@ function SignInStep({ flow }: { flow: UseAuthFlowReturn }) {
         ))}
       </div>
 
-      <p className="text-muted-foreground text-center text-sm">
+      <p className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}
         <button
-          className="text-foreground font-medium underline-offset-4 hover:underline"
+          className="font-medium text-foreground underline-offset-4 hover:underline"
           onClick={() => flow.goTo({ step: "sign-up" })}
           type="button"
         >
@@ -179,7 +179,7 @@ function SignUpStep({ flow }: { flow: UseAuthFlowReturn }) {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background text-muted-foreground px-2">Or continue with</span>
+          <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
         </div>
       </div>
 
@@ -201,10 +201,10 @@ function SignUpStep({ flow }: { flow: UseAuthFlowReturn }) {
         ))}
       </div>
 
-      <p className="text-muted-foreground text-center text-sm">
+      <p className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
         <button
-          className="text-foreground font-medium underline-offset-4 hover:underline"
+          className="font-medium text-foreground underline-offset-4 hover:underline"
           onClick={() => flow.goTo({ step: "sign-in" })}
           type="button"
         >
@@ -220,7 +220,7 @@ function ForgotPasswordStep({ flow }: { flow: UseAuthFlowReturn }) {
 
   return (
     <>
-      <p className="text-muted-foreground text-sm">
+      <p className="text-sm text-muted-foreground">
         Enter your email and we&apos;ll send you {verificationType === "code" ? "a code" : "a link"}{" "}
         to reset your password.
       </p>
@@ -237,7 +237,7 @@ function ForgotPasswordStep({ flow }: { flow: UseAuthFlowReturn }) {
         submitText="Send reset link"
       />
       <button
-        className="text-muted-foreground text-sm font-medium underline-offset-4 hover:underline"
+        className="text-sm font-medium text-muted-foreground underline-offset-4 hover:underline"
         onClick={() => flow.goBack()}
         type="button"
       >
@@ -264,7 +264,7 @@ function VerificationStep({ flow }: { flow: UseAuthFlowReturn }) {
 
       {flow.canGoBack ? (
         <button
-          className="text-muted-foreground text-sm font-medium underline-offset-4 hover:underline"
+          className="text-sm font-medium text-muted-foreground underline-offset-4 hover:underline"
           onClick={() => flow.goBack()}
           type="button"
         >

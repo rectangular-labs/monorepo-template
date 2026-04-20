@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "monorepo-template-sample",
+  "name": "monorepo-template-demo-blog",
   "compatibility_date": "2026-03-17",
   "compatibility_flags": ["nodejs_compat"],
   "preview_urls": false,
@@ -20,7 +20,7 @@
     "production": {
       "routes": [
         {
-          "pattern": "rectangularlabs.com",
+          "pattern": "demo.rectangularlabs.com",
           "custom_domain": true,
         },
       ],
@@ -28,7 +28,7 @@
     "[env.PULL_REQUEST]": {
       "routes": [
         {
-          "pattern": "[env.PULL_REQUEST].rectangularlabs.com",
+          "pattern": "[env.PULL_REQUEST]-demo.rectangularlabs.com",
           "custom_domain": true,
         },
       ],

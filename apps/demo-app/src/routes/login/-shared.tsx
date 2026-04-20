@@ -17,13 +17,13 @@ export function AuthPageFrame({
     <main className="mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-6 py-16">
       <div className="grid w-full max-w-5xl gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
         <div className="space-y-4">
-          <p className="text-muted-foreground text-sm font-medium tracking-widest uppercase">
+          <p className="text-sm font-medium tracking-widest text-muted-foreground uppercase">
             Authentication
           </p>
-          <h1 className="text-foreground max-w-xl text-4xl font-semibold tracking-tight sm:text-5xl">
+          <h1 className="max-w-xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
             {title}
           </h1>
-          <div className="text-muted-foreground max-w-xl text-base">{description}</div>
+          <div className="max-w-xl text-base text-muted-foreground">{description}</div>
         </div>
 
         <div className="w-full space-y-6">{children}</div>

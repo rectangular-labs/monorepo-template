@@ -1,4 +1,3 @@
-import { apiEnv } from "@rectangular-labs/api/env";
 import { createEnv } from "@t3-oss/env-core";
 import { type } from "arktype";
 
@@ -10,7 +9,7 @@ export const clientEnv = () =>
     clientPrefix: "VITE_",
     client: {
       VITE_APP_URL: type("string.url"),
-      VITE_AUTH_EMAIL_VERIFICATION_TYPE: type("'code'|'token'"),
+      VITE_BLOG_URL: type("string.url"),
     },
     runtimeEnv: import.meta.env,
     emptyStringAsUndefined: true,
@@ -19,7 +18,7 @@ export const clientEnv = () =>
 
 export const serverEnv = () =>
   createEnv({
-    extends: [clientEnv(), apiEnv()],
+    extends: [clientEnv()],
     server: {},
     runtimeEnv: process.env,
     emptyStringAsUndefined: true,

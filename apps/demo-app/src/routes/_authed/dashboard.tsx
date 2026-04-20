@@ -24,11 +24,11 @@ function DashboardPage() {
 
   return (
     <main className="mx-auto flex min-h-[60vh] w-full max-w-5xl flex-col gap-4 px-6 py-16 lg:px-0">
-      <p className="text-muted-foreground text-sm font-medium tracking-[0.24em] uppercase">
+      <p className="text-sm font-medium tracking-[0.24em] text-muted-foreground uppercase">
         Protected
       </p>
       <h1 className="text-4xl font-semibold tracking-tight">Dashboard</h1>
-      <p className="text-muted-foreground max-w-2xl">
+      <p className="max-w-2xl text-muted-foreground">
         This route is guarded by the current Auth session. Unauthenticated visitors will be
         redirected to the login page.
       </p>

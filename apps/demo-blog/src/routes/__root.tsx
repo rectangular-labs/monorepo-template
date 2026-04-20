@@ -1,15 +1,14 @@
 import { ThemeProvider } from "@rectangular-labs/ui/components/theme";
 import { Toaster } from "@rectangular-labs/ui/core/sonner";
-import type { QueryClient } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { clientEnv } from "~/lib/env";
 import { seo } from "~/lib/seo";
 import appCss from "../styles.css?url";
+import { Footer } from "./-components/footer";
+import { Header } from "./-components/header";
 
-export const Route = createRootRouteWithContext<{
-  queryClient: QueryClient;
-}>()({
+export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -19,25 +18,20 @@ export const Route = createRootRouteWithContext<{
       },
       {
         name: "apple-mobile-web-app-title",
-        content: "Rectangular Labs",
+        content: "Vite Plus Monorepo Template",
       },
       {
         name: "application-name",
-        content: "Rectangular Labs",
+        content: "Vite Plus Monorepo Template",
       },
       ...seo({
-        title: "Rectangular Labs — Bootstrapped, customer-obsessed technology studio",
+        title: "Vite Plus Monorepo Template for teams shipping real products",
         description:
-          "We build and launch high-craft products: Result, Emails, and a production-ready monorepo starter.",
+          "A Vite Plus monorepo template with TanStack Start, auth, API, UI, and deployment wiring already set up.",
       }),
     ],
     links: [
-      {
-        rel: "alternate",
-        type: "application/rss+xml",
-        href: "/blog/rss.xml",
-        title: "Blog RSS",
-      },
+      { rel: "canonical", href: clientEnv().VITE_BLOG_URL },
       { rel: "stylesheet", href: appCss },
       {
         rel: "apple-touch-icon",
@@ -75,11 +69,16 @@ function RootLayout() {
       </head>
       <body>
         <ThemeProvider attribute="class" enableSystem>
-          <Outlet />
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <main className="flex-1">
+              <Outlet />
+            </main>
+            <Footer />
+          </div>
           <Toaster />
         </ThemeProvider>
         <TanStackRouterDevtools position="bottom-left" />
-        <ReactQueryDevtools buttonPosition="bottom-right" />
         <Scripts />
       </body>
     </html>

@@ -44,10 +44,10 @@ function LoginCallbackPage() {
       {error ? (
         <AuthErrorPanel error={error} />
       ) : (
-        <div className="border-border bg-card flex min-h-52 flex-col items-center justify-center gap-3 border px-6 py-10 text-center">
+        <div className="flex min-h-52 flex-col items-center justify-center gap-3 border border-border bg-card px-6 py-10 text-center">
           <Spinner className="size-5" />
           <div className="space-y-1">
-            <p className="text-foreground text-sm font-medium">This page will update shortly.</p>
+            <p className="text-sm font-medium text-foreground">This page will update shortly.</p>
           </div>
         </div>
       )}

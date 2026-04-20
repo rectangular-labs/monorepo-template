@@ -1,42 +1,40 @@
 import { Logo, Menu, X } from "@rectangular-labs/ui/components/icons";
 import { ThemeToggle } from "@rectangular-labs/ui/components/theme";
-import { Link } from "@tanstack/react-router";
+import { Button } from "@rectangular-labs/ui/core/button";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
+import { clientEnv } from "~/lib/env";
 
 const menuItems = [
-  { name: "Docs", href: "/docs" },
-  { name: "Blog", href: "/blog" },
-  { name: "About", href: "/about" },
+  { name: "Features", href: "#features" },
+  { name: "Stack", href: "#stack" },
+  { name: "Why It Ranks", href: "#proof" },
 ];
+
 function HeaderItems({ items }: { items: { name: string; href: string }[] }) {
+  const { VITE_APP_URL } = clientEnv();
+
   return (
     <>
       <div className="lg:pr-4">
         <ul className="space-y-6 text-base lg:flex lg:gap-8 lg:space-y-0 lg:text-sm">
           {items.map((item) => (
             <li key={item.name}>
-              {item.href.startsWith("#") ? (
-                <a
-                  className="block text-muted-foreground duration-150 hover:text-accent-foreground"
-                  href={item.href}
-                >
-                  <span>{item.name}</span>
-                </a>
-              ) : (
-                <Link
-                  className="block text-muted-foreground duration-150 hover:text-accent-foreground"
-                  to={item.href}
-                >
-                  <span>{item.name}</span>
-                </Link>
-              )}
+              <a
+                className="block text-muted-foreground duration-150 hover:text-accent-foreground"
+                href={item.href}
+              >
+                <span>{item.name}</span>
+              </a>
             </li>
           ))}
         </ul>
       </div>
 
       <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit lg:border-l lg:pl-6">
+        <Button render={<a href={VITE_APP_URL} />} variant="outline">
+          Open Demo App
+        </Button>
         <ThemeToggle variant="outline" />
       </div>
     </>
@@ -52,15 +50,12 @@ export function Header() {
         className="fixed z-20 w-full border-b backdrop-blur md:relative md:backdrop-blur-none lg:h-[70px]"
         data-state={menuState && "active"}
       >
-        <div className="m-auto flex h-full max-w-5xl flex-wrap items-center justify-between gap-6 px-4 py-3 md:px-6 lg:gap-0 lg:py-4">
+        <div className="m-auto flex h-full max-w-6xl flex-wrap items-center justify-between gap-6 px-4 py-3 md:px-6 lg:gap-0 lg:py-4">
           <div className="flex w-full justify-between lg:w-auto">
-            <Link
-              aria-label="home"
-              className="flex items-center gap-2 text-muted-foreground"
-              to="/"
-            >
-              <Logo /> Rectangular Labs
-            </Link>
+            <a aria-label="home" className="flex items-center gap-2 text-muted-foreground" href="/">
+              <Logo className="size-5" />
+              Rectangular Labs
+            </a>
 
             <button
               aria-label={menuState === true ? "Close Menu" : "Open Menu"}
