@@ -1,4 +1,4 @@
-import { Section } from "@rectangular-labs/ui/components/ui/section";
+import { Section } from "@rectangular-labs/ui/components/section";
 
 export function Footer() {
   const links = [

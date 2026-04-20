@@ -18,6 +18,12 @@ export default defineConfig({
       scripts: false,
     },
     tasks: {
+      install: {
+        command: "vp i",
+      },
+      fmt: {
+        command: "vp fmt",
+      },
       build: {
         command: "vp run -r build",
         env: cacheEnv,
@@ -63,7 +69,7 @@ export default defineConfig({
   fmt: {
     ignorePatterns,
     sortTailwindcss: {
-      stylesheet: "./packages/ui/src/styles.css",
+      stylesheet: "./apps/www/src/styles.css",
       functions: ["clsx", "cn", "cva", "tw"],
       preserveDuplicates: false,
       preserveWhitespace: false,

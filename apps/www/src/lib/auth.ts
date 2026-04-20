@@ -1,35 +1,33 @@
-import { createApiContext } from "@rectangular-labs/api/context";
+import { createBetterAuthActions } from "@rectangular-labs/auth/adapter/better-auth";
+import type { CallbackURLs } from "@rectangular-labs/auth/adapter/types";
 import { createAuthClient } from "@rectangular-labs/auth/client";
-import { queryOptions } from "@tanstack/react-query";
-import { createIsomorphicFn } from "@tanstack/react-start";
-import { getRequest } from "@tanstack/react-start/server";
 import { clientEnv } from "./env";
 
-const baseURL = clientEnv().VITE_APP_URL;
+export const authClient = createAuthClient({ baseURL: clientEnv().VITE_APP_URL });
 
-export const authClient = createAuthClient({ baseURL });
+export const authAdapter = createBetterAuthActions(
+  authClient,
+  clientEnv().VITE_AUTH_EMAIL_VERIFICATION_TYPE,
+);
 
-export const getCurrentSession = createIsomorphicFn()
-  .server(async () => {
-    const request = getRequest();
-    const { auth } = createApiContext({
-      reqHeaders: request.headers,
-      resHeaders: new Headers(),
-      url: new URL(request.url),
-    });
+export function createLoginCallbackURLs(next?: string) {
+  const rawNext = next || "/dashboard";
+  const rawNewUserDestination = `/new-user?next=${rawNext}`;
+  const destination = encodeURIComponent(rawNext);
+  const newUserDestination = encodeURIComponent(rawNewUserDestination);
 
-    return await auth.api.getSession({
-      headers: request.headers,
-    });
-  })
-  .client(async () => {
-    const response = await authClient.getSession();
-    return response.data ?? null;
-  });
-
-export const getCurrentSessionQueryOptions = () =>
-  queryOptions({
-    queryKey: ["auth", "session", "current"],
-    queryFn: getCurrentSession,
-    staleTime: 15 * 1000,
-  });
+  return {
+    postLogin: {
+      success: rawNext,
+      newUser: rawNewUserDestination,
+      error: rawNext,
+      resetPassword: `/login/reset-password?next=${destination}`,
+    } satisfies CallbackURLs,
+    preLogin: {
+      success: `/login/callback?next=${destination}`,
+      newUser: `/login/callback?next=${newUserDestination}`,
+      error: `/login/callback?next=${destination}`,
+      resetPassword: `/login/reset-password?next=${destination}`,
+    } satisfies CallbackURLs,
+  };
+}

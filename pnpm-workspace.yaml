@@ -4,18 +4,20 @@ packages:
   - tooling/*
 
 catalog:
+  "@rollup/plugin-babel": ^7.0.0
   "@t3-oss/env-core": ^0.13.11
   "@types/node": ^25.5.0
   "@types/react": ^19.2.14
   "@types/react-dom": ^19.2.3
   "@typescript/native-preview": 7.0.0-dev.20260321.1
-  arktype: ^2.1.20
+  arktype: ^2.2.0
+  babel-plugin-react-compiler: ^1.0.0
   publint: ^0.3.18
-  react: ^19.2.4
-  react-dom: ^19.2.4
+  react: ^19.2.5
+  react-dom: ^19.2.5
   typescript: ^5.9.3
   vite: npm:@voidzero-dev/vite-plus-core@latest
-  vite-plus: ^0.1.14
+  vite-plus: ^0.1.18
   vitest: npm:@voidzero-dev/vite-plus-test@latest
 
 ignoredBuiltDependencies:
@@ -41,5 +43,6 @@ peerDependencyRules:
     - vite
     - vitest
   allowedVersions:
+    better-sqlite3: "*"
     vite: "*"
     vitest: "*"

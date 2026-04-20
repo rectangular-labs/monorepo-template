@@ -4,7 +4,7 @@ import { Dialog as DialogPrimitive } from "@base-ui/react/dialog";
 import * as React from "react";
 
 import { XIcon } from "@phosphor-icons/react";
-import { Button } from "@rectangular-labs/ui/components/core/button";
+import { Button } from "@rectangular-labs/ui/core/button";
 import { cn } from "@rectangular-labs/ui/utils";
 
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {

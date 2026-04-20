@@ -9,6 +9,7 @@ import type {
   ResponseHeadersPluginContext,
 } from "@orpc/server/plugins";
 import type { Auth } from "@rectangular-labs/auth";
+import { CredentialVerificationType } from "@rectangular-labs/auth/client";
 import type { DB } from "@rectangular-labs/db";
 import type { router } from "./routes";
 
@@ -25,4 +26,5 @@ export interface InitialContext extends RequestHeadersPluginContext, ResponseHea
   db: DB;
   auth: Auth;
   url: URL;
+  credentialVerificationType: CredentialVerificationType;
 }

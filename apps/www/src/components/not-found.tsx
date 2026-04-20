@@ -1,5 +1,5 @@
-import { Button } from "@rectangular-labs/ui/components/core/button";
-import { Section } from "@rectangular-labs/ui/components/ui/section";
+import { Section } from "@rectangular-labs/ui/components/section";
+import { Button } from "@rectangular-labs/ui/core/button";
 import { Link } from "@tanstack/react-router";
 
 export function NotFound({ children }: { children?: React.ReactNode }) {

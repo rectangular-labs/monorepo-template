@@ -10,8 +10,7 @@
     /* Linting */
     "noUncheckedSideEffectImports": true,
     "paths": {
-      "~/*": ["./src/*"],
-      "@rectangular-labs/ui/*": ["../../packages/ui/src/*"]
+      "~/*": ["./src/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"]

@@ -1,5 +1,5 @@
-import { Logo, Menu, X } from "@rectangular-labs/ui/components/icon";
-import { ThemeToggle } from "@rectangular-labs/ui/components/theme-provider";
+import { Logo, Menu, X } from "@rectangular-labs/ui/components/icons";
+import { ThemeToggle } from "@rectangular-labs/ui/components/theme";
 import { Link } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";

@@ -9,18 +9,18 @@
   "type": "module",
   "scripts": {
     "clean": "vp run -r clean && git clean -xdf node_modules .sst",
-    "dev:www": "docker compose up -d && vp run --cache build -r && vp run www#dev",
+    "dev:www": "docker compose up -d && vp run --cache -r build && vp run www#dev",
     "env:set": "pnpm dotenvx set",
     "env:get": "pnpm dotenvx get",
     "new:package": "vp create @rectangular-labs/create-package && find apps packages tooling -type d -name .vscode -prune -exec rm -rf '{}' +",
     "changeset": "changeset",
     "changeset:release": "vp run build && changeset publish",
-    "postinstall": "pnpx sherif@latest",
+    "postinstall": "vpx sherif@latest",
     "prepare": "vp config"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.30.0",
-    "@dotenvx/dotenvx": "^1.57.1",
+    "@changesets/cli": "^2.31.0",
+    "@dotenvx/dotenvx": "^1.61.1",
     "@rectangular-labs/typescript": "workspace:*",
     "typescript": "catalog:",
     "vite-plus": "catalog:"

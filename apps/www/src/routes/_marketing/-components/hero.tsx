@@ -1,6 +1,6 @@
-import { InteractiveGridPattern } from "@rectangular-labs/ui/components/background/interactive-grid-pattern";
-import { Button } from "@rectangular-labs/ui/components/core/button";
-import { Section } from "@rectangular-labs/ui/components/ui/section";
+import { InteractiveGridPattern } from "@rectangular-labs/ui/background/interactive-grid-pattern";
+import { Section } from "@rectangular-labs/ui/components/section";
+import { Button } from "@rectangular-labs/ui/core/button";
 import { Link } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 

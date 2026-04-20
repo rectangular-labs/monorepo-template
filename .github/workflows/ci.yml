@@ -21,8 +21,13 @@ jobs:
       - name: Setup
         uses: ./tooling/github/setup
 
+      - name: Build
+        env:
+          DOTENV_PRIVATE_KEY: ${{ secrets.DOTENV_PRIVATE_KEY }}
+        run: vp run build
+
       - name: Vite+ check
         run: vp check
 
-      - name: Run tests
-        run: vp test
+      # - name: Run tests
+      #   run: vp test

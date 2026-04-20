@@ -1,4 +1,4 @@
-import { type DB } from "@rectangular-labs/db";
+import { DB } from "better-auth/adapters/drizzle";
 import { initAuthHandler } from "./server";
 
 // Used simply to generate the schema for the auth database

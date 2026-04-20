@@ -7,6 +7,9 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+permissions:
+  id-token: write # Required for OIDC
+
 jobs:
   release:
     name: Create PR or publish to NPM
@@ -25,4 +28,3 @@ jobs:
           publish: vp run changeset:release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,15 +1,22 @@
 import {
   ArrowDownIcon,
   ArrowUpIcon,
+  BuildingsIcon,
+  CaretUpDownIcon,
+  CheckIcon,
   XIcon as CloseIcon,
   DotIcon,
   EyeIcon,
   EyeSlashIcon,
   FileIcon,
+  FingerprintSimpleIcon,
   ListIcon,
   MoonIcon,
+  PaperPlaneTiltIcon,
+  SpinnerIcon,
   SunIcon,
   TerminalIcon,
+  WarningCircleIcon,
 } from "@phosphor-icons/react";
 import type { SVGProps } from "react";
 
@@ -17,14 +24,21 @@ type IconProps = React.HTMLAttributes<SVGElement>;
 
 export const ArrowDown = ArrowDownIcon;
 export const ArrowUp = ArrowUpIcon;
+export const Buildings = BuildingsIcon;
+export const CaretUpDown = CaretUpDownIcon;
+export const Check = CheckIcon;
 export const Dot = DotIcon;
 export const EyeOff = EyeSlashIcon;
 export const EyeOn = EyeIcon;
 export const File = FileIcon;
+export const Fingerprint = FingerprintSimpleIcon;
 export const Menu = ListIcon;
 export const Moon = MoonIcon;
+export const PaperPlaneTilt = PaperPlaneTiltIcon;
+export const Spinner = SpinnerIcon;
 export const Sun = SunIcon;
 export const Terminal = TerminalIcon;
+export const WarningCircle = WarningCircleIcon;
 export const X = CloseIcon;
 
 export const Logo = (props: IconProps) => (

@@ -1,28 +1,43 @@
+import { createSelectSchema } from "drizzle-arktype";
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean, index, uniqueIndex } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  index,
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+} from "drizzle-orm/pg-core";
 
-export const user = pgTable("user", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email").notNull().unique(),
-  emailVerified: boolean("email_verified").default(false).notNull(),
-  image: text("image"),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => /* @__PURE__ */ new Date())
-    .notNull(),
-  twoFactorEnabled: boolean("two_factor_enabled").default(false),
-  source: text("source"),
-  goal: text("goal"),
-});
+// Better Auth index guidance:
+// https://better-auth.com/docs/guides/optimizing-for-performance#database-optimizations
+export const user = pgTable(
+  "user",
+  {
+    id: text("id").primaryKey(),
+    name: text("name").notNull(),
+    email: text("email").notNull(),
+    emailVerified: boolean("email_verified").default(false).notNull(),
+    image: text("image"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+    twoFactorEnabled: boolean("two_factor_enabled").default(false),
+    source: text("source"),
+    goal: text("goal"),
+  },
+  (table) => [uniqueIndex("user_email_uidx").on(table.email)],
+);
 
 export const session = pgTable(
   "session",
   {
     id: text("id").primaryKey(),
     expiresAt: timestamp("expires_at").notNull(),
-    token: text("token").notNull().unique(),
+    token: text("token").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .$onUpdate(() => /* @__PURE__ */ new Date())
@@ -34,7 +49,10 @@ export const session = pgTable(
       .references(() => user.id, { onDelete: "cascade" }),
     activeOrganizationId: text("active_organization_id"),
   },
-  (table) => [index("session_userId_idx").on(table.userId)],
+  (table) => [
+    index("session_userId_idx").on(table.userId),
+    uniqueIndex("session_token_uidx").on(table.token),
+  ],
 );
 
 export const account = pgTable(
@@ -77,6 +95,29 @@ export const verification = pgTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
+export const passkey = pgTable(
+  "passkey",
+  {
+    id: text("id").primaryKey(),
+    name: text("name"),
+    publicKey: text("public_key").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    credentialID: text("credential_id").notNull(),
+    counter: integer("counter").notNull(),
+    deviceType: text("device_type").notNull(),
+    backedUp: boolean("backed_up").notNull(),
+    transports: text("transports"),
+    createdAt: timestamp("created_at"),
+    aaguid: text("aaguid"),
+  },
+  (table) => [
+    index("passkey_userId_idx").on(table.userId),
+    index("passkey_credentialID_idx").on(table.credentialID),
+  ],
+);
+
 export const twoFactor = pgTable(
   "two_factor",
   {
@@ -98,7 +139,7 @@ export const organization = pgTable(
   {
     id: text("id").primaryKey(),
     name: text("name").notNull(),
-    slug: text("slug").notNull().unique(),
+    slug: text("slug").notNull(),
     logo: text("logo"),
     createdAt: timestamp("created_at").notNull(),
     metadata: text("metadata"),
@@ -150,6 +191,7 @@ export const invitation = pgTable(
 export const userRelations = relations(user, ({ many }) => ({
   sessions: many(session),
   accounts: many(account),
+  passkeys: many(passkey),
   twoFactors: many(twoFactor),
   members: many(member),
   invitations: many(invitation),
@@ -165,6 +207,13 @@ export const sessionRelations = relations(session, ({ one }) => ({
 export const accountRelations = relations(account, ({ one }) => ({
   user: one(user, {
     fields: [account.userId],
+    references: [user.id],
+  }),
+}));
+
+export const passkeyRelations = relations(passkey, ({ one }) => ({
+  user: one(user, {
+    fields: [passkey.userId],
     references: [user.id],
   }),
 }));
@@ -202,3 +251,6 @@ export const invitationRelations = relations(invitation, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+export const userSelectSchema = createSelectSchema(user);
+export const sessionSelectSchema = createSelectSchema(session);

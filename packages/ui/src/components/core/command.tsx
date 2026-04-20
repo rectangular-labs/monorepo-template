@@ -10,8 +10,8 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@rectangular-labs/ui/components/core/dialog";
-import { InputGroup, InputGroupAddon } from "@rectangular-labs/ui/components/core/input-group";
+} from "@rectangular-labs/ui/core/dialog";
+import { InputGroup, InputGroupAddon } from "@rectangular-labs/ui/core/input-group";
 import { cn } from "@rectangular-labs/ui/utils";
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {

@@ -23,12 +23,12 @@
     }
   },
   "scripts": {
-    "migrate-generate": "pnpm with-env drizzle-kit generate",
+    "migrate-generate": "pnpm with-env-local drizzle-kit generate",
     "migrate-push:local": "pnpm with-env-local drizzle-kit migrate",
     "migrate-push:preview": "pnpm with-env-preview drizzle-kit migrate",
     "migrate-push:production": "pnpm with-env-production drizzle-kit migrate",
-    "push": "pnpm with-env drizzle-kit push",
-    "studio": "pnpm with-env drizzle-kit studio",
+    "push": "pnpm with-env-local drizzle-kit push",
+    "studio": "pnpm with-env-local drizzle-kit studio",
     "build": "vp pack",
     "dev": "vp pack --watch",
     "clean": "git clean -xdf node_modules dist .cache",
@@ -41,12 +41,12 @@
     "arktype": "catalog:",
     "drizzle-arktype": "^0.1.3",
     "drizzle-orm": "^0.45.1",
-    "pg": "^8.16.3"
+    "postgres": "^3.4.9",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@rectangular-labs/typescript": "workspace:*",
     "@types/node": "catalog:",
-    "@types/pg": "^8.15.5",
     "@typescript/native-preview": "catalog:",
     "drizzle-kit": "^0.31.4",
     "typescript": "catalog:",

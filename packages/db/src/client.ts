@@ -1,21 +1,26 @@
-import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
-import type { Pool } from "pg";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import { dbEnv } from "./env";
 import * as authSchema from "./schema/auth-schema";
 
 export * from "drizzle-orm";
 
-const schema = {
+export const schema = {
   ...authSchema,
 };
 
-type DbInstance = NodePgDatabase<typeof schema> & { $client: Pool };
+export const createDb = () => {
+  const env = dbEnv();
+  const client = postgres(env.DATABASE_URL, {
+    // prepare: false,
+  });
 
-export const createDb = (connectionString: string): DbInstance => {
-  return drizzle(connectionString, {
+  return drizzle({
+    client,
     schema,
     casing: "snake_case",
-    logger: true,
   });
 };
 
 export type DB = ReturnType<typeof createDb>;
+export type DBTransaction = Parameters<Parameters<DB["transaction"]>[0]>[0];

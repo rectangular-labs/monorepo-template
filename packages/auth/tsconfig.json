@@ -1,10 +1,9 @@
 {
   "extends": "@rectangular-labs/typescript/tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
+    "jsx": "react-jsx",
     "lib": ["ES2024", "DOM", "DOM.Iterable"],
-    "exactOptionalPropertyTypes": false
+    "types": ["node"]
   },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": ["src"]
 }

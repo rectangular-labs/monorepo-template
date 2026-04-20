@@ -5,57 +5,37 @@ import {
   createFormHookContexts,
   type AnyFormApi,
   type DeepKeys,
-  type FieldApi,
 } from "@tanstack/react-form";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 
 import { Button } from "../core/button";
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-  FieldSet,
-} from "../core/field";
+import { Field, FieldContent, FieldDescription, FieldError, FieldLabel } from "../core/field";
 
 type ErrorLike = {
   message?: string;
   summary?: string;
 };
 
-type TypedFieldApi<TValue> = FieldApi<
-  any,
-  any,
-  TValue,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any
->;
-
-type FormFieldProps<TValue, TProps extends Record<string, unknown> = {}> = TProps & {
-  field: TypedFieldApi<TValue>;
+type ResultErrorLike = {
+  type: string;
+  field?: string | undefined;
+  message?: string | undefined;
 };
 
-const { fieldContext, formContext, useFormContext } = createFormHookContexts();
+export type HandleFormResultErrorOptions<TFormData> = {
+  focusInvalidField?: boolean | undefined;
+  password?:
+    | {
+        enabled?: boolean | undefined;
+        confirmField?: DeepKeys<TFormData> | undefined;
+        field?: DeepKeys<TFormData> | undefined;
+      }
+    | undefined;
+  resetFields?: DeepKeys<TFormData>[] | undefined;
+};
+
+const { fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts();
 
 const fieldShellVariants = cva("", {
   variants: {
@@ -71,7 +51,7 @@ const fieldShellVariants = cva("", {
   },
 });
 
-const fieldLabelVariants = cva("", {
+const fieldLabelVariants = cva("w-full", {
   variants: {
     size: {
       xs: "text-xs",
@@ -123,15 +103,12 @@ type FieldShellOrientation =
   | "horizontal-start"
   | "horizontal-end";
 
-type FieldShellProps<TValue> = FormFieldProps<
-  TValue,
-  {
-    children: React.ReactNode;
-    description?: React.ReactNode | undefined;
-    label?: React.ReactNode | undefined;
-    orientation?: FieldShellOrientation | undefined;
-  } & FieldShellVariantProps
->;
+export type FieldShellProps = {
+  label?: React.ReactNode | undefined;
+  description?: React.ReactNode | undefined;
+  orientation?: FieldShellOrientation | undefined;
+  children: React.ReactNode;
+} & FieldShellVariantProps;
 
 function collectErrorMessages(error: unknown, messages: Set<string>) {
   if (!error) return;
@@ -159,14 +136,14 @@ function collectErrorMessages(error: unknown, messages: Set<string>) {
   }
 }
 
-function FieldShell<TValue>({
+function FieldShell({
   children,
   description,
-  field,
   label,
   orientation = "responsive",
   size = "default",
-}: FieldShellProps<TValue>) {
+}: FieldShellProps) {
+  const field = useFieldContext();
   const fieldOrientation =
     orientation === "horizontal-start" || orientation === "horizontal-end"
       ? "horizontal"
@@ -182,7 +159,11 @@ function FieldShell<TValue>({
     >
       {orientation === "horizontal-end" ? children : null}
       <FieldContent>
-        {label ? <FieldLabel className={fieldLabelVariants({ size })}>{label}</FieldLabel> : null}
+        {label ? (
+          <FieldLabel htmlFor={field.name} className={fieldLabelVariants({ size })}>
+            {label}
+          </FieldLabel>
+        ) : null}
         {fieldOrientation === "vertical" ? children : null}
         {description ? (
           <FieldDescription className={fieldDescriptionVariants({ size })}>
@@ -214,12 +195,9 @@ function SubmitButton({
       {(state) => (
         <Button
           {...props}
-          disabled={disabled || !state.canSubmit}
+          disabled={!!disabled || !state.canSubmit}
           isLoading={state.isSubmitting}
-          onClick={() => {
-            void form.handleSubmit();
-          }}
-          type="button"
+          type="submit"
         />
       )}
     </form.Subscribe>
@@ -263,17 +241,13 @@ export function clearFormError(form: AnyFormApi) {
   });
 }
 
-export function setFormError(form: AnyFormApi, message: string) {
+function setFormError(form: AnyFormApi, message: string) {
   form.setErrorMap({
     onSubmit: message,
   });
 }
 
-export function setFieldError<TFormData>(
-  form: AnyFormApi,
-  name: DeepKeys<TFormData>,
-  message: string,
-) {
+function setFieldError<TFormData>(form: AnyFormApi, name: DeepKeys<TFormData>, message: string) {
   form.setFieldMeta(
     name as never,
     (prev: Record<string, unknown> = {} as Record<string, unknown>) =>
@@ -288,7 +262,48 @@ export function setFieldError<TFormData>(
   );
 }
 
-export const { useAppForm } = createFormHook({
+export function handleFormResultError<TFormData>(
+  form: AnyFormApi,
+  result: ResultErrorLike,
+  options?: HandleFormResultErrorOptions<TFormData>,
+) {
+  if (result.type !== "error" || !result.message) {
+    return false;
+  }
+
+  const { focusInvalidField = false, password, resetFields = [] } = options ?? {};
+
+  const passwordField = password?.field ?? ("password" as DeepKeys<TFormData>);
+
+  if (result.field) {
+    if (password?.enabled && result.field === passwordField) {
+      form.resetField(passwordField as never);
+
+      if (password.confirmField) {
+        form.resetField(password.confirmField as never);
+      }
+    }
+
+    setFieldError<TFormData>(form, result.field as DeepKeys<TFormData>, result.message);
+  } else {
+    setFormError(form, result.message);
+  }
+
+  for (const fieldName of resetFields) {
+    form.resetField(fieldName as never);
+  }
+
+  if (focusInvalidField) {
+    requestAnimationFrame(() => {
+      const invalidInput = document.querySelector('[aria-invalid="true"]') as HTMLElement | null;
+      invalidInput?.focus();
+    });
+  }
+
+  return true;
+}
+
+export const { useAppForm, withFieldGroup } = createFormHook({
   fieldComponents: {
     FieldShell,
   },
@@ -300,4 +315,4 @@ export const { useAppForm } = createFormHook({
   formContext,
 });
 
-export { FieldError, FieldSet, useFormContext };
+export { useFieldContext, useFormContext };

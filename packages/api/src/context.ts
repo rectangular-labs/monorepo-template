@@ -9,13 +9,13 @@ import type { InitialContext } from "./types";
 
 export const createApiContext = (args: Omit<InitialContext, "db" | "auth">) => {
   const env = apiEnv();
-  const db = createDb(env.DATABASE_URL);
+  const db = createDb();
 
   return {
     db,
     auth: initAuthHandler({
-      baseURL: env.AUTH_PRODUCTION_URL,
-      credentialVerificationType: env.AUTH_CREDENTIAL_VERIFICATION_TYPE,
+      baseURL: args.url.origin,
+      credentialVerificationType: args.credentialVerificationType,
       db,
       encryptionKey: env.AUTH_ENCRYPTION_KEY,
       fromEmail: env.AUTH_FROM_EMAIL,
@@ -43,8 +43,8 @@ export const base = os
   .use(authMiddleware);
 
 export const protectedBase = base.use(({ context, next }) => {
-  const session = context.session;
-  if (!session) {
+  const { session, user } = context;
+  if (!session || !user) {
     throw new ORPCError("UNAUTHORIZED");
   }
   return next();

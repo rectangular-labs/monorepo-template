@@ -10,6 +10,7 @@ export const clientEnv = () =>
     clientPrefix: "VITE_",
     client: {
       VITE_APP_URL: type("string.url"),
+      VITE_AUTH_EMAIL_VERIFICATION_TYPE: type("'code'|'token'"),
     },
     runtimeEnv: import.meta.env,
     emptyStringAsUndefined: true,
