@@ -16,6 +16,7 @@ import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
 import { Route as LoginResetPasswordRouteImport } from './routes/login/reset-password'
 import { Route as LoginCallbackRouteImport } from './routes/login/callback'
 import { Route as ApiSplatRouteImport } from './routes/api/$'
+import { Route as AuthedNewUserRouteImport } from './routes/_authed/new-user'
 import { Route as AuthedDashboardRouteImport } from './routes/_authed/dashboard'
 import { Route as ApiRpcSplatRouteImport } from './routes/api/rpc.$'
 
@@ -52,6 +53,11 @@ const ApiSplatRoute = ApiSplatRouteImport.update({
   path: '/api/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthedNewUserRoute = AuthedNewUserRouteImport.update({
+  id: '/new-user',
+  path: '/new-user',
+  getParentRoute: () => AuthedRouteRoute,
+} as any)
 const AuthedDashboardRoute = AuthedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -66,6 +72,7 @@ const ApiRpcSplatRoute = ApiRpcSplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
   '/dashboard': typeof AuthedDashboardRoute
+  '/new-user': typeof AuthedNewUserRoute
   '/api/$': typeof ApiSplatRoute
   '/login/callback': typeof LoginCallbackRoute
   '/login/reset-password': typeof LoginResetPasswordRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
   '/dashboard': typeof AuthedDashboardRoute
+  '/new-user': typeof AuthedNewUserRoute
   '/api/$': typeof ApiSplatRoute
   '/login/callback': typeof LoginCallbackRoute
   '/login/reset-password': typeof LoginResetPasswordRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/_authed': typeof AuthedRouteRouteWithChildren
   '/_marketing': typeof MarketingRouteRouteWithChildren
   '/_authed/dashboard': typeof AuthedDashboardRoute
+  '/_authed/new-user': typeof AuthedNewUserRoute
   '/api/$': typeof ApiSplatRoute
   '/login/callback': typeof LoginCallbackRoute
   '/login/reset-password': typeof LoginResetPasswordRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/new-user'
     | '/api/$'
     | '/login/callback'
     | '/login/reset-password'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/new-user'
     | '/api/$'
     | '/login/callback'
     | '/login/reset-password'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/_authed'
     | '/_marketing'
     | '/_authed/dashboard'
+    | '/_authed/new-user'
     | '/api/$'
     | '/login/callback'
     | '/login/reset-password'
@@ -186,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authed/new-user': {
+      id: '/_authed/new-user'
+      path: '/new-user'
+      fullPath: '/new-user'
+      preLoaderRoute: typeof AuthedNewUserRouteImport
+      parentRoute: typeof AuthedRouteRoute
+    }
     '/_authed/dashboard': {
       id: '/_authed/dashboard'
       path: '/dashboard'
@@ -205,10 +224,12 @@ declare module '@tanstack/react-router' {
 
 interface AuthedRouteRouteChildren {
   AuthedDashboardRoute: typeof AuthedDashboardRoute
+  AuthedNewUserRoute: typeof AuthedNewUserRoute
 }
 
 const AuthedRouteRouteChildren: AuthedRouteRouteChildren = {
   AuthedDashboardRoute: AuthedDashboardRoute,
+  AuthedNewUserRoute: AuthedNewUserRoute,
 }
 
 const AuthedRouteRouteWithChildren = AuthedRouteRoute._addFileChildren(

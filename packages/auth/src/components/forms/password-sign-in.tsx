@@ -107,15 +107,10 @@ export function PasswordSignInForm({
           fields={{ password: "password" }}
           form={form}
           label={
-            <div className="flex w-full items-center">
+            <div className="flex w-full items-center justify-between">
               <span>Password</span>
               {showForgotPassword && onForgotPassword ? (
-                <Button
-                  className="ml-auto px-0"
-                  onClick={onForgotPassword}
-                  type="button"
-                  variant="link"
-                >
+                <Button className="px-0" onClick={onForgotPassword} type="button" variant="link">
                   Forgot password?
                 </Button>
               ) : null}

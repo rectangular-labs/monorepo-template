@@ -316,13 +316,32 @@ export function createBetterAuthActions(
     }
   };
 
-  const verifyCode: AuthAdapter["verifyCode"] = async (values) => {
+  const verifyCode: AuthAdapter["verifyCode"] = async (values, callbackURLs) => {
     switch (values.mode) {
       case "login-email-code": {
         const response = await auth.signIn.emailOtp({
           email: values.identifier,
           otp: values.code,
         });
+        const { success, newUser } = callbackURLs ?? {};
+
+        if (
+          response.data &&
+          response.data.user.createdAt.getTime() > Date.now() - 30_000 &&
+          newUser
+        ) {
+          return {
+            type: "pending-redirect",
+            url: newUser,
+          };
+        }
+        if (response.data && success) {
+          return {
+            type: "pending-redirect",
+            url: success,
+          };
+        }
+
         return toResult(response, "emailOTP");
       }
 
@@ -332,7 +351,25 @@ export function createBetterAuthActions(
           code: values.code,
           disableSession: false,
         });
-        return toResult(response);
+        const { success, newUser } = callbackURLs ?? {};
+        if (
+          response.data &&
+          response.data.user.createdAt.getTime() > Date.now() - 30_000 &&
+          newUser
+        ) {
+          return {
+            type: "pending-redirect",
+            url: newUser,
+          };
+        }
+        if (response.data && success) {
+          return {
+            type: "pending-redirect",
+            url: success,
+          };
+        }
+
+        return toResult(response, "phoneNumber");
       }
 
       case "2fa-totp": {
@@ -365,7 +402,16 @@ export function createBetterAuthActions(
           email: values.identifier,
           otp: values.code,
         });
-        return toResult(response, "emailOTP");
+        const callbackUrl = callbackURLs?.newUser ?? callbackURLs?.success;
+
+        if (response.error || !callbackUrl) {
+          return toResult(response, "emailOTP");
+        }
+
+        return {
+          type: "pending-redirect",
+          url: callbackUrl,
+        };
       }
 
       case "password-reset-email-code": {

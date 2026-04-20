@@ -28,6 +28,7 @@ function ResetPasswordPage() {
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
   const verificationType = clientEnv().VITE_AUTH_EMAIL_VERIFICATION_TYPE;
+  const callbackURLs = createLoginCallbackURLs(search.next);
 
   const hasResetContext =
     verificationType === "code"
@@ -36,15 +37,14 @@ function ResetPasswordPage() {
 
   const flow = useAuthFlow({
     adapter: authAdapter,
-    callbackURLs: createLoginCallbackURLs(search.next),
     initialState: {
       step: "reset-password",
       identifier: search.identifier,
       token: search.token,
     },
-    navigate: async (url) => {
+    onSuccess: async () => {
       await navigate({
-        href: url,
+        href: callbackURLs.postLogin.success,
       });
     },
   });

@@ -10,13 +10,24 @@ export const authAdapter = createBetterAuthActions(
   clientEnv().VITE_AUTH_EMAIL_VERIFICATION_TYPE,
 );
 
-export function createLoginCallbackURLs(next?: string): CallbackURLs {
-  const destination = encodeURIComponent(next || "/dashboard");
+export function createLoginCallbackURLs(next?: string) {
+  const rawNext = next || "/dashboard";
+  const rawNewUserDestination = `/new-user?next=${rawNext}`;
+  const destination = encodeURIComponent(rawNext);
+  const newUserDestination = encodeURIComponent(rawNewUserDestination);
 
   return {
-    success: `/login/callback?next=${destination}`,
-    newUser: `/login/callback?next=${destination}`,
-    error: `/login/callback?next=${destination}`,
-    resetPassword: `/login/reset-password?next=${destination}`,
+    postLogin: {
+      success: rawNext,
+      newUser: rawNewUserDestination,
+      error: rawNext,
+      resetPassword: `/login/reset-password?next=${destination}`,
+    } satisfies CallbackURLs,
+    preLogin: {
+      success: `/login/callback?next=${destination}`,
+      newUser: `/login/callback?next=${newUserDestination}`,
+      error: `/login/callback?next=${destination}`,
+      resetPassword: `/login/reset-password?next=${destination}`,
+    } satisfies CallbackURLs,
   };
 }

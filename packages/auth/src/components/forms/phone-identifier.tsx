@@ -12,14 +12,10 @@ import { type } from "arktype";
 import * as React from "react";
 import { PhoneFieldGroup } from "../field-groups/phone";
 
-// ─── Props ───────────────────────────────────────────────────────────────────
-
 export type PhoneIdentifierFormProps = {
   onSubmit: (values: { phone: string }) => Promise<AuthResult>;
   submitText?: React.ReactNode | undefined;
 };
-
-// ─── Component ───────────────────────────────────────────────────────────────
 
 const phoneSchema = type({ phone: "string >= 6" });
 
@@ -48,6 +44,7 @@ export function PhoneIdentifierForm({
   return (
     <form.AppForm>
       <form
+        id={form.formId}
         className="grid w-full gap-6"
         onSubmit={(event) => {
           event.preventDefault();

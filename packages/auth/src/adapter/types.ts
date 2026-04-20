@@ -91,11 +91,21 @@ export interface AuthAdapter {
   ) => Promise<AuthResult>;
   changePassword: (values: { oldPassword: string; newPassword: string }) => Promise<AuthResult>;
 
+  /**
+   * ! Known issue: callback url in the `login-email-token` flow for new User will error if contain nested query params.
+   * Manually override to skip intermediate `callback` endpoint if using
+   * @param info - verification information
+   * @param callbackURLs - callback urls to override
+   * @returns
+   */
   sendCode: (
     info: Omit<VerificationInfo, "code">,
     callbackURLs?: CallbackURLs,
   ) => Promise<AuthResult>;
-  verifyCode: (values: Omit<VerificationInfo, "code"> & { code: string }) => Promise<AuthResult>;
+  verifyCode: (
+    values: Omit<VerificationInfo, "code"> & { code: string },
+    callbackURLs?: CallbackURLs,
+  ) => Promise<AuthResult>;
   signInWithSocial: (provider: string, options?: SocialSignInOptions) => Promise<AuthResult>;
   signInWithPasskey: () => Promise<AuthResult>;
   generate2FACredential: (

@@ -34,7 +34,7 @@ function LoginPage() {
 
   const flow = useAuthFlow({
     adapter: authAdapter,
-    callbackURLs,
+    callbackURLs: callbackURLs.preLogin,
     onTransition: async (state) => {
       if (state.step === "reset-password") {
         await navigate({
@@ -93,7 +93,7 @@ function LoginPage() {
       description={
         <>
           After authentication you&apos;ll be redirected back to{" "}
-          <span className="font-medium text-foreground">{callbackURLs.success}</span>.
+          <span className="font-medium text-foreground">{next || "/dashboard"}</span>.
         </>
       }
       title={title}

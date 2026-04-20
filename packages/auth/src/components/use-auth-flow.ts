@@ -78,7 +78,7 @@ export type UseAuthFlowOptions = {
    *
    * @default navigates to `callbackURLs.success` if present
    */
-  onSuccess?: () => void | Promise<void>;
+  onSuccess?: (data: unknown) => void | Promise<void>;
   /**
    * Called for non-field auth errors after the adapter result is normalized.
    */
@@ -91,7 +91,6 @@ export type UseAuthFlowOptions = {
 export type UseAuthFlowReturn = {
   state: AuthFlowState;
   auth: AuthAdapter;
-  handleResult: (result: AuthResult) => void;
   goTo: (state: AuthFlowState) => void;
   goBack: () => void;
   canGoBack: boolean;
@@ -112,38 +111,36 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
 
   const onSuccessRef = useRef(onSuccess);
   const onErrorRef = useRef(onError);
+  const onTransitionRef = useRef(onTransition);
   const [state, setState] = useState<AuthFlowState>(initialState);
   const historyRef = useRef<AuthFlowState[]>([]);
 
-  const transitionTo = useCallback(
-    (next: AuthFlowState, recordHistory: boolean) => {
-      let shouldNotify = false;
+  const transitionTo = useCallback((next: AuthFlowState, recordHistory: boolean) => {
+    let shouldNotify = false;
 
-      setState((prev) => {
-        if (isSameState(prev, next)) {
-          return prev;
-        }
-
-        if (recordHistory) {
-          historyRef.current = [...historyRef.current, prev];
-        }
-
-        shouldNotify = true;
-        return next;
-      });
-
-      if (shouldNotify) {
-        void onTransition?.(next);
+    setState((prev) => {
+      if (isSameState(prev, next)) {
+        return prev;
       }
-    },
-    [onTransition],
-  );
+
+      if (recordHistory) {
+        historyRef.current = [...historyRef.current, prev];
+      }
+
+      shouldNotify = true;
+      return next;
+    });
+
+    if (shouldNotify) {
+      void onTransitionRef.current?.(next);
+    }
+  }, []);
 
   const handleResult = useCallback(
     (result: AuthResult) => {
       switch (result.type) {
         case "success":
-          void onSuccessRef.current?.();
+          void onSuccessRef.current?.(result.data);
           break;
 
         case "error":
@@ -231,7 +228,7 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
         const [values] = args;
         const mergedValues = {
           ...values,
-          newUserCallbackUrl: values.newUserCallbackUrl ?? urls?.newUser ?? urls?.success,
+          newUserCallbackURL: values.newUserCallbackURL ?? urls?.newUser ?? urls?.success,
         };
         const result = await fn(mergedValues);
         handleResult(result);
@@ -241,6 +238,16 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
         const fn = assertMethod("sendCode");
         const [info, callbackURLs] = args;
         const result = await fn(info, {
+          ...urls,
+          ...callbackURLs,
+        });
+        handleResult(result);
+        return result;
+      },
+      verifyCode: async (...args: Parameters<AuthAdapter["verifyCode"]>) => {
+        const fn = assertMethod("verifyCode");
+        const [values, callbackURLs] = args;
+        const result = await fn(values, {
           ...urls,
           ...callbackURLs,
         });
@@ -282,7 +289,6 @@ export function useAuthFlow(options: UseAuthFlowOptions): UseAuthFlowReturn {
   return {
     state,
     auth,
-    handleResult,
     goTo,
     goBack,
     canGoBack,

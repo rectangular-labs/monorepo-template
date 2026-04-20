@@ -44,6 +44,7 @@ export function EmailIdentifierForm({
   return (
     <form.AppForm>
       <form
+        id={form.formId}
         className="grid w-full gap-6"
         onSubmit={(event) => {
           event.preventDefault();
