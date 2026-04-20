@@ -1,20 +1,19 @@
 # Vite Plus Monorepo Template
 
-This repo is a TypeScript monorepo based on `vite-plus` for task orchestration, builds, linting, and package workflows.
+This repo is a TypeScript monorepo built around `vite-plus` for workspace orchestration, builds, linting, and package workflows.
 
 ## Workspace Structure
 
-- `apps`: runnable applications such as `www`
+- `apps`: runnable applications such as `demo-blog` and `demo-app`
 - `packages`: shared workspace packages such as `api`, `auth`, `db`, and `ui`
 - `tooling`: internal generators and shared tooling
 
 ## Tooling
 
-- pre-commit hooks run automatically on staged files.
-- Create new packages (public and private) via `vp run new:package`.
-- `vp check --fix` to run all int and format with automatic fixes being applied.
-- Supports running tasks with caching in [`vite.config.ts`](./vite.config.ts).
-- For workspace task that don't need caching, you can add it directly to [`package.json`](./package.json) scripts.
+- Pre-commit hooks run automatically on staged files.
+- Create new packages via `vpr new:package`.
+- Run `vp check --fix` to apply lint and format fixes.
+- Workspace builds and tasks are orchestrated with `vite-plus`.
 
 ## Environment Variables
 
@@ -29,13 +28,13 @@ Environment variables are managed with `dotenvx` and layered like this:
 Set a variable in the root `.env` file:
 
 ```bash
-pnpm env:set <VARIABLE_NAME> <VALUE>
+vpr env:set <VARIABLE_NAME> <VALUE> #defaults to .env
 ```
 
 Target a specific file with `-f`:
 
 ```bash
-pnpm env:set <VARIABLE_NAME> <VALUE> -f .env.production
+vpr env:set <VARIABLE_NAME> <VALUE> -f .env.production
 ```
 
 `.env.local` and `.env.key` are ignored by Git. Feel free to add values in `.env.local` without going through the CLI.
@@ -45,48 +44,55 @@ By default, `dotenvx` encrypts values so they can be shared safely across the te
 ## First-Time Setup
 
 1. [Install vite plus](https://viteplus.dev/guide/#install-vp)
-
 2. Install workspace dependencies:
 
    ```bash
-   vp install
+   vp install # shorthand: vp i
    ```
 
-3. Install dev3000 (we use for passing browser logs to agent)
+3. Push the default schema to the local database:
 
    ```bash
-   vp i -g dev3000
-   ```
-
-4. Push the default schema to the local database:
-
-   ```bash
+   docker compose up -d # Spin up the database
    vp run db#push
    ```
 
-5. Start the web app from the repo root:
+4. Configure `.env` variables.
+
+   Required for local setup:
+   - `VITE_BLOG_URL`: public URL for the marketing site
+   - `VITE_APP_URL`: public URL for the demo app
+   - `DATABASE_URL`: database connection string
+   - `VITE_AUTH_EMAIL_VERIFICATION_TYPE`: email verification mode for password auth, currently `code` or `token`
+   - `AUTH_ENCRYPTION_KEY`: auth encryption key, minimum 32 characters
+   - `AUTH_FROM_EMAIL`: sender address for auth emails
+
+   Optional auth providers:
+   - `AUTH_DISCORD_ID` and `AUTH_DISCORD_SECRET`
+   - `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`
+   - `AUTH_REDDIT_ID` and `AUTH_REDDIT_SECRET`
+   - `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET`
+
+5. Start the demo-blog app:
 
    ```bash
-   vp run dev:www
+   vpr dev:demo-blog
    ```
 
-6. Open `https://www.localhost:1355`.
+6. Start the demo-app app:
 
-On the first run, Portless will need to approve various self-signed certs so that we can use SSL locally.
+   ```bash
+   vpr dev:demo-app
+   ```
 
 ## Development
 
-The main development entrypoint is:
+The main development entrypoints are:
 
 ```bash
-vp run dev:www
+vpr dev:demo-blog
+vpr dev:demo-app
 ```
-
-That command:
-
-- starts the local PostgreSQL container
-- runs the cached workspace build with `vite-plus`
-- starts the `www` app in dev mode through Portless and Vite
 
 ## Building
 
@@ -97,37 +103,34 @@ vp run build:preview
 vp run build:production
 ```
 
-- `vp build:preview` uses `.env`
-- `vp build:production` uses `.env.production`
-
-To build or preview only the `www` app directly:
+To build individual apps directly:
 
 ```bash
 vp run www#build:preview
 vp run www#build:production
+vp run demo-app#build:preview
+vp run demo-app#build:production
 ```
 
 ## Deployment
 
-This repository includes a [GitHub Action](.github/workflows/cloudflare.yml) for automated deployments to Cloudflare. The workflow will provides:
+This repository includes a [GitHub Action](.github/workflows/cloudflare.yml) for automated deployments to Cloudflare.
 
-- Automatic deployment to preview env on Pull Requests.
-- Automatic deployment to production env on pushes to `main`.
-- Manual workflow trigger to both preview and production envs via GitHub Actions UI.
+The workflow:
 
-To smoothly set up deployment, you must configure the following **Secrets** in your GitHub repository:
+- deploys preview environments for pull requests
+- deploys production on pushes to `main`
+- supports manual preview and production deploys from GitHub Actions
+- deploys both apps in the same run
 
-- `CLOUDFLARE_ACCOUNT_ID`: Your Cloudflare account ID.
-- `CLOUDFLARE_API_TOKEN`: A Cloudflare API token with permissions to edit Workers/Pages.
-- `DOTENV_PRIVATE_KEY`: The decrypted dotenvx private key for your preview/development environment (`.env`).
-- `DOTENV_PRIVATE_KEY_PRODUCTION`: The decrypted dotenvx private key for your production environment (`.env.production`).
+Configure these repository secrets in GitHub:
 
-When adding new builds, add a deploy and teardown step to the [GitHub Action](.github/workflows/cloudflare.yml). Also update the steps for preview env vars and comments to include the new build.
+- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_API_TOKEN`
+- `DOTENV_PRIVATE_KEY`
+- `DOTENV_PRIVATE_KEY_PRODUCTION`
 
-> Make sure to have `CLOUDFLARE_ENV` in your preview `.env` file. This ensures that the we deploy to the right preview environments. (Done for you by default)
-
-**Opting Out:**
-Delete the `.github/workflows/cloudflare.yml` file and the corresponding `wrangler.jsonc` files.
+When adding new deployable apps, update `.github/workflows/cloudflare.yml` so build, deploy, preview comments, and cleanup stay in sync.
 
 ## Credits
 
