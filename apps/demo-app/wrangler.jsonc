@@ -1,0 +1,37 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "monorepo-template-demo-app",
+  "compatibility_date": "2026-03-17",
+  "compatibility_flags": ["nodejs_compat"],
+  "preview_urls": false,
+  "main": "@tanstack/react-start/server-entry",
+  "assets": {
+    "directory": ".output/public",
+  },
+  "observability": {
+    "enabled": true,
+  },
+  "placement": {
+    "mode": "smart",
+  },
+  // mostly a workaround to avoid issues with the build and next themes
+  "keep_names": false,
+  "env": {
+    "production": {
+      "routes": [
+        {
+          "pattern": "demo-app.rectangularlabs.com",
+          "custom_domain": true,
+        },
+      ],
+    },
+    "[env.PULL_REQUEST]": {
+      "routes": [
+        {
+          "pattern": "[env.PULL_REQUEST]-demo-app.rectangularlabs.com",
+          "custom_domain": true,
+        },
+      ],
+    },
+  },
+}
