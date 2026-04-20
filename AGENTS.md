@@ -11,4 +11,4 @@
 Examples:
 
 - `packages/ui/src/components/core/button.tsx` may use `@phosphor-icons/react` directly.
-- `apps/www/src/routes/login/-shared.tsx` should consume icons from `packages/ui/src/components/icon.tsx`.
+- `apps/demo-app/src/routes/login/-shared.tsx` should consume icons from `packages/ui/src/components/icon.tsx`.

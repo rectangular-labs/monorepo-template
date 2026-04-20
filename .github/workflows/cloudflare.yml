@@ -93,9 +93,10 @@ jobs:
           ENVIRONMENT: ${{ steps.resolve.outputs.environment }}
           ENV_PATH: ${{ steps.resolve.outputs.env_path }}
         run: |
-          FILE_WWW="apps/www/wrangler.jsonc"
-          # Replace placeholder with computed slug
-          sed -i "s|\\[env\\.PULL_REQUEST\\]|$ENVIRONMENT|g" "$FILE_WWW"
+          FILE_DEMO_BLOG="apps/demo-blog/wrangler.jsonc"
+          FILE_DEMO_APP="apps/demo-app/wrangler.jsonc"
+          sed -i "s|\\[env\\.PULL_REQUEST\\]|$ENVIRONMENT|g" "$FILE_DEMO_BLOG"
+          sed -i "s|\\[env\\.PULL_REQUEST\\]|$ENVIRONMENT|g" "$FILE_DEMO_APP"
           sed -i "s|\\[env\\.PULL_REQUEST\\]|$ENVIRONMENT|g" "$ENV_PATH"
 
       - name: Prepare secrets
@@ -113,12 +114,23 @@ jobs:
       # - name: Migrate Database
       #   run: vp run db#migrate-push:${{ steps.resolve.outputs.stage }}
 
-      - name: Deploy Sample WWW
-        id: deploy_sample_www
+      - name: Deploy Demo Marketing Site
+        id: deploy_demo_marketing
         uses: cloudflare/wrangler-action@v3
         with:
           command: deploy --env=""
-          workingDirectory: apps/www
+          workingDirectory: apps/demo-blog
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          environment: ${{ steps.resolve.outputs.environment }}
+          secrets: ${{ steps.prepare_secrets.outputs.secret_names }}
+
+      - name: Deploy Demo App
+        id: deploy_demo_app
+        uses: cloudflare/wrangler-action@v3
+        with:
+          command: deploy --env=""
+          workingDirectory: apps/demo-app
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           environment: ${{ steps.resolve.outputs.environment }}
@@ -129,7 +141,8 @@ jobs:
         uses: thollander/actions-comment-pull-request@v3
         with:
           message: |
-            Cloudflare Preview URL for Sample WWW :balloon: : ${{ startsWith(steps.deploy_sample_www.outputs.deployment-url, 'https://') && steps.deploy_sample_www.outputs.deployment-url || format('https://{0}', steps.deploy_sample_www.outputs.deployment-url) }}
+            Cloudflare Preview URL for Demo Marketing Site :balloon: : ${{ startsWith(steps.deploy_demo_marketing.outputs.deployment-url, 'https://') && steps.deploy_demo_marketing.outputs.deployment-url || format('https://{0}', steps.deploy_demo_marketing.outputs.deployment-url) }}
+            Cloudflare Preview URL for Demo App :balloon: : ${{ startsWith(steps.deploy_demo_app.outputs.deployment-url, 'https://') && steps.deploy_demo_app.outputs.deployment-url || format('https://{0}', steps.deploy_demo_app.outputs.deployment-url) }}
           comment-tag: execution
 
   cleanup:
@@ -146,13 +159,23 @@ jobs:
       - name: Update Environment in wrangler.jsonc for teardown
         shell: bash
         run: |
-          FILE_WWW="apps/www/wrangler.jsonc"
-          # Replace placeholder with computed slug
-          sed -i "s|\\[env\\.PULL_REQUEST\\]|$STAGE|g" "$FILE_WWW"
-      - name: Destroy Preview Environment for WWW
+          FILE_DEMO_BLOG="apps/demo-blog/wrangler.jsonc"
+          FILE_DEMO_APP="apps/demo-app/wrangler.jsonc"
+          sed -i "s|\\[env\\.PULL_REQUEST\\]|$STAGE|g" "$FILE_DEMO_BLOG"
+          sed -i "s|\\[env\\.PULL_REQUEST\\]|$STAGE|g" "$FILE_DEMO_APP"
+
+      - name: Destroy Preview Environment for Demo Marketing Site
         uses: cloudflare/wrangler-action@v3
         with:
-          workingDirectory: apps/www
+          workingDirectory: apps/demo-blog
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: delete --env ${{ env.STAGE }}
+
+      - name: Destroy Preview Environment for Demo App
+        uses: cloudflare/wrangler-action@v3
+        with:
+          workingDirectory: apps/demo-app
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: delete --env ${{ env.STAGE }}

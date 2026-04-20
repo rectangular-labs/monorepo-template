@@ -9,7 +9,8 @@
   "type": "module",
   "scripts": {
     "clean": "vp run -r clean && git clean -xdf node_modules .sst",
-    "dev:www": "docker compose up -d && vp run --cache -r build && vp run www#dev",
+    "dev:demo-blog": "vp run --cache -r build && vp run demo-blog#dev",
+    "dev:demo-app": "docker compose up -d && vp run --cache -r build && vp run demo-app#dev",
     "env:set": "pnpm dotenvx set",
     "env:get": "pnpm dotenvx get",
     "new:package": "vp create @rectangular-labs/create-package && find apps packages tooling -type d -name .vscode -prune -exec rm -rf '{}' +",
