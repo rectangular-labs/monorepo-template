@@ -36,6 +36,7 @@ function withReactPackageJson(basePackageJson: PackageJson) {
     ...basePackageJson,
     devDependencies: {
       ...(basePackageJson.devDependencies as Record<string, string>),
+      "@rectangular-labs/ui": "workspace:*",
       "@rollup/plugin-babel": "catalog:",
       "@types/react": "catalog:",
       "@types/react-dom": "catalog:",
