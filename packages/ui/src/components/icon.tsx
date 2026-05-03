@@ -3,20 +3,27 @@ import {
   ArrowUpIcon,
   BuildingsIcon,
   CaretUpDownIcon,
+  CheckCircleIcon,
   CheckIcon,
+  ClipboardIcon,
   XIcon as CloseIcon,
   DotIcon,
   EyeIcon,
   EyeSlashIcon,
   FileIcon,
   FingerprintSimpleIcon,
+  InfoIcon,
+  LightbulbIcon,
+  LinkSimpleIcon,
   ListIcon,
   MoonIcon,
   PaperPlaneTiltIcon,
   SpinnerIcon,
   SunIcon,
   TerminalIcon,
+  WarningIcon,
   WarningCircleIcon,
+  XCircleIcon,
 } from "@phosphor-icons/react";
 import type { SVGProps } from "react";
 
@@ -27,19 +34,26 @@ export const ArrowUp = ArrowUpIcon;
 export const Buildings = BuildingsIcon;
 export const CaretUpDown = CaretUpDownIcon;
 export const Check = CheckIcon;
+export const CheckCircle = CheckCircleIcon;
+export const Clipboard = ClipboardIcon;
 export const Dot = DotIcon;
 export const EyeOff = EyeSlashIcon;
 export const EyeOn = EyeIcon;
 export const File = FileIcon;
 export const Fingerprint = FingerprintSimpleIcon;
+export const Info = InfoIcon;
+export const Lightbulb = LightbulbIcon;
+export const Link = LinkSimpleIcon;
 export const Menu = ListIcon;
 export const Moon = MoonIcon;
 export const PaperPlaneTilt = PaperPlaneTiltIcon;
 export const Spinner = SpinnerIcon;
 export const Sun = SunIcon;
 export const Terminal = TerminalIcon;
+export const Warning = WarningIcon;
 export const WarningCircle = WarningCircleIcon;
 export const X = CloseIcon;
+export const XCircle = XCircleIcon;
 
 export const Logo = (props: IconProps) => (
   <svg viewBox="107.599 192.599 284.802 284.802" xmlns="http://www.w3.org/2000/svg" {...props}>

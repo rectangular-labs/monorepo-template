@@ -42,7 +42,6 @@ dist/
 .idea/usage.statistics.xml
 .idea/shelf
 
-
 # misc
 .DS_Store
 *.pem
@@ -95,3 +94,6 @@ sst-env.d.ts
 
 # pnpm
 .pnpm-store
+
+# mdx Content
+.source

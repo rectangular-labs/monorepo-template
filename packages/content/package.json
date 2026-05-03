@@ -1,0 +1,54 @@
+{
+  "name": "@rectangular-labs/content",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Handle all markdown parsing related concerns",
+  "type": "module",
+  "exports": {
+    "./config": "./src/config.ts",
+    "./source": "./src/source.ts",
+    "./package.json": "./package.json",
+    "./style.css": "./dist/style.css"
+  },
+  "publishConfig": {
+    "exports": {
+      "./config": "./dist/config.js",
+      "./source": "./dist/source.js",
+      "./package.json": "./package.json",
+      "./style.css": "./dist/style.css"
+    }
+  },
+  "scripts": {
+    "build": "vp pack",
+    "dev": "vp pack --watch",
+    "clean": "git clean -xdf node_modules dist .cache"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.4.1",
+    "@fumadocs/base-ui": "^16.8.5",
+    "arktype": "catalog:",
+    "fumadocs-core": "^16.8.1",
+    "fumadocs-mdx": "^14.2.4",
+    "fumadocs-ui": "npm:@fumadocs/base-ui@^16.6.10"
+  },
+  "devDependencies": {
+    "@rectangular-labs/typescript": "workspace:*",
+    "@rectangular-labs/ui": "workspace:*",
+    "@rollup/plugin-babel": "catalog:",
+    "@tsdown/css": "0.21.8",
+    "@types/mdx": "^2.0.13",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@typescript/native-preview": "catalog:",
+    "babel-plugin-react-compiler": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "typescript": "catalog:",
+    "vite-plus": "catalog:"
+  },
+  "peerDependencies": {
+    "@rectangular-labs/ui": "workspace:*",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  }
+}
