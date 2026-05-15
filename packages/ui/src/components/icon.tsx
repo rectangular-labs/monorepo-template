@@ -1,11 +1,17 @@
 import {
   ArrowDownIcon,
+  ArrowSquareOutIcon,
   ArrowUpIcon,
   BuildingsIcon,
+  CaretDoubleUpIcon,
+  CaretDownIcon,
+  CaretLeftIcon,
+  CaretRightIcon,
   CaretUpDownIcon,
   CheckCircleIcon,
   CheckIcon,
   ClipboardIcon,
+  CopyIcon,
   XIcon as CloseIcon,
   DotIcon,
   EyeIcon,
@@ -16,11 +22,17 @@ import {
   LightbulbIcon,
   LinkSimpleIcon,
   ListIcon,
+  MagnifyingGlassIcon,
+  MonitorIcon,
   MoonIcon,
   PaperPlaneTiltIcon,
+  PencilSimpleIcon,
+  SidebarSimpleIcon,
   SpinnerIcon,
   SunIcon,
   TerminalIcon,
+  TextTIcon,
+  TranslateIcon,
   WarningIcon,
   WarningCircleIcon,
   XCircleIcon,
@@ -30,12 +42,18 @@ import type { SVGProps } from "react";
 type IconProps = React.HTMLAttributes<SVGElement>;
 
 export const ArrowDown = ArrowDownIcon;
+export const ArrowSquareOut = ArrowSquareOutIcon;
 export const ArrowUp = ArrowUpIcon;
 export const Buildings = BuildingsIcon;
+export const CaretDoubleUp = CaretDoubleUpIcon;
+export const CaretDown = CaretDownIcon;
+export const CaretLeft = CaretLeftIcon;
+export const CaretRight = CaretRightIcon;
 export const CaretUpDown = CaretUpDownIcon;
 export const Check = CheckIcon;
 export const CheckCircle = CheckCircleIcon;
 export const Clipboard = ClipboardIcon;
+export const Copy = CopyIcon;
 export const Dot = DotIcon;
 export const EyeOff = EyeSlashIcon;
 export const EyeOn = EyeIcon;
@@ -44,12 +62,18 @@ export const Fingerprint = FingerprintSimpleIcon;
 export const Info = InfoIcon;
 export const Lightbulb = LightbulbIcon;
 export const Link = LinkSimpleIcon;
+export const Languages = TranslateIcon;
+export const MagnifyingGlass = MagnifyingGlassIcon;
 export const Menu = ListIcon;
+export const Monitor = MonitorIcon;
 export const Moon = MoonIcon;
 export const PaperPlaneTilt = PaperPlaneTiltIcon;
+export const Pencil = PencilSimpleIcon;
+export const Sidebar = SidebarSimpleIcon;
 export const Spinner = SpinnerIcon;
 export const Sun = SunIcon;
 export const Terminal = TerminalIcon;
+export const Text = TextTIcon;
 export const Warning = WarningIcon;
 export const WarningCircle = WarningCircleIcon;
 export const X = CloseIcon;
