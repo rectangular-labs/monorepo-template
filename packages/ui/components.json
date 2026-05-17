@@ -16,7 +16,7 @@
     "components": "@rectangular-labs/ui/components",
     "ui": "@rectangular-labs/ui/components/core",
     "utils": "@rectangular-labs/ui/utils",
-    "lib": "@rectangular-labs/ui",
+    "lib": "@rectangular-labs/ui/utils",
     "hooks": "@rectangular-labs/ui/hooks"
   },
   "menuColor": "inverted",
