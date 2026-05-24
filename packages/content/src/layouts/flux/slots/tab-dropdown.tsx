@@ -1,0 +1,107 @@
+"use client";
+import { CaretUpDown, Check } from "@rectangular-labs/ui/components/icons";
+import { Popover, PopoverContent, PopoverTrigger } from "@rectangular-labs/ui/core/popover";
+import { cn } from "@rectangular-labs/ui/utils";
+import { usePathname } from "fumadocs-core/framework";
+import Link from "fumadocs-core/link";
+import { AnimatePresence, motion } from "motion/react";
+import { type ComponentProps, type ReactNode, useMemo, useState } from "react";
+import { isLayoutTabActive, type LayoutTab } from "../../shared";
+
+export interface TabDropdownProps extends ComponentProps<"button"> {
+  placeholder?: ReactNode;
+  tabs: LayoutTab[];
+}
+
+export function TabDropdown({ tabs, placeholder, className, ...props }: TabDropdownProps) {
+  const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const selectedIdx = useMemo(() => {
+    return tabs.findLastIndex((item) => isLayoutTabActive(item, pathname));
+  }, [tabs, pathname]);
+  const selected = selectedIdx !== -1 ? tabs[selectedIdx] : undefined;
+
+  const onClick = () => {
+    setOpen(false);
+  };
+
+  const item = selected ? (
+    <>
+      <div className="size-4.5 shrink-0 empty:hidden">{selected.icon}</div>
+      <p className="font-medium">{selected.title}</p>
+    </>
+  ) : (
+    placeholder
+  );
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      {item && (
+        <PopoverTrigger
+          className={cn(
+            "flex items-center gap-2 rounded-xl overflow-hidden p-1.5 border shadow-sm text-sm text-start transition-colors hover:bg-accent hover:text-accent-foreground data-[state=open]:bg-accent data-[state=open]:text-accent-foreground",
+            className,
+          )}
+          {...props}
+        >
+          <AnimatePresence mode="popLayout">
+            <motion.span
+              key={selectedIdx}
+              className="flex w-full min-w-0 overflow-hidden items-center text-nowrap gap-1.5"
+              initial={{
+                opacity: 0,
+                y: "100%",
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+                y: "-100%",
+              }}
+            >
+              {item}
+            </motion.span>
+          </AnimatePresence>
+
+          <CaretUpDown className="shrink-0 ms-auto size-4 text-muted-foreground" />
+        </PopoverTrigger>
+      )}
+      <PopoverContent
+        align="start"
+        className="flex flex-col gap-1 max-w-svw p-1 fd-scroll-container"
+      >
+        {tabs.map((item, i) => {
+          const isActive = i === selectedIdx;
+          if (!isActive && item.unlisted) return;
+
+          return (
+            <Link
+              key={item.url}
+              href={item.url}
+              onClick={onClick}
+              {...item.props}
+              className={cn(
+                "flex items-center gap-1.5 rounded-lg p-1.5 hover:bg-accent hover:text-accent-foreground",
+                item.props?.className,
+              )}
+            >
+              <div className="shrink-0 mb-auto size-4.5 empty:hidden">{item.icon}</div>
+              <div>
+                <p className="text-sm font-medium leading-none">{item.title}</p>
+                <p className="text-[0.8125rem] text-muted-foreground mt-1 empty:hidden">
+                  {item.description}
+                </p>
+              </div>
+
+              <Check
+                className={cn("shrink-0 ms-auto size-3.5 text-primary", !isActive && "invisible")}
+              />
+            </Link>
+          );
+        })}
+      </PopoverContent>
+    </Popover>
+  );
+}

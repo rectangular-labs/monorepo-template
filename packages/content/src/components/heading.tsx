@@ -23,7 +23,7 @@ export function Heading<T extends Types = "h1">({
       </a>
       <LinkIcon
         aria-hidden
-        className="size-3.5 shrink-0 text-fd-muted-foreground opacity-0 transition-opacity peer-hover:opacity-100"
+        className="size-3.5 shrink-0 text-muted-foreground opacity-0 transition-opacity peer-hover:opacity-100"
       />
     </As>
   );

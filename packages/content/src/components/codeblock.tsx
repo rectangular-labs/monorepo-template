@@ -1,8 +1,8 @@
 "use client";
-import { Button } from "@rectangular-labs/ui/core/button";
 import { Check, Clipboard } from "@rectangular-labs/ui/components/icons";
+import { Button } from "@rectangular-labs/ui/core/button";
 import { cn } from "@rectangular-labs/ui/utils";
-import { useCopyButton } from "@fumadocs/base-ui/utils/use-copy-button";
+import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
 import {
   type ComponentProps,
   createContext,
@@ -13,8 +13,8 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { mergeRefs } from "../lib/merge-refs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 export interface CodeBlockProps extends ComponentProps<"figure"> {
   /**
@@ -87,7 +87,7 @@ export function CodeBlock({
       {...props}
       tabIndex={-1}
       className={cn(
-        inTab ? "-mx-px -mb-px bg-fd-secondary last:rounded-b-xl" : "my-4 rounded-xl bg-fd-card",
+        inTab ? "-mx-px -mb-px bg-secondary last:rounded-b-xl" : "my-4 rounded-xl bg-card",
         keepBackground && "bg-(--shiki-light-bg) dark:bg-(--shiki-dark-bg)",
 
         "shiki not-prose relative overflow-hidden border text-sm shadow-sm",
@@ -95,7 +95,7 @@ export function CodeBlock({
       )}
     >
       {title ? (
-        <div className="flex h-9.5 items-center gap-2 border-b px-4 text-fd-muted-foreground">
+        <div className="flex h-9.5 items-center gap-2 border-b px-4 text-muted-foreground">
           {typeof icon === "string" ? (
             <div
               className="[&_svg]:size-3.5"
@@ -114,8 +114,7 @@ export function CodeBlock({
         </div>
       ) : (
         Actions({
-          className:
-            "absolute top-2 right-2 z-2 backdrop-blur-lg rounded-lg text-fd-muted-foreground",
+          className: "absolute top-2 right-2 z-2 backdrop-blur-lg rounded-lg text-muted-foreground",
           children: allowCopy && <CopyButton containerRef={areaRef} />,
         })
       )}
@@ -125,7 +124,7 @@ export function CodeBlock({
         role="region"
         tabIndex={0}
         className={cn(
-          "fd-scroll-container max-h-[600px] overflow-auto py-3.5 text-[0.8125rem] focus-visible:ring-2 focus-visible:ring-fd-ring focus-visible:outline-none focus-visible:ring-inset",
+          "fd-scroll-container max-h-[600px] overflow-auto py-3.5 text-[0.8125rem] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset",
           viewportProps.className,
         )}
         style={
@@ -190,7 +189,7 @@ export function CodeBlockTabs({ ref, className, ...props }: ComponentProps<typeo
       {...props}
       className={(s) =>
         cn(
-          "rounded-xl border bg-fd-card",
+          "rounded-xl border bg-card",
           !nested && "my-4",
           typeof className === "function" ? className(s) : className,
         )
@@ -217,7 +216,7 @@ export function CodeBlockTabsList({ className, ...props }: ComponentProps<typeof
       {...props}
       className={(s) =>
         cn(
-          "flex flex-row overflow-x-auto px-2 text-fd-muted-foreground",
+          "flex flex-row overflow-x-auto px-2 text-muted-foreground",
           typeof className === "function" ? className(s) : className,
         )
       }
@@ -238,12 +237,12 @@ export function CodeBlockTabsTrigger({
       className={(s) =>
         cn(
           "group relative inline-flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-nowrap transition-colors [&_svg]:size-3.5",
-          s.active ? "text-fd-primary" : "hover:text-fd-accent-foreground",
+          s.active ? "text-primary" : "hover:text-accent-foreground",
           typeof className === "function" ? className(s) : className,
         )
       }
     >
-      <div className="absolute inset-x-2 bottom-0 h-px group-data-active:bg-fd-primary" />
+      <div className="absolute inset-x-2 bottom-0 h-px group-data-active:bg-primary" />
       {children}
     </TabsTrigger>
   );

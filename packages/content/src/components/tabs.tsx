@@ -58,7 +58,7 @@ export function TabsList({
       {...props}
       className={(s) =>
         cn(
-          "not-prose flex gap-3.5 overflow-x-auto px-4 text-fd-secondary-foreground",
+          "not-prose flex gap-3.5 overflow-x-auto px-4 text-secondary-foreground",
           typeof className === "function" ? className(s) : className,
         )
       }
@@ -75,7 +75,7 @@ export function TabsTrigger({
       {...props}
       className={(s) =>
         cn(
-          "inline-flex items-center gap-2 border-b border-transparent py-2 text-sm font-medium whitespace-nowrap text-fd-muted-foreground transition-colors hover:text-fd-accent-foreground disabled:pointer-events-none disabled:opacity-50 data-[active]:border-fd-primary data-[active]:text-fd-primary [&_svg]:size-4",
+          "inline-flex items-center gap-2 border-b border-transparent py-2 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:text-accent-foreground disabled:pointer-events-none disabled:opacity-50 data-[active]:border-primary data-[active]:text-primary [&_svg]:size-4",
           typeof className === "function" ? className(s) : className,
         )
       }
@@ -100,7 +100,7 @@ export function Tabs({
       ref={ref}
       className={(s) =>
         cn(
-          "my-4 flex flex-col overflow-hidden rounded-xl border bg-fd-secondary",
+          "my-4 flex flex-col overflow-hidden rounded-xl border bg-secondary",
           typeof className === "function" ? className(s) : className,
         )
       }
@@ -164,7 +164,7 @@ export function TabsContent({
       keepMounted
       className={(s) =>
         cn(
-          "prose-no-margin rounded-xl bg-fd-background p-4 text-[0.9375rem] outline-none data-[inactive]:hidden [&>figure:only-child]:-m-4 [&>figure:only-child]:border-none",
+          "prose-no-margin rounded-xl bg-background p-4 text-[0.9375rem] outline-none data-[inactive]:hidden [&>figure:only-child]:-m-4 [&>figure:only-child]:border-none",
           typeof className === "function" ? className(s) : className,
         )
       }
