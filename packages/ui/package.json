@@ -25,6 +25,7 @@
     "./core/collapsible": "./src/components/core/collapsible.tsx",
     "./core/command": "./src/components/core/command.tsx",
     "./core/dialog": "./src/components/core/dialog.tsx",
+    "./core/direction": "./src/components/core/direction.tsx",
     "./core/field": "./src/components/core/field.tsx",
     "./core/input": "./src/components/core/input.tsx",
     "./core/input-group": "./src/components/core/input-group.tsx",
@@ -46,6 +47,7 @@
     "./core/switch": "./src/components/core/switch.tsx",
     "./core/textarea": "./src/components/core/textarea.tsx",
     "./core/tooltip": "./src/components/core/tooltip.tsx",
+    "./hooks/use-copy": "./src/hooks/use-copy.tsx",
     "./hooks/use-mobile": "./src/hooks/use-mobile.ts",
     "./utils": "./src/utils/index.ts",
     "./package.json": "./package.json",
@@ -70,6 +72,7 @@
       "./core/collapsible": "./dist/core/collapsible.js",
       "./core/command": "./dist/core/command.js",
       "./core/dialog": "./dist/core/dialog.js",
+      "./core/direction": "./dist/core/direction.js",
       "./core/field": "./dist/core/field.js",
       "./core/input": "./dist/core/input.js",
       "./core/input-group": "./dist/core/input-group.js",
@@ -91,6 +94,7 @@
       "./core/switch": "./dist/core/switch.js",
       "./core/textarea": "./dist/core/textarea.js",
       "./core/tooltip": "./dist/core/tooltip.js",
+      "./hooks/use-copy": "./dist/hooks/use-copy.js",
       "./hooks/use-mobile": "./dist/hooks/use-mobile.js",
       "./utils": "./dist/utils/index.js",
       "./package.json": "./package.json",
@@ -101,7 +105,7 @@
     "build": "vp pack",
     "dev": "vp pack --watch",
     "clean": "git clean -xdf node_modules dist .cache",
-    "ui-add": "pnpx shadcn@latest add && vp check --fix"
+    "ui-add": "vpx shadcn@latest add && vp check --fix"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

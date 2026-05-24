@@ -30,7 +30,7 @@ export function ThemeToggle({ className, ...props }: ButtonProps) {
   );
 }
 
-const itemVariants = cva("size-6.5 p-1.5 text-muted-foreground", {
+const itemVariants = cva("size-6.5 p-1.5", {
   variants: {
     active: {
       true: "bg-accent text-accent-foreground",
@@ -45,32 +45,6 @@ export interface ThemeSwitchProps extends React.ComponentProps<"div"> {
 
 export function ThemeSwitch({ className, mode = "light-dark", ...props }: ThemeSwitchProps) {
   const { setTheme, theme } = useTheme();
-
-  // if (mode === "light-dark") {
-  //   return (
-  //     <button
-  //       className={container}
-  //       onClick={() => (theme === "dark" ? setTheme("light") : setTheme("dark"))}
-  //     >
-  //       <span className="sr-only">Toggle theme</span>
-  //       {[
-  //   ["light", Icons.Sun] as const,
-  //   ["dark", Icons.Moon] as const,
-  //   ["system", Icons.Monitor] as const,
-  // ].map(([key, Icon]) => {
-  //         if (key === "system") return;
-
-  //         return (
-  //           <Icon
-  //             key={key}
-  //             fill="currentColor"
-  //             className={cn(itemVariants({ active: theme === key }))}
-  //           />
-  //         );
-  //       })}
-  //     </button>
-  //   );
-  // }
 
   return (
     <div
