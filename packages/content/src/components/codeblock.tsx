@@ -1,20 +1,15 @@
 "use client";
 import { Check, Clipboard } from "@rectangular-labs/ui/components/icons";
 import { Button } from "@rectangular-labs/ui/core/button";
+import { useCopy } from "@rectangular-labs/ui/hooks/use-copy";
 import { cn } from "@rectangular-labs/ui/utils";
-import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
 import {
   type ComponentProps,
-  createContext,
   type HTMLAttributes,
   type ReactNode,
   type RefObject,
-  use,
-  useMemo,
   useRef,
 } from "react";
-import { mergeRefs } from "../lib/merge-refs";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 
 export interface CodeBlockProps extends ComponentProps<"figure"> {
   /**
@@ -53,11 +48,6 @@ export interface CodeBlockProps extends ComponentProps<"figure"> {
   Actions?: (props: { className?: string; children?: ReactNode }) => ReactNode;
 }
 
-const TabsContext = createContext<{
-  containerRef: RefObject<HTMLDivElement | null>;
-  nested: boolean;
-} | null>(null);
-
 export function Pre(props: ComponentProps<"pre">) {
   return (
     <pre {...props} className={cn("w-max min-w-full *:flex *:flex-col", props.className)}>
@@ -77,7 +67,6 @@ export function CodeBlock({
   Actions = (props) => <div {...props} className={cn("empty:hidden", props.className)} />,
   ...props
 }: CodeBlockProps) {
-  const inTab = use(TabsContext) !== null;
   const areaRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -87,15 +76,19 @@ export function CodeBlock({
       {...props}
       tabIndex={-1}
       className={cn(
-        inTab ? "-mx-px -mb-px bg-secondary last:rounded-b-xl" : "my-4 rounded-xl bg-card",
+        "my-4 rounded-none bg-card",
+        "group-data-slot/tab-content:my-0 group-data-slot/tab-content:-mx-px group-data-slot/tab-content:-mb-px  group-data-slot/tab-content:bg-secondary",
+        // if we ever add radius, uncomment the below to have the bottom be rounded
+        // "group-data-slot/tab-content:rounded-none tab-content:last:rounded-b-xl",
+        // if we ever add padding the bottom can help compensate
+        // "group-data-slot/tab-content:-m-4 group-data-slot/tab-content:border-none",
         keepBackground && "bg-(--shiki-light-bg) dark:bg-(--shiki-dark-bg)",
-
         "shiki not-prose relative overflow-hidden border text-sm shadow-sm",
         props.className,
       )}
     >
       {title ? (
-        <div className="flex h-9.5 items-center gap-2 border-b px-4 text-muted-foreground">
+        <div className="flex h-9.5 items-center gap-2 border-b px-2 text-muted-foreground">
           {typeof icon === "string" ? (
             <div
               className="[&_svg]:size-3.5"
@@ -124,7 +117,7 @@ export function CodeBlock({
         role="region"
         tabIndex={0}
         className={cn(
-          "fd-scroll-container max-h-[600px] overflow-auto py-3.5 text-[0.8125rem] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset",
+          "fd-scroll-container max-h-150 overflow-auto py-3.5 text-[0.8125rem] focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none focus-visible:ring-inset",
           viewportProps.className,
         )}
         style={
@@ -151,7 +144,7 @@ function CopyButton({
 }: ComponentProps<"button"> & {
   containerRef: RefObject<HTMLElement | null>;
 }) {
-  const [checked, onClick] = useCopyButton(() => {
+  const [checked, onClick] = useCopy(() => {
     const pre = containerRef.current?.getElementsByTagName("pre").item(0);
     if (!pre) return;
 
@@ -177,77 +170,4 @@ function CopyButton({
       {checked ? <Check /> : <Clipboard />}
     </Button>
   );
-}
-
-export function CodeBlockTabs({ ref, className, ...props }: ComponentProps<typeof Tabs>) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const nested = use(TabsContext) !== null;
-
-  return (
-    <Tabs
-      ref={mergeRefs(containerRef, ref)}
-      {...props}
-      className={(s) =>
-        cn(
-          "rounded-xl border bg-card",
-          !nested && "my-4",
-          typeof className === "function" ? className(s) : className,
-        )
-      }
-    >
-      <TabsContext
-        value={useMemo(
-          () => ({
-            containerRef,
-            nested,
-          }),
-          [nested],
-        )}
-      >
-        {props.children}
-      </TabsContext>
-    </Tabs>
-  );
-}
-
-export function CodeBlockTabsList({ className, ...props }: ComponentProps<typeof TabsList>) {
-  return (
-    <TabsList
-      {...props}
-      className={(s) =>
-        cn(
-          "flex flex-row overflow-x-auto px-2 text-muted-foreground",
-          typeof className === "function" ? className(s) : className,
-        )
-      }
-    >
-      {props.children}
-    </TabsList>
-  );
-}
-
-export function CodeBlockTabsTrigger({
-  children,
-  className,
-  ...props
-}: ComponentProps<typeof TabsTrigger>) {
-  return (
-    <TabsTrigger
-      {...props}
-      className={(s) =>
-        cn(
-          "group relative inline-flex items-center gap-2 px-2 py-1.5 text-sm font-medium text-nowrap transition-colors [&_svg]:size-3.5",
-          s.active ? "text-primary" : "hover:text-accent-foreground",
-          typeof className === "function" ? className(s) : className,
-        )
-      }
-    >
-      <div className="absolute inset-x-2 bottom-0 h-px group-data-active:bg-primary" />
-      {children}
-    </TabsTrigger>
-  );
-}
-
-export function CodeBlockTab(props: ComponentProps<typeof TabsContent>) {
-  return <TabsContent {...props} />;
 }

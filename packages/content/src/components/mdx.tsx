@@ -1,15 +1,9 @@
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@rectangular-labs/ui/core/tabs";
 import type { MDXComponents } from "mdx/types";
 import { HTMLAttributes, TableHTMLAttributes } from "react";
 import { Callout } from "./callout";
 import { Card, Cards } from "./card";
-import {
-  CodeBlock,
-  CodeBlockTab,
-  CodeBlockTabs,
-  CodeBlockTabsList,
-  CodeBlockTabsTrigger,
-  Pre,
-} from "./codeblock";
+import { CodeBlock, Pre } from "./codeblock";
 import { Heading } from "./heading";
 
 /**
@@ -50,10 +44,10 @@ function Table(props: TableHTMLAttributes<HTMLTableElement>) {
 
 export function getMDXComponents(components?: MDXComponents) {
   return {
-    CodeBlockTab,
-    CodeBlockTabs,
-    CodeBlockTabsList,
-    CodeBlockTabsTrigger,
+    CodeBlockTab: Tabs,
+    CodeBlockTabs: TabsContent,
+    CodeBlockTabsList: TabsList,
+    CodeBlockTabsTrigger: TabsTrigger,
     pre: (props: HTMLAttributes<HTMLPreElement>) => (
       <CodeBlock {...props}>
         <Pre>{props.children}</Pre>
@@ -84,6 +78,5 @@ declare global {
   type MDXProvidedComponents = ReturnType<typeof getMDXComponents>;
 }
 
-// TODO: Bring in docs and flux layout
-// TODO: Bring in docs page
+// TODO: replace the sidebar and other core UI elements with the shadcn equivalent while keeping the same overall structure
 // TODO: Hook everything up via RSC tanstack starter
