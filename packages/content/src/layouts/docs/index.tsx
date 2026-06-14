@@ -1,79 +1,104 @@
 "use client";
 
+import { SidebarProvider, SidebarTrigger } from "@rectangular-labs/ui/core/sidebar";
+import { cn } from "@rectangular-labs/ui/utils";
 import type * as PageTree from "fumadocs-core/page-tree";
-import { TreeContextProvider } from "fumadocs-ui/contexts/tree";
-import { type HTMLAttributes, useMemo } from "react";
+import type { TOCItemType } from "fumadocs-core/toc";
+import type { ComponentProps, ReactNode } from "react";
 import {
-  type BaseLayoutProps,
-  getLayoutTabs,
-  type GetLayoutTabsOptions,
-  type LayoutTab,
-  useLinkItems,
-} from "../shared";
-import { Container } from "./slots/container";
-import { Header } from "./slots/header";
+  ContentTreeProvider,
+  type ContentTreeProviderProps,
+} from "../../components/content-tree/content-tree";
+import { Link } from "../../components/links";
+import { SearchTrigger } from "../../components/search-trigger";
+import type * as TocClerk from "../../components/toc/clerk";
+import type * as TocDefault from "../../components/toc/default";
+import { NavOptions } from "../shared";
+import { Container } from "./components/container";
+import { Sidebar } from "./components/sidebar";
 import {
-  Sidebar,
-  type SidebarProps,
-  SidebarProvider,
-  type SidebarProviderProps,
-} from "./slots/sidebar";
+  TOC as DesktopTOC,
+  TOCPopover,
+  TOCProvider,
+  type TOCProviderProps,
+} from "./components/toc";
 
-export interface DocsLayoutProps extends BaseLayoutProps {
+export { Sidebar };
+
+export interface LayoutContainerProps extends Omit<ContentTreeProviderProps, "children" | "tree"> {
+  children?: ReactNode;
+  containerProps?: ComponentProps<typeof Container>;
   tree: PageTree.Root;
-  sidebar?: SidebarOptions;
-  tabs?: LayoutTab[] | GetLayoutTabsOptions | false;
-  containerProps?: HTMLAttributes<HTMLDivElement>;
 }
 
-interface SidebarOptions extends SidebarProps, SidebarProviderProps {
-  enabled?: boolean;
+export function LayoutContainer({
+  children,
+  containerProps,
+  defaultOpenLevel = 0,
+  prefetch = true,
+  tree,
+}: LayoutContainerProps) {
+  return (
+    <SidebarProvider defaultOpen className="contents">
+      <ContentTreeProvider tree={tree} defaultOpenLevel={defaultOpenLevel} prefetch={prefetch}>
+        <Container {...containerProps}>{children}</Container>
+      </ContentTreeProvider>
+    </SidebarProvider>
+  );
 }
 
-export function DocsLayout({ tree, tabs: layoutTabs, children, ...props }: DocsLayoutProps) {
-  const tabs = useMemo(() => {
-    if (Array.isArray(layoutTabs)) {
-      return layoutTabs;
-    }
-    if (typeof layoutTabs === "object") {
-      return getLayoutTabs(tree, layoutTabs);
-    }
-    if (layoutTabs !== false) {
-      return getLayoutTabs(tree);
-    }
-    return [];
-  }, [tree, layoutTabs]);
+interface MobileHeaderProps extends ComponentProps<"header"> {
+  nav?: NavOptions;
+}
 
-  const {
-    nav,
-    searchToggle: { enabled: searchToggleEnabled = true, ...searchToggle } = {},
-    themeSwitch: { enabled: themeSwitchEnabled = true, ...themeSwitch } = {},
-    sidebar: { enabled: sidebarEnabled = true, defaultOpenLevel, prefetch, ...sidebarProps } = {},
-    containerProps,
-  } = props;
-  const linkItems = useLinkItems(props);
-  const resolvedSearchToggle = searchToggleEnabled ? searchToggle : false;
-  const resolvedThemeSwitch = themeSwitchEnabled ? themeSwitch : false;
+export function MobileHeader({ nav, children, ...props }: MobileHeaderProps) {
+  return (
+    <header
+      id="nd-subnav"
+      {...props}
+      className={cn(
+        "[grid-area:header] sticky top-(--docs-row-1) z-30 flex items-center ps-4 pe-2.5 border-b transition-colors backdrop-blur-sm h-(--header-height) md:hidden max-md:layout:[--header-height:--spacing(14)]",
+        props.className,
+      )}
+    >
+      {nav?.title ? (
+        <Link className="inline-flex items-center gap-2.5 font-semibold" href={nav.url}>
+          {nav.title}
+        </Link>
+      ) : null}
+      <div className="flex-1">{children}</div>
+      <SearchTrigger hideIfDisabled className="p-2" />
+      <SidebarTrigger className={"p-2"} />
+    </header>
+  );
+}
+
+type TOCOptions = Pick<TOCProviderProps, "single"> & {
+  footer?: ReactNode;
+  header?: ReactNode;
+} & (
+    | {
+        list?: TocDefault.TOCItemsProps;
+        style?: "normal";
+      }
+    | {
+        list?: TocClerk.TOCItemsProps;
+        style: "clerk";
+      }
+  );
+
+interface TOCProps {
+  options?: TOCOptions;
+  toc?: TOCItemType[];
+}
+
+export function TOC({ options = {}, toc = [] }: TOCProps) {
+  const { single = false, ...tocProps } = options;
 
   return (
-    <TreeContextProvider tree={tree}>
-      <SidebarProvider defaultOpenLevel={defaultOpenLevel ?? 0} prefetch={prefetch ?? true}>
-        <Container {...containerProps}>
-          {nav && <Header nav={nav} />}
-          {sidebarEnabled && (
-            <Sidebar
-              {...sidebarProps}
-              menuItems={linkItems.menuItems}
-              nav={nav}
-              searchToggle={(resolvedSearchToggle && resolvedSearchToggle.full) ?? false}
-              tabs={tabs}
-              themeSwitch={resolvedThemeSwitch}
-            />
-          )}
-
-          {children}
-        </Container>
-      </SidebarProvider>
-    </TreeContextProvider>
+    <TOCProvider single={single} toc={toc}>
+      <TOCPopover {...tocProps} />
+      <DesktopTOC {...tocProps} />
+    </TOCProvider>
   );
 }

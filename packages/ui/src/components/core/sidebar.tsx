@@ -5,23 +5,24 @@ import { useRender } from "@base-ui/react/use-render";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 
-import { SidebarIcon } from "@phosphor-icons/react";
-import { Button } from "@rectangular-labs/ui/components/core/button";
-import { Input } from "@rectangular-labs/ui/components/core/input";
-import { Separator } from "@rectangular-labs/ui/components/core/separator";
+import { CaretRightIcon, SidebarIcon } from "@phosphor-icons/react";
+import { Button } from "@rectangular-labs/ui/core/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@rectangular-labs/ui/core/collapsible";
+import { Input } from "@rectangular-labs/ui/core/input";
+import { Separator } from "@rectangular-labs/ui/core/separator";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@rectangular-labs/ui/components/core/sheet";
-import { Skeleton } from "@rectangular-labs/ui/components/core/skeleton";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@rectangular-labs/ui/components/core/tooltip";
+} from "@rectangular-labs/ui/core/sheet";
+import { Skeleton } from "@rectangular-labs/ui/core/skeleton";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@rectangular-labs/ui/core/tooltip";
 import { useIsMobile } from "@rectangular-labs/ui/hooks/use-mobile";
 import { cn } from "@rectangular-labs/ui/utils";
 
@@ -35,7 +36,7 @@ const SIDEBAR_KEYBOARD_SHORTCUT = "b";
 type SidebarContextProps = {
   state: "expanded" | "collapsed";
   open: boolean;
-  setOpen: (open: boolean) => void;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   openMobile: boolean;
   setOpenMobile: (open: boolean) => void;
   isMobile: boolean;
@@ -92,7 +93,6 @@ function SidebarProvider({
   const toggleSidebar = React.useCallback(() => {
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open);
   }, [isMobile, setOpen, setOpenMobile]);
-
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -459,7 +459,7 @@ function SidebarMenuItem({ className, ...props }: React.ComponentProps<"li">) {
 }
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-none p-2 text-start text-xs ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pe-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate",
+  "peer/menu-button group/menu-button flex w-full items-center gap-2 overflow-hidden rounded-none p-2 text-start text-xs ring-sidebar-ring outline-hidden transition-[width,height,padding] group-has-data-[sidebar=menu-action]/menu-item:pe-8 group-data-[collapsible=icon]:size-8! group-data-[collapsible=icon]:p-2! hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-open:hover:bg-sidebar-accent data-open:hover:text-sidebar-accent-foreground data-active:bg-sidebar-accent data-active:font-medium data-active:text-sidebar-accent-foreground data-[status=active]:bg-sidebar-accent data-[status=active]:font-medium data-[status=active]:text-sidebar-accent-foreground [&_svg]:size-4 [&_svg]:shrink-0 [&>span:last-child]:truncate",
   {
     variants: {
       variant: {
@@ -490,7 +490,7 @@ function SidebarMenuButton({
   ...props
 }: useRender.ComponentProps<"button"> &
   React.ComponentProps<"button"> & {
-    isActive?: boolean;
+    isActive?: boolean | undefined;
     tooltip?: string | React.ComponentProps<typeof TooltipContent>;
   } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const { isMobile, state } = useSidebar();
@@ -617,7 +617,7 @@ function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">) {
       data-slot="sidebar-menu-sub"
       data-sidebar="menu-sub"
       className={cn(
-        "mx-3.5 flex min-w-0 translate-x-px rtl:-translate-x-px flex-col gap-1 border-s border-sidebar-border px-2.5 py-0.5 group-data-[collapsible=icon]:hidden",
+        "ms-3.5 flex min-w-0 translate-x-px rtl:-translate-x-px flex-col gap-1 border-s border-sidebar-border ps-2.5 pe-0 py-0.5 group-data-[collapsible=icon]:hidden",
         className,
       )}
       {...props}
@@ -652,7 +652,7 @@ function SidebarMenuSubButton({
     props: mergeProps<"a">(
       {
         className: cn(
-          "flex h-7 min-w-0 -translate-x-px rtl:translate-x-px items-center gap-2 overflow-hidden rounded-none px-2 text-sidebar-foreground ring-sidebar-ring outline-hidden group-data-[collapsible=icon]:hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-xs data-[size=sm]:text-xs data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground",
+          "flex h-7 min-w-0 -translate-x-px rtl:translate-x-px items-center gap-2 overflow-hidden rounded-none px-2 text-sidebar-foreground ring-sidebar-ring outline-hidden group-data-[collapsible=icon]:hidden hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[size=md]:text-xs data-[size=sm]:text-xs data-active:bg-sidebar-accent data-active:text-sidebar-accent-foreground data-[status=active]:bg-sidebar-accent data-[status=active]:text-sidebar-accent-foreground [&>span:last-child]:truncate [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-sidebar-accent-foreground",
           className,
         ),
       },
@@ -666,6 +666,230 @@ function SidebarMenuSubButton({
       active: isActive,
     },
   });
+}
+
+type SidebarTreeNode =
+  | {
+      type: "item";
+      id: string;
+      title: React.ReactNode;
+      url: string;
+      icon?: React.ReactNode;
+      active?: boolean;
+    }
+  | {
+      type: "folder";
+      id: string;
+      title: React.ReactNode;
+      url?: string;
+      icon?: React.ReactNode;
+      defaultOpen?: boolean;
+      collapsible?: boolean;
+      active?: boolean;
+      children: SidebarTreeNode[];
+    }
+  | {
+      type: "group";
+      id: string;
+      title?: React.ReactNode;
+      icon?: React.ReactNode;
+      children: SidebarTreeNode[];
+    };
+
+type SidebarTreeLinkNode = Extract<SidebarTreeNode, { type: "item" | "folder" }>;
+
+type SidebarTreeProps = {
+  nodes: SidebarTreeNode[];
+  renderLink?: (props: {
+    node: SidebarTreeLinkNode;
+    children?: React.ReactNode;
+    className?: string;
+  }) => React.ReactElement;
+};
+
+type SidebarTreeNodeProps = {
+  node: SidebarTreeNode;
+  renderLink: NonNullable<SidebarTreeProps["renderLink"]>;
+  level?: number;
+};
+
+const sidebarTreeCollapsibleStyles = [
+  {
+    group: "group/collapsible-0",
+    icon: "group-data-open/collapsible-0:rotate-90",
+  },
+  {
+    group: "group/collapsible-1",
+    icon: "group-data-open/collapsible-1:rotate-90",
+  },
+  {
+    group: "group/collapsible-2",
+    icon: "group-data-open/collapsible-2:rotate-90",
+  },
+  {
+    group: "group/collapsible-3",
+    icon: "group-data-open/collapsible-3:rotate-90",
+  },
+  {
+    group: "group/collapsible-4",
+    icon: "group-data-open/collapsible-4:rotate-90",
+  },
+  {
+    group: "group/collapsible-5",
+    icon: "group-data-open/collapsible-5:rotate-90",
+  },
+  {
+    group: "group/collapsible-6",
+    icon: "group-data-open/collapsible-6:rotate-90",
+  },
+] as const;
+
+function getSidebarTreeCollapsibleStyle(level: number) {
+  return (
+    sidebarTreeCollapsibleStyles[Math.min(level, sidebarTreeCollapsibleStyles.length - 1)] ??
+    sidebarTreeCollapsibleStyles[0]
+  );
+}
+
+const defaultRenderTreeLink: NonNullable<SidebarTreeProps["renderLink"]> = ({
+  node,
+  children,
+  className,
+}) => (
+  <a className={className} href={node.url}>
+    {children}
+  </a>
+);
+
+function SidebarTree({ nodes, renderLink = defaultRenderTreeLink }: SidebarTreeProps) {
+  return (
+    <>
+      {nodes.map((node) =>
+        node.type === "group" ? (
+          <SidebarTreeNode key={node.id} node={node} renderLink={renderLink} />
+        ) : (
+          <SidebarGroup key={node.id}>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarTreeNode node={node} renderLink={renderLink} />
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ),
+      )}
+    </>
+  );
+}
+
+function SidebarTreeNode({ node, renderLink, level = 0 }: SidebarTreeNodeProps) {
+  if (node.type === "group") {
+    return (
+      <SidebarGroup>
+        {node.title ? (
+          <SidebarGroupLabel>
+            {node.icon}
+            {node.title}
+          </SidebarGroupLabel>
+        ) : null}
+        <SidebarGroupContent>
+          <SidebarMenu>
+            {node.children.map((child) => (
+              <SidebarTreeNode key={child.id} node={child} renderLink={renderLink} level={level} />
+            ))}
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    );
+  }
+
+  if (node.type === "item") {
+    const content = (
+      <>
+        {node.icon}
+        <span>{node.title}</span>
+      </>
+    );
+
+    return (
+      <SidebarMenuItem>
+        <SidebarMenuButton
+          {...(node.active === undefined ? {} : { isActive: node.active })}
+          render={renderLink({
+            node,
+            children: content,
+          })}
+        />
+      </SidebarMenuItem>
+    );
+  }
+
+  const collapsible = node.collapsible !== false;
+  const collapsibleStyle = getSidebarTreeCollapsibleStyle(level);
+  const folderContent = (
+    <>
+      {node.icon}
+      <span>{node.title}</span>
+    </>
+  );
+
+  const caret = collapsible ? (
+    <CaretRightIcon className={cn("size-4 transition-transform", collapsibleStyle.icon)} />
+  ) : null;
+
+  return (
+    <SidebarMenuItem>
+      <Collapsible
+        className={collapsibleStyle.group}
+        defaultOpen={node.defaultOpen || !collapsible}
+        disabled={!collapsible}
+      >
+        <div className="relative w-full min-w-0">
+          {node.url ? (
+            <>
+              <SidebarMenuButton
+                className={collapsible ? "pe-8" : undefined}
+                isActive={node.active}
+                render={renderLink({
+                  node,
+                  children: folderContent,
+                })}
+              />
+              {collapsible ? (
+                <CollapsibleTrigger className="absolute top-1 end-1 flex size-4 items-center justify-center text-sidebar-foreground/70 group-data-[collapsible=icon]:hidden">
+                  {caret}
+                </CollapsibleTrigger>
+              ) : null}
+            </>
+          ) : (
+            <CollapsibleTrigger
+              render={
+                <SidebarMenuButton
+                  {...(node.active === undefined ? {} : { isActive: node.active })}
+                />
+              }
+            >
+              {folderContent}
+              <span className="ms-auto flex size-4 items-center justify-center text-sidebar-foreground/70">
+                {caret}
+              </span>
+            </CollapsibleTrigger>
+          )}
+        </div>
+        <CollapsibleContent>
+          <SidebarMenuSub>
+            {node.children.map((child) => (
+              <SidebarTreeNode
+                key={child.id}
+                node={child}
+                renderLink={renderLink}
+                level={level + 1}
+              />
+            ))}
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </Collapsible>
+    </SidebarMenuItem>
+  );
 }
 
 export {
@@ -691,6 +915,8 @@ export {
   SidebarProvider,
   SidebarRail,
   SidebarSeparator,
+  SidebarTree,
   SidebarTrigger,
   useSidebar,
 };
+export type { SidebarTreeNode, SidebarTreeProps };

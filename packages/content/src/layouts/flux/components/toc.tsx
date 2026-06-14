@@ -9,7 +9,6 @@ import {
 import { CircularProgress } from "@rectangular-labs/ui/core/progress";
 import { cn } from "@rectangular-labs/ui/utils";
 import { useI18n } from "fumadocs-ui/contexts/i18n";
-import { useTreePath } from "fumadocs-ui/contexts/tree";
 import { AnimatePresence, motion } from "motion/react";
 import {
   type ComponentProps,
@@ -23,9 +22,10 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import * as Base from "../../../../components/toc";
-import * as TocClerk from "../../../../components/toc/clerk";
-import * as TocDefault from "../../../../components/toc/default";
+import { useTreePath } from "../../../components/content-tree/content-tree-context";
+import * as Base from "../../../components/toc";
+import * as TocClerk from "../../../components/toc/clerk";
+import * as TocDefault from "../../../components/toc/default";
 
 const TocPopoverContext = createContext<{
   open: boolean;

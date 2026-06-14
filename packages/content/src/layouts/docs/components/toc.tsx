@@ -1,6 +1,4 @@
 "use client";
-import { I18nLabel, useI18n } from "fumadocs-ui/contexts/i18n";
-import { useTreePath } from "fumadocs-ui/contexts/tree";
 import { CaretDown, Text } from "@rectangular-labs/ui/components/icons";
 import {
   Collapsible,
@@ -9,6 +7,7 @@ import {
 } from "@rectangular-labs/ui/core/collapsible";
 import { CircularProgress } from "@rectangular-labs/ui/core/progress";
 import { cn } from "@rectangular-labs/ui/utils";
+import { I18nLabel, useI18n } from "fumadocs-ui/contexts/i18n";
 import {
   createContext,
   use,
@@ -20,9 +19,10 @@ import {
   type ComponentProps,
   type ReactNode,
 } from "react";
-import * as Base from "../../../../components/toc";
-import * as TocClerk from "../../../../components/toc/clerk";
-import * as TocDefault from "../../../../components/toc/default";
+import { useTreePath } from "../../../components/content-tree/content-tree-context";
+import * as Base from "../../../components/toc";
+import * as TocClerk from "../../../components/toc/clerk";
+import * as TocDefault from "../../../components/toc/default";
 
 export type TOCProviderProps = Base.TOCProviderProps;
 

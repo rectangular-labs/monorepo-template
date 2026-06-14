@@ -1,10 +1,11 @@
 "use client";
+import { useSidebar } from "@rectangular-labs/ui/core/sidebar";
 import { cn } from "@rectangular-labs/ui/utils";
 import { useEffect, useState, type ComponentProps } from "react";
-import { useSidebar } from "./sidebar";
 
 export function Container(props: ComponentProps<"div">) {
-  const { collapsed } = useSidebar();
+  const { open } = useSidebar();
+  const collapsed = !open;
   const [previousCollapsed, setPreviousCollapsed] = useState(collapsed);
   const isCollapseChanged = previousCollapsed !== collapsed;
 

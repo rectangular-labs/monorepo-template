@@ -33,7 +33,7 @@ export function ThemeToggle({ className, ...props }: ButtonProps) {
 const itemVariants = cva("size-6.5 p-1.5", {
   variants: {
     active: {
-      true: "bg-accent text-accent-foreground",
+      true: "bg-secondary text-secondary-foreground",
       false: "text-muted-foreground",
     },
   },
@@ -47,13 +47,7 @@ export function ThemeSwitch({ className, mode = "light-dark", ...props }: ThemeS
   const { setTheme, theme } = useTheme();
 
   return (
-    <div
-      className={cn(
-        "inline-flex items-center overflow-hidden rounded-full border p-1 *:rounded-full",
-        className,
-      )}
-      {...props}
-    >
+    <div className={cn("inline-flex items-center overflow-hidden border", className)} {...props}>
       {[
         ["light", Icons.Sun] as const,
         ["dark", Icons.Moon] as const,
@@ -62,14 +56,16 @@ export function ThemeSwitch({ className, mode = "light-dark", ...props }: ThemeS
         if (mode === "light-dark" && key === "system") return;
 
         return (
-          <button
+          <Button
             key={key}
             aria-label={key}
+            size={"icon-xs"}
+            variant={theme === key ? "secondary" : "ghost"}
             className={itemVariants({ active: theme === key })}
             onClick={() => setTheme(key)}
           >
             <Icon className="size-full" fill="currentColor" />
-          </button>
+          </Button>
         );
       })}
     </div>
