@@ -9,8 +9,8 @@ import {
   ContentTreeProvider,
   type ContentTreeProviderProps,
 } from "../../components/content-tree/content-tree";
-import { Link } from "../../components/links";
-import { SearchTrigger } from "../../components/search-trigger";
+import { Link } from "../../components/page-items/links";
+import { SearchTrigger } from "../../components/page-items/search-trigger";
 import type * as TocClerk from "../../components/toc/clerk";
 import type * as TocDefault from "../../components/toc/default";
 import { NavOptions } from "../shared";

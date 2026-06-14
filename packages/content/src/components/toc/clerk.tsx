@@ -1,8 +1,8 @@
 // @ts-nocheck
 "use client";
-import { useI18n } from "fumadocs-ui/contexts/i18n";
-import { cn } from "@rectangular-labs/ui/utils";
+import { cn, mergeRefs } from "@rectangular-labs/ui/utils";
 import * as Primitive from "fumadocs-core/toc";
+import { useI18n } from "fumadocs-ui/contexts/i18n";
 import {
   type ComponentProps,
   type ReactNode,
@@ -12,7 +12,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { mergeRefs } from "../../lib/merge-refs";
 import { useTOCItems } from "./index";
 
 interface ComputedSVG {

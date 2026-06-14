@@ -16,12 +16,12 @@ import {
   type ContentTreeComponents,
   useTreeContext,
 } from "../../../components/content-tree/content-tree";
-import { Link, LinkIcon } from "../../../components/links";
+import { Link, LinkIcon } from "../../../components/page-items/links";
 import {
   FullSearchTrigger,
   type FullSearchTriggerProps,
   SearchTrigger,
-} from "../../../components/search-trigger";
+} from "../../../components/page-items/search-trigger";
 import { getLayoutTabs, type NavOptions } from "../../shared";
 import { SidebarTabsDropdown } from "./sidebar-tabs-dropdown";
 

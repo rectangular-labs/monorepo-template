@@ -6,8 +6,8 @@ import { usePathname } from "fumadocs-core/framework";
 import Link from "fumadocs-core/link";
 import type * as PageTree from "fumadocs-core/page-tree";
 import { type ComponentProps, useMemo } from "react";
-import { isActive } from "../lib/urls";
-import { useTreeContext } from "./content-tree/content-tree-context";
+import { isActive } from "../../lib/urls";
+import { useTreeContext } from "../content-tree/content-tree-context";
 
 type Item = Pick<PageTree.Item, "name" | "description" | "url">;
 

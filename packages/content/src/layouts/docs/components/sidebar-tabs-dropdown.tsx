@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@rectangular-labs/ui/co
 import { cn } from "@rectangular-labs/ui/utils";
 import { usePathname } from "fumadocs-core/framework";
 import { type ComponentProps, type ReactNode, useMemo, useState } from "react";
-import { Link } from "../../../components/links";
+import { Link } from "../../../components/page-items/links";
 import { isLayoutTabActive, type LayoutTab } from "../../shared";
 
 export function SidebarTabsDropdown({

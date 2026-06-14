@@ -6,7 +6,7 @@ import { cn } from "@rectangular-labs/ui/utils";
 import { type BreadcrumbOptions, getBreadcrumbItemsFromPath } from "fumadocs-core/breadcrumb";
 import Link from "fumadocs-core/link";
 import { type ComponentProps, Fragment, useMemo } from "react";
-import { useTreeContext, useTreePath } from "./content-tree/content-tree-context";
+import { useTreeContext, useTreePath } from "../content-tree/content-tree-context";
 
 export type BreadcrumbProps = BreadcrumbOptions & ComponentProps<"div">;
 

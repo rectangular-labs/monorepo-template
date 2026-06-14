@@ -1,8 +1,7 @@
 "use client";
+import { cn, mergeRefs } from "@rectangular-labs/ui/utils";
 import * as Primitive from "fumadocs-core/toc";
 import { type ComponentProps, createContext, use, useRef } from "react";
-import { cn } from "@rectangular-labs/ui/utils";
-import { mergeRefs } from "../../lib/merge-refs";
 
 const TOCContext = createContext<Primitive.TOCItemType[]>([]);
 
