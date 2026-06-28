@@ -14,7 +14,7 @@
   "rtl": true,
   "aliases": {
     "components": "@rectangular-labs/ui/components",
-    "ui": "@rectangular-labs/ui/components/core",
+    "ui": "@rectangular-labs/ui/core",
     "utils": "@rectangular-labs/ui/utils",
     "lib": "@rectangular-labs/ui/utils",
     "hooks": "@rectangular-labs/ui/hooks"
