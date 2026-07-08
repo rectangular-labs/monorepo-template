@@ -1,3 +1,4 @@
+import { cva } from "class-variance-authority";
 import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import type * as React from "react";
 import * as Icons from "../components/icon";
@@ -26,6 +27,48 @@ export function ThemeToggle({ className, ...props }: ButtonProps) {
       <Icons.Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
       <span className="sr-only">Toggle theme</span>
     </Button>
+  );
+}
+
+const itemVariants = cva("size-6.5 p-1.5", {
+  variants: {
+    active: {
+      true: "bg-secondary text-secondary-foreground",
+      false: "text-muted-foreground",
+    },
+  },
+});
+
+export interface ThemeSwitchProps extends React.ComponentProps<"div"> {
+  mode?: "light-dark" | "light-dark-system";
+}
+
+export function ThemeSwitch({ className, mode = "light-dark", ...props }: ThemeSwitchProps) {
+  const { setTheme, theme } = useTheme();
+
+  return (
+    <div className={cn("inline-flex items-center overflow-hidden border", className)} {...props}>
+      {[
+        ["light", Icons.Sun] as const,
+        ["dark", Icons.Moon] as const,
+        ["system", Icons.Monitor] as const,
+      ].map(([key, Icon]) => {
+        if (mode === "light-dark" && key === "system") return;
+
+        return (
+          <Button
+            key={key}
+            aria-label={key}
+            size={"icon-xs"}
+            variant={theme === key ? "secondary" : "ghost"}
+            className={itemVariants({ active: theme === key })}
+            onClick={() => setTheme(key)}
+          >
+            <Icon className="size-full" fill="currentColor" />
+          </Button>
+        );
+      })}
+    </div>
   );
 }
 

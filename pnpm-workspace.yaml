@@ -6,6 +6,7 @@ packages:
 catalog:
   "@rollup/plugin-babel": ^7.0.0
   "@t3-oss/env-core": ^0.13.11
+  "@tsdown/css": 0.22.0
   "@types/node": ^25.5.0
   "@types/react": ^19.2.14
   "@types/react-dom": ^19.2.3
@@ -17,7 +18,7 @@ catalog:
   react-dom: ^19.2.5
   typescript: ^5.9.3
   vite: npm:@voidzero-dev/vite-plus-core@latest
-  vite-plus: ^0.1.18
+  vite-plus: ^0.1.20
   vitest: npm:@voidzero-dev/vite-plus-test@latest
 
 ignoredBuiltDependencies:

@@ -2,6 +2,8 @@
 
 /* This is from https://github.com/shadcn-ui/ui/blob/main/packages/shadcn/src/tailwind.css so tha we don't have to download a random extra package */
 @theme inline {
+  --ease-rectangular-labs: cubic-bezier(0, 0, 0.28, 1);
+
   @keyframes accordion-down {
     from {
       height: 0;
